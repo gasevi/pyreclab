@@ -35,21 +35,21 @@ add_subdirectory( algorithms temp/algorithms )
 add_subdirectory( pyinterface temp/pyinterface )
 add_subdirectory( eval_metrics temp/eval_metrics )
 
-add_library( pylibrec SHARED
+add_library( pyreclab SHARED
                       $<TARGET_OBJECTS:dataio>
                       $<TARGET_OBJECTS:datahandlers>
                       $<TARGET_OBJECTS:algorithms>
                       $<TARGET_OBJECTS:eval_metrics>
                       $<TARGET_OBJECTS:pyinterface> )
 
-set_target_properties( pylibrec PROPERTIES PREFIX ""
-                                           LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/pylibrec" )
+set_target_properties( pyreclab PROPERTIES PREFIX ""
+                                           LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/pyreclab" )
 
-install( TARGETS pylibrec DESTINATION ${PYTHON_LIB_DIR}/dist-packages/ )
+install( TARGETS pyreclab DESTINATION ${PYTHON_LIB_DIR}/dist-packages/ )
 
 #add_executable( tests/test_itemavg tests/test_itemavg.cpp )
 
-#target_link_libraries( tests/test_itemavg pylibrec )
+#target_link_libraries( tests/test_itemavg pyreclab )
 #target_link_libraries( tests/test_itemavg python2.7 )
 
 

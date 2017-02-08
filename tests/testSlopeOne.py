@@ -1,17 +1,17 @@
 #! /usr/bin/env python
 
-# Append pylibrec temporary directory
+# Append pyreclab temporary directory
 import time
 import sys
 sys.path.append( '.' )
 sys.path.append( '..' )
-sys.path.append( '../pylibrec/' )
+sys.path.append( '../pyreclab/' )
 
-import pylibrec
+import pyreclab
 
 if __name__ == '__main__':
 
-   slpone = pylibrec.SlopeOne( 'dataset/u1.base',
+   slpone = pyreclab.SlopeOne( 'dataset/u1.base',
                                dlmchar = b'\t',
                                header = False,
                                usercol = 0,

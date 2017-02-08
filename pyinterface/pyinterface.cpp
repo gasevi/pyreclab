@@ -164,18 +164,18 @@ PyObject* Recommender_predict( Recommender* self, PyObject* args, PyObject* kwds
    return Py_BuildValue( "f", prating );
 }
 
-static PyMethodDef pylibrecMethods[] =
+static PyMethodDef pyreclabMethods[] =
 {
    { NULL, NULL }
 };
 
 #if PY_MAJOR_VERSION >= 3
-static int pylibrec_traverse(PyObject *m, visitproc visit, void *arg) {
+static int pyreclab_traverse(PyObject *m, visitproc visit, void *arg) {
     Py_VISIT(GETSTATE(m)->error);
     return 0;
 }
 
-static int pylibrec_clear(PyObject *m) {
+static int pyreclab_clear(PyObject *m) {
     Py_CLEAR(GETSTATE(m)->error);
     return 0;
 }
@@ -183,19 +183,19 @@ static int pylibrec_clear(PyObject *m) {
 static struct PyModuleDef moduledef =
 {
    PyModuleDef_HEAD_INIT,
-   "pylibrec",
+   "pyreclab",
    NULL,
    sizeof( struct module_state ),
-   pylibrecMethods,
+   pyreclabMethods,
    NULL,
-   pylibrec_traverse,
-   pylibrec_clear,
+   pyreclab_traverse,
+   pyreclab_clear,
    NULL
 };
 
-PyMODINIT_FUNC PyInit_pylibrec()
+PyMODINIT_FUNC PyInit_pyreclab()
 #else
-extern "C" void initpylibrec()
+extern "C" void initpyreclab()
 #endif
 {
    if( PyType_Ready( &MostPopularType ) < 0 )
@@ -264,7 +264,7 @@ extern "C" void initpylibrec()
 #if PY_MAJOR_VERSION >= 3
    PyObject* module = PyModule_Create( &moduledef );
 #else
-   PyObject* module = Py_InitModule( "pylibrec", pylibrecMethods );
+   PyObject* module = Py_InitModule( "pyreclab", pyreclabMethods );
 #endif
    if( NULL == module )
    {
