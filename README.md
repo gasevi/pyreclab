@@ -101,7 +101,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 
 
 | Parameter | Type      | Default value | Description                                                 |
-|:---------:|----------:|--------------:|:------------------------------------------------------------|
+|:----------|:---------:|:-------------:|:------------------------------------------------------------|
 | dataset   | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
 | dlmchar   | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header    | optional  | False         | Whether dataset filename contains a header line to skip     |
@@ -128,7 +128,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 ```
 
 | Parameter | Type      | Default value | Description       |
-|:---------:|----------:|--------------:|:------------------|
+|:----------|:---------:|:-------------:|:------------------|
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
 
@@ -145,8 +145,8 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
                                           output_file = 'predictions.csv' )
 ```
 
-| Parameter   | type      | default value | Description                                                 |
-|------------:|----------:|--------------:|:------------------------------------------------------------|
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
 | input_file  | mandatory | N.A.          | Testset filename                                            |
 | dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
@@ -171,7 +171,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 ```
 
 | Parameter | Type      | Default value | Description       |
-|:---------:|----------:|--------------:|:------------------|
+|:----------|:---------:|:-------------:|:------------------|
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
 
@@ -188,8 +188,8 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
                                           output_file = 'predictions.csv' )
 ```
 
-| Parameter   | type      | default value | Description                                                 |
-|------------:|----------:|--------------:|:------------------------------------------------------------|
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
 | input_file  | mandatory | N.A.          | Testset filename                                            |
 | dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
@@ -214,7 +214,7 @@ prediction = obj.predict( userId, itemId )
 ```
 
 | Parameter | Type      | Default value | Description       |
-|:---------:|----------:|--------------:|:------------------|
+|:----------|:---------:|:-------------:|:------------------|
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
 
@@ -231,8 +231,8 @@ predictionList, mae, rmse = obj.test( input_file = testset,
                                       output_file = 'predictions.csv' )
 ```
 
-| Parameter   | type      | default value | Description                                                 |
-|------------:|----------:|--------------:|:------------------------------------------------------------|
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
 | input_file  | mandatory | N.A.          | Testset filename                                            |
 | dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
@@ -250,7 +250,9 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 >>> obj.train( knn )
 ```
 
-knn: k nearest neighbors.
+| Parameter | Type      | Default value | Description         |
+|:----------|:---------:|:-------------:|:--------------------|
+| knn       | optional  | 10            | K nearest neighbors |
 
  * Rating prediction
 
@@ -259,7 +261,7 @@ knn: k nearest neighbors.
 ```
 
 | Parameter | Type      | Default value | Description       |
-|:---------:|----------:|--------------:|:------------------|
+|:----------|:---------:|:-------------:|:------------------|
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
 
@@ -275,8 +277,8 @@ knn: k nearest neighbors.
                                           output_file = 'predictions.csv' )
 ```
 
-| Parameter   | type      | default value | Description                                                 |
-|------------:|----------:|--------------:|:------------------------------------------------------------|
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
 | input_file  | mandatory | N.A.          | Testset filename                                            |
 | dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
@@ -294,7 +296,9 @@ knn: k nearest neighbors.
 >>> obj.train( knn )
 ```
 
-knn: k nearest neighbors.
+| Parameter | Type      | Default value | Description         |
+|:----------|:---------:|:-------------:|:--------------------|
+| knn       | optional  | 10            | K nearest neighbors |
 
  * Rating prediction
 
@@ -303,7 +307,7 @@ knn: k nearest neighbors.
 ```
 
 | Parameter | Type      | Default value | Description       |
-|:---------:|----------:|--------------:|:------------------|
+|:----------|:---------:|:-------------:|:------------------|
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
 
@@ -319,8 +323,8 @@ knn: k nearest neighbors.
                                           output_file = 'predictions.csv' )
 ```
 
-| Parameter   | type      | default value | Description                                                 |
-|------------:|----------:|--------------:|:------------------------------------------------------------|
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
 | input_file  | mandatory | N.A.          | Testset filename                                            |
 | dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
@@ -338,8 +342,8 @@ knn: k nearest neighbors.
 >>> obj.train( factors = 1000, maxiter = 100, lr = 0.01, lamb = 0.1 )
 ```
 
-| Parameter   | type      | default value | Description                                                 |
-|------------:|----------:|--------------:|:------------------------------------------------------------|
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
 | factors     | optional  | 1000          | Number of latent factors in matrix factorization            |
 | maxiter     | optional  | 100           | Maximum number of iterations reached without convergence    |
 | lr          | optional  | 0.01          | Learning rate                                               |
@@ -352,7 +356,7 @@ knn: k nearest neighbors.
 ```
 
 | Parameter | Type      | Default value | Description       |
-|:---------:|----------:|--------------:|:------------------|
+|:----------|:---------:|:-------------:|:------------------|
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
 
@@ -368,8 +372,8 @@ knn: k nearest neighbors.
                                           output_file = 'predictions.csv' )
 ```
 
-| Parameter   | type      | default value | Description                                                 |
-|------------:|----------:|--------------:|:------------------------------------------------------------|
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
 | input_file  | mandatory | N.A.          | Testset filename                                            |
 | dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
@@ -388,9 +392,9 @@ knn: k nearest neighbors.
 >>> obj.train( topN )
 ```
 
-| Parameter | type      | default value | Description                                                 |
-|----------:|----------:|--------------:|:------------------------------------------------------------|
-| topN      | mandatory | N.A.          | Top N items to recommend                                    |
+| Parameter | Type      | Default value | Description               |
+|----------:|----------:|--------------:|:--------------------------|
+| topN      | optional  | 10            | Top N items to recommend  |
 
 
  * Rating prediction
@@ -399,8 +403,8 @@ knn: k nearest neighbors.
 >>> ranking = obj.recommend( userId )
 ```
 
-| Parameter | type      | default value | Description       |
-|----------:|----------:|--------------:|:------------------|
+| Parameter | Type      | Default value | Description       |
+|:----------|:---------:|:-------------:|:------------------|
 | userId    | mandatory | N.A.          | User identifier   |
 
 
@@ -414,8 +418,8 @@ knn: k nearest neighbors.
                                           output_file = 'predictions.csv' )
 ```
 
-| Parameter   | type      | default value | Description                                                 |
-|------------:|----------:|--------------:|:------------------------------------------------------------|
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
 | input_file  | mandatory | N.A.          | Testset filename                                            |
 | dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
