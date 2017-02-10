@@ -11,7 +11,7 @@ import pyreclab
 
 if __name__ == '__main__':
 
-   ubknn = pyreclab.UserKnn( 'dataset/u1.base',
+   ubknn = pyreclab.UserKnn( dataset = 'dataset/u1.base',
                              dlmchar = b'\t',
                              header = False,
                              usercol = 0,
@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
    print( 'testing...' )
    start = time.clock()
-   predlist, mae, rmse = ubknn.test( 'dataset/u1.test',
+   predlist, mae, rmse = ubknn.test( input_file = 'dataset/u1.test',
                                      dlmchar = b'\t',
                                      header = False,
                                      usercol = 0,

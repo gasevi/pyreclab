@@ -11,7 +11,7 @@ import pyreclab
 
 if __name__ == '__main__':
 
-   mpop = pyreclab.MostPopular( 'dataset/u1.base',
+   mpop = pyreclab.MostPopular( dataset = 'dataset/u1.base',
                                 dlmchar = b'\t',
                                 header = False,
                                 usercol = 0,
@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
    print( 'testing...' )
    start = time.clock()
-   predlist = mpop.test( 'dataset/u1.test',
+   predlist = mpop.test( input_file = 'dataset/u1.test',
                          dlmchar = b'\t',
                          header = False,
                          usercol = 0,

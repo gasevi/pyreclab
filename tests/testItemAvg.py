@@ -11,7 +11,7 @@ import pyreclab
 
 if __name__ == '__main__':
 
-   iavg = pyreclab.ItemAvg( 'dataset/u1.base',
+   iavg = pyreclab.ItemAvg( dataset = 'dataset/u1.base',
                             dlmchar = b'\t',
                             header = False,
                             usercol = 0,
@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
    print( 'testing...' )
    start = time.clock()
-   predlist, mae, rmse = iavg.test( 'dataset/u1.test',
+   predlist, mae, rmse = iavg.test( input_file = 'dataset/u1.test',
                                     dlmchar = b'\t',
                                     header = False,
                                     usercol = 0,
