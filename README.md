@@ -2,9 +2,9 @@
 
    *Pyreclab* is a recommendation library designed for training recommendation models with a friendly and easy-to-use interface, keeping a good performance in memory and CPU usage.
 
-   In order to achieve this, *Pyreclab* is built as a Python module to give a friendly access to its algorithms, and it is completely developed in C++ to avoid the lack of performace of the interpreted languages.
+   In order to achieve this, *Pyreclab* is built as a Python module to give a friendly access to its algorithms and it is completely developed in C++ to avoid the lack of performace of the interpreted languages.
 
-   At this moment, the following recommendation algorithms are supported.
+   At this moment, the following recommendation algorithms are supported:
 
 **Rating Prediction**
 
@@ -45,7 +45,7 @@ $ cmake .
 $ make
 ```
 
-By default, it will be compiled for *Python 2.7*. If you want to build it for *Python 3*, you can execute the following steps.
+By default, it will be compiled for *Python 2.7*. If you want to build it for *Python 3*, you can execute the following steps:
 
 ```sh
 $ cd pyreclab
@@ -72,7 +72,7 @@ $ make install
  * [pyreclab.SVD](#svd)
  * [pyreclab.MostPopular](#mostpopular)
 
-   So, you can import any of them as follows
+   So, you can import any of them as follows:
 
 ```python
 >>> from pyreclab import <RecAlg>
