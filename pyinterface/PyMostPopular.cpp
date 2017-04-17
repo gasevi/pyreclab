@@ -80,7 +80,24 @@ PyObject* MostPopular_train( Recommender* self, PyObject* args, PyObject* kwdict
       return NULL;
    }
 
-   dynamic_cast<AlgMostPopular*>( self->m_recAlgorithm )->train( topn );
+   self->m_currentRecSys = self->m_recAlgorithm;
+   sighandler_t prevsighd = signal( SIGINT, Recommender::sighandler );
+
+   int cause = 0;
+   Py_BEGIN_ALLOW_THREADS
+   cause = dynamic_cast<AlgMostPopular*>( self->m_recAlgorithm )->train( topn );
+   Py_END_ALLOW_THREADS
+
+   signal( SIGINT, prevsighd );
+
+   if( RecSysAlgorithm::STOPPED == cause )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_KeyboardInterrupt, "SIGINT received" );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
    Py_INCREF( Py_None );
    return Py_None;
 }

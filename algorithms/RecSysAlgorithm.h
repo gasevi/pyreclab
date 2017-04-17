@@ -11,14 +11,21 @@ class RecSysAlgorithm
 {
 public:
 
+   enum ETrainingEndCauses
+   {
+      FINISHED,
+      STOPPED
+   };
+
    RecSysAlgorithm( RatingMatrix& ratingMatrix )
-   : m_ratingMatrix( ratingMatrix )
+   : m_ratingMatrix( ratingMatrix ),
+     m_running( true )
    {
       m_globalMean = m_ratingMatrix.sumRatings()/m_ratingMatrix.numRatings();
    }
 
    virtual
-   void train() = 0;
+   int train() = 0;
 
    virtual
    void test( DataFrame& dataFrame ) = 0;
@@ -35,11 +42,18 @@ public:
       return false;
    }
 
+   void stop()
+   {
+      m_running = false;
+   }
+
 protected:
 
    RatingMatrix& m_ratingMatrix;
 
    double m_globalMean;
+
+   bool m_running;
 
 };
 

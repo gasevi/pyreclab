@@ -14,9 +14,9 @@ public:
 
    AlgMostPopular( RatingMatrix& ratingMatrix );
 
-   void train();
+   int train();
 
-   void train( size_t topn );
+   int train( size_t topn );
 
    void test( DataFrame& dataFrame );
 

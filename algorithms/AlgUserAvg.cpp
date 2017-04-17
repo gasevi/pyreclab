@@ -8,7 +8,7 @@ AlgUserAvg::AlgUserAvg( RatingMatrix& ratingMatrix )
 {
 }
 
-void AlgUserAvg::train()
+int AlgUserAvg::train()
 {
    for( int u = 0 ; u < m_ratingMatrix.users() ; ++u )
    {
@@ -19,7 +19,14 @@ void AlgUserAvg::train()
       {
          m_meanRatingByUser[userId] = sumbyrow/countbyrow;
       }
+
+      if( !m_running )
+      {
+         return STOPPED;
+      }
    }
+
+   return FINISHED;
 }
 
 void AlgUserAvg::test( DataFrame& dataFrame )

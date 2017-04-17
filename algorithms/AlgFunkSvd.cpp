@@ -37,13 +37,13 @@ AlgFunkSvd::~AlgFunkSvd()
    delete [] m_itemBias;
 }
 
-void AlgFunkSvd::train( size_t factors, size_t maxiter, float lrate, float lambda )
+int AlgFunkSvd::train( size_t factors, size_t maxiter, float lrate, float lambda )
 {
    reset( factors, maxiter, lrate, lambda );
-   train();
+   return train();
 }
 
-void AlgFunkSvd::train()
+int AlgFunkSvd::train()
 {
    for( int it = 0 ; it < m_maxIter ; ++it )
    {
@@ -91,6 +91,11 @@ void AlgFunkSvd::train()
 
                // user and item vectors regularization: lambda * ( ||pu||^2 + ||qi||^2 )
                loss += m_lambda * puf * puf + m_lambda * qif * qif;
+
+               if( !m_running )
+               {
+                  return STOPPED;
+               }
             }
          }
       }
@@ -103,6 +108,8 @@ void AlgFunkSvd::train()
       }
       adaptLR( it );
    }
+
+   return FINISHED;
 }
 
 void AlgFunkSvd::test( DataFrame& dataFrame )

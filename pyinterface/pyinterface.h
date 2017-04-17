@@ -9,8 +9,7 @@
 
 #include <Python.h>
 
-
-typedef struct
+typedef struct RecSysStruct
 {
    PyObject_HEAD
    DataReader* m_trainingReader;
@@ -18,6 +17,17 @@ typedef struct
    RecSysAlgorithm* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
+   static
+   RecSysAlgorithm* m_currentRecSys;
+
+   static
+   void sighandler( int signum )
+   {
+      if( NULL != RecSysStruct::m_currentRecSys )
+      {
+         RecSysStruct::m_currentRecSys->stop();
+      }
+   }
 } Recommender;
 
 void Recommender_dealloc( Recommender* self );

@@ -14,7 +14,7 @@ public:
 
    AlgUserAvg( RatingMatrix& ratingMatrix );
 
-   void train();
+   int train();
 
    void test( DataFrame& dataFrame );
 

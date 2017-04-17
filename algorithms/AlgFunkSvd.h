@@ -15,9 +15,9 @@ public:
 
    ~AlgFunkSvd();
 
-   void train();
+   int train();
 
-   void train( size_t factors, size_t maxiter, float lrate, float lambda );
+   int train( size_t factors, size_t maxiter, float lrate, float lambda );
 
    void test( DataFrame& dataFrame );
 

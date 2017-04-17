@@ -11,12 +11,12 @@ AlgUserBasedKnn::AlgUserBasedKnn( RatingMatrix& ratingMatrix )
 {
 }
 
-void AlgUserBasedKnn::train()
+int AlgUserBasedKnn::train()
 {
-   train( 10 );
+   return train( 10 );
 }
 
-void AlgUserBasedKnn::train( size_t k )
+int AlgUserBasedKnn::train( size_t k )
 {
    m_knn = k;
    Similarity<SparseRow> simfunc( Similarity<SparseRow>::PEARSON );
@@ -36,8 +36,15 @@ void AlgUserBasedKnn::train( size_t k )
          double sim = simfunc.calculate( rowi, rowj );
          m_simMatrix.set( i, j, sim );
          m_simMatrix.set( j, i, sim );
+
+         if( !m_running )
+         {
+            return STOPPED;
+         }
       }
    }
+
+   return FINISHED;
 }
 
 void AlgUserBasedKnn::test( DataFrame& dataFrame )

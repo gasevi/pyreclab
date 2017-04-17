@@ -11,12 +11,12 @@ AlgItemBasedKnn::AlgItemBasedKnn( RatingMatrix& ratingMatrix )
 {
 }
 
-void AlgItemBasedKnn::train()
+int AlgItemBasedKnn::train()
 {  
-   train( 10 );
+   return train( 10 );
 }
 
-void AlgItemBasedKnn::train( size_t k )
+int AlgItemBasedKnn::train( size_t k )
 {
    m_knn = k;
    Similarity<SparseColumn> simfunc( Similarity<SparseColumn>::PEARSON );
@@ -36,8 +36,15 @@ void AlgItemBasedKnn::train( size_t k )
          double sim = simfunc.calculate( coli, colj );
          m_simMatrix.set( i, j, sim );
          m_simMatrix.set( j, i, sim );
+
+         if( !m_running )
+         {
+            return STOPPED;
+         }
       }
    }
+
+   return FINISHED;
 }
 
 void AlgItemBasedKnn::test( DataFrame& dataFrame )

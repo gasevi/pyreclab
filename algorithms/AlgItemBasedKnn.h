@@ -13,9 +13,9 @@ public:
 
    AlgItemBasedKnn( RatingMatrix& ratingMatrix );
 
-   void train();
+   int train();
 
-   void train( size_t k );
+   int train( size_t k );
 
    void test( DataFrame& dataFrame );
 

@@ -8,7 +8,7 @@ AlgItemAvg::AlgItemAvg( RatingMatrix& ratingMatrix )
 {
 }
 
-void AlgItemAvg::train()
+int AlgItemAvg::train()
 {
    for( int i = 0 ; i < m_ratingMatrix.items() ; ++i )
    {
@@ -19,7 +19,14 @@ void AlgItemAvg::train()
       {
          m_meanRatingByItem[itemId] = sumbycol/countbycol;
       }
+
+      if( !m_running )
+      {
+         return STOPPED;
+      }
    }
+
+   return FINISHED;
 }
 
 void AlgItemAvg::test( DataFrame& dataFrame )

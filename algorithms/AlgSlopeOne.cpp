@@ -11,7 +11,7 @@ AlgSlopeOne::AlgSlopeOne( RatingMatrix& ratingMatrix )
    m_cardMatrix.resize( nitems, nitems );
 }
 
-void AlgSlopeOne::train()
+int AlgSlopeOne::train()
 {
    double ratesum = 0;
    size_t nusers = m_ratingMatrix.users();
@@ -46,6 +46,10 @@ void AlgSlopeOne::train()
                cout << porcent << " %" << endl;
             }
 */
+            if( !m_running )
+            {
+               return STOPPED;
+            }
          }
 
       }
@@ -61,8 +65,15 @@ void AlgSlopeOne::train()
             double sum = m_devMatrix.get( i, j );
             m_devMatrix.set( i, j, sum / card );
          }
+
+         if( !m_running )
+         {
+            return STOPPED;
+         }
       }
    }
+
+   return FINISHED;
 }
 
 void AlgSlopeOne::test( DataFrame& dataFrame )

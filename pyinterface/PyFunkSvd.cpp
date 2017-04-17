@@ -82,7 +82,24 @@ PyObject* FunkSvd_train( Recommender* self, PyObject* args, PyObject* kwdict )
       return NULL;
    }
 
-   dynamic_cast<AlgFunkSvd*>( self->m_recAlgorithm )->train( factors, maxiter, lr, lambda );
+   self->m_currentRecSys = self->m_recAlgorithm;
+   sighandler_t prevsighd = signal( SIGINT, Recommender::sighandler );
+
+   int cause = 0;
+   Py_BEGIN_ALLOW_THREADS
+   cause = dynamic_cast<AlgFunkSvd*>( self->m_recAlgorithm )->train( factors, maxiter, lr, lambda );
+   Py_END_ALLOW_THREADS
+
+   signal( SIGINT, prevsighd );
+
+   if( RecSysAlgorithm::STOPPED == cause )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_KeyboardInterrupt, "SIGINT received" );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
    Py_INCREF( Py_None );
    return Py_None;
 }

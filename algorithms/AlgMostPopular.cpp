@@ -10,13 +10,13 @@ AlgMostPopular::AlgMostPopular( RatingMatrix& ratingMatrix )
 {
 }
 
-void AlgMostPopular::train( size_t topn )
+int AlgMostPopular::train( size_t topn )
 {
    m_topn = topn;
-   train();
+   return train();
 }
 
-void AlgMostPopular::train()
+int AlgMostPopular::train()
 {
    for( int i = 0 ; i < m_ratingMatrix.items() ; ++i )
    {
@@ -34,7 +34,14 @@ void AlgMostPopular::train()
          sort( m_itemList.rbegin(), m_itemList.rend() );
          m_itemList.pop_back();
       }
+
+      if( !m_running )
+      {
+         return STOPPED;
+      }
    }
+
+   return FINISHED;
 }
 
 void AlgMostPopular::test( DataFrame& dataFrame )

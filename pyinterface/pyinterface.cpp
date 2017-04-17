@@ -15,6 +15,8 @@
 
 using namespace std;
 
+RecSysAlgorithm* RecSysStruct::m_currentRecSys = NULL;
+
 #if PY_MAJOR_VERSION >= 3
 struct module_state
 {
@@ -37,7 +39,24 @@ void Recommender_dealloc( Recommender* self )
 
 PyObject* Recommender_train( Recommender* self, PyObject* args, PyObject* kwds )
 {
-   self->m_recAlgorithm->train();
+   self->m_currentRecSys = self->m_recAlgorithm;
+   sighandler_t prevsighd = signal( SIGINT, Recommender::sighandler );
+
+   int cause = 0;
+   Py_BEGIN_ALLOW_THREADS
+   cause = self->m_recAlgorithm->train();
+   Py_END_ALLOW_THREADS
+
+   signal( SIGINT, prevsighd );
+
+   if( RecSysAlgorithm::STOPPED == cause )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_KeyboardInterrupt, "SIGINT received" );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
    Py_INCREF( Py_None );
    return Py_None;
 }
@@ -170,14 +189,16 @@ static PyMethodDef pyreclabMethods[] =
 };
 
 #if PY_MAJOR_VERSION >= 3
-static int pyreclab_traverse(PyObject *m, visitproc visit, void *arg) {
-    Py_VISIT(GETSTATE(m)->error);
-    return 0;
+static int pyreclab_traverse(PyObject *m, visitproc visit, void *arg)
+{
+   Py_VISIT( GETSTATE( m )->error );
+   return 0;
 }
 
-static int pyreclab_clear(PyObject *m) {
-    Py_CLEAR(GETSTATE(m)->error);
-    return 0;
+static int pyreclab_clear( PyObject *m )
+{
+   Py_CLEAR( GETSTATE( m )->error );
+   return 0;
 }
 
 static struct PyModuleDef moduledef =
