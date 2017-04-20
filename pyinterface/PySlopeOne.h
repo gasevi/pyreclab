@@ -9,9 +9,9 @@ PyObject* SlopeOne_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 static
 PyMethodDef SlopeOne_methods[] =
 {
-   { "train",   (PyCFunction)Recommender_train,   METH_VARARGS,               "train model" },
+   { "train",   (PyCFunction)Recommender_train,   METH_NOARGS,                "train model" },
    { "test",    (PyCFunction)Recommender_test,    METH_VARARGS|METH_KEYWORDS, "test model" },
-   { "predict", (PyCFunction)Recommender_predict, METH_VARARGS,               "predict user's rating for an item" },
+   { "predict", (PyCFunction)Recommender_predict, METH_KEYWORDS,              "predict user's rating for an item" },
    { NULL }
 };
 

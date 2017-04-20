@@ -5,6 +5,7 @@
 #include "AlgMostPopular.h"
 
 #include <Python.h>
+#include <signal.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -195,13 +196,13 @@ PyObject* MostPopular_test( Recommender* self, PyObject* args, PyObject* kwdict 
    return pyDict;
 }
 
-PyObject* MostPopular_recommend( Recommender* self, PyObject* args, PyObject* kwds )
+PyObject* MostPopular_recommend( Recommender* self, PyObject* args, PyObject* kwdict )
 {
    const char* userId = NULL;
    static char* kwlist[] = { const_cast<char*>( "user" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwds, "s|", kwlist, &userId  ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|", kwlist, &userId  ) )
    {
       return NULL;
    }

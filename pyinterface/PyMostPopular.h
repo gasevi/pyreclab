@@ -7,14 +7,14 @@
 PyObject* MostPopular_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 PyObject* MostPopular_train( Recommender* self, PyObject* args, PyObject* kwdict );
 PyObject* MostPopular_test( Recommender* self, PyObject* args, PyObject* kwdict );
-PyObject* MostPopular_recommend( Recommender* self, PyObject* args, PyObject* kwds );
+PyObject* MostPopular_recommend( Recommender* self, PyObject* args, PyObject* kwdict );
 
 static
 PyMethodDef MostPopular_methods[] =
 {
    { "train",     (PyCFunction)MostPopular_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
    { "test",      (PyCFunction)MostPopular_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
-   { "recommend", (PyCFunction)MostPopular_recommend, METH_VARARGS|METH_KEYWORDS, "recommend items" },
+   { "recommend", (PyCFunction)MostPopular_recommend, METH_KEYWORDS,              "recommend items" },
    { NULL }
 };
 

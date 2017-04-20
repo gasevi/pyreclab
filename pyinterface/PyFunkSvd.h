@@ -12,7 +12,7 @@ PyMethodDef FunkSvd_methods[] =
 {
    { "train",   (PyCFunction)FunkSvd_train,       METH_VARARGS|METH_KEYWORDS, "train model" },
    { "test",    (PyCFunction)Recommender_test,    METH_VARARGS|METH_KEYWORDS, "test model" },
-   { "predict", (PyCFunction)Recommender_predict, METH_VARARGS,               "predict user's rating for an item" },
+   { "predict", (PyCFunction)Recommender_predict, METH_KEYWORDS,              "predict user's rating for an item" },
    { NULL }
 };
 

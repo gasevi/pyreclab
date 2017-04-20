@@ -9,6 +9,7 @@
 #include "PySlopeOne.h"
 #include "PyFunkSvd.h"
 
+#include <signal.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -37,7 +38,7 @@ void Recommender_dealloc( Recommender* self )
 #endif
 }
 
-PyObject* Recommender_train( Recommender* self, PyObject* args, PyObject* kwds )
+PyObject* Recommender_train( Recommender* self, PyObject* args )
 {
    self->m_currentRecSys = self->m_recAlgorithm;
    sighandler_t prevsighd = signal( SIGINT, Recommender::sighandler );
@@ -166,7 +167,7 @@ PyObject* Recommender_test( Recommender* self, PyObject* args, PyObject* kwdict 
    return pyTupleResult;
 }
 
-PyObject* Recommender_predict( Recommender* self, PyObject* args, PyObject* kwds )
+PyObject* Recommender_predict( Recommender* self, PyObject* args, PyObject* kwdict )
 {
    const char* userId = NULL;
    const char* itemId = NULL;
@@ -174,12 +175,13 @@ PyObject* Recommender_predict( Recommender* self, PyObject* args, PyObject* kwds
                              const_cast<char*>( "item" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwds, "|ss", kwlist, &userId, &itemId ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "ss|", kwlist, &userId, &itemId ) )
    {
       return NULL;
    }
 
    float prating = self->m_recAlgorithm->predict( userId, itemId );
+
    return Py_BuildValue( "f", prating );
 }
 

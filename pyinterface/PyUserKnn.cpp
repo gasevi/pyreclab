@@ -2,6 +2,7 @@
 #include "AlgFactory.h"
 #include "AlgUserBasedKnn.h"
 
+#include <signal.h>
 #include <iostream>
 #include <string>
 
