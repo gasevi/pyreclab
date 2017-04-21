@@ -34,11 +34,11 @@ if __name__ == '__main__':
    end = time.clock()
    testtime = end - start
 
-   pred = mpop.recommend( '457' )
-   print( 'user 457, recommended items ' + str( pred ) )
-
    print( 'train time: ' + str( traintime ) )
    print( 'test time: ' + str( testtime ) )
+
+   ranking = mpop.recommend( '457', 5 )
+   print( 'user 457, recommended items ' + str( ranking ) )
 
 
 

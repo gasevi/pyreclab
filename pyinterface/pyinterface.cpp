@@ -185,6 +185,42 @@ PyObject* Recommender_predict( Recommender* self, PyObject* args, PyObject* kwdi
    return Py_BuildValue( "f", prating );
 }
 
+PyObject* Recommender_recommend( Recommender* self, PyObject* args, PyObject* kwds )
+{
+   const char* userId = NULL;
+   int topn = 10;
+
+   static char* kwlist[] = { const_cast<char*>( "user" ),
+                             const_cast<char*>( "topn" ),
+                             NULL };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwds, "s|i", kwlist, &userId, &topn ) )
+   {
+      return NULL;
+   }
+
+   vector<string> itemList;
+   self->m_recAlgorithm->recommend( userId, topn, itemList );
+
+   PyObject* pyList = PyList_New( 0 );
+   if( NULL == pyList )
+   {
+      return NULL;
+   }
+
+   vector<string>::iterator ind;
+   vector<string>::iterator end = itemList.end();
+   for( ind = itemList.begin() ; ind != end ; ++ind )
+   {
+      if( -1 == PyList_Append( pyList, Py_BuildValue( "s", ind->c_str() ) ) )
+      {
+         return NULL;
+      }
+   }
+
+   return pyList;
+}
+
 static PyMethodDef pyreclabMethods[] =
 {
    { NULL, NULL }

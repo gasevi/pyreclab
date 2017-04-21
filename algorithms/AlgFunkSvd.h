@@ -23,11 +23,11 @@ public:
 
    double predict( std::string userId, std::string itemId );
 
+   double predict( size_t userrow, size_t itemcol );
+
 private:
 
    void reset( size_t factors, size_t maxiter, float lrate, float lambda );
-
-   double predict( size_t userrow, size_t itemcol );
 
    bool converged( double loss );
 

@@ -86,7 +86,7 @@ PyObject* MostPopular_train( Recommender* self, PyObject* args, PyObject* kwdict
 
    int cause = 0;
    Py_BEGIN_ALLOW_THREADS
-   cause = dynamic_cast<AlgMostPopular*>( self->m_recAlgorithm )->train( topn );
+   cause = dynamic_cast<AlgMostPopular*>( self->m_recAlgorithm )->train();
    Py_END_ALLOW_THREADS
 
    signal( SIGINT, prevsighd );
@@ -111,16 +111,18 @@ PyObject* MostPopular_test( Recommender* self, PyObject* args, PyObject* kwdict 
    int header = 0;
    int usercol = 0;
    int itemcol = 1;
+   int topn = 10;
 
    static char* kwlist[] = { const_cast<char*>( "input_file" ),
                              const_cast<char*>( "output_file" ),
                              const_cast<char*>( "dlmchar" ),
                              const_cast<char*>( "header" ),
                              const_cast<char*>( "usercol" ),
+                             const_cast<char*>( "topn" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|scii", kwlist, &input_file,
-                                     &output_file, &dlmchar, &header, &usercol ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|sciii", kwlist, &input_file,
+                                     &output_file, &dlmchar, &header, &usercol, &topn ) )
    {
       return NULL;
    }
@@ -160,7 +162,7 @@ PyObject* MostPopular_test( Recommender* self, PyObject* args, PyObject* kwdict 
       std::string itemId = ind->first.second;
 
       vector<string> itemList;
-      if( !self->m_recAlgorithm->rank( userId, itemList ) )
+      if( !self->m_recAlgorithm->recommend( userId, topn, itemList ) )
       {
          continue;
       }
@@ -199,16 +201,19 @@ PyObject* MostPopular_test( Recommender* self, PyObject* args, PyObject* kwdict 
 PyObject* MostPopular_recommend( Recommender* self, PyObject* args, PyObject* kwdict )
 {
    const char* userId = NULL;
+   int topn = 10;
+
    static char* kwlist[] = { const_cast<char*>( "user" ),
+                             const_cast<char*>( "topn" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|", kwlist, &userId  ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|i", kwlist, &userId, &topn ) )
    {
       return NULL;
    }
 
    vector<string> itemList;
-   self->m_recAlgorithm->rank( userId, itemList );
+   self->m_recAlgorithm->recommend( userId, topn, itemList );
 
    PyObject* pyList = PyList_New( 0 );
    if( NULL == pyList )

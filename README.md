@@ -132,6 +132,16 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
 
+ * Top-N item recommendation
+
+```python
+>>> ranking = obj.recommend( userId, topN )
+```
+
+| Parameter | Type      | Default value | Description               |
+|:----------|:---------:|:-------------:|:--------------------------|
+| userId    | mandatory | N.A.          | User identifier           |
+| topN      | optional  | 10            | Top N items to recommend  |
 
  * Testing and evaluation
 
@@ -175,6 +185,16 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
 
+ * Top-N item recommendation
+
+```python
+>>> ranking = obj.recommend( userId, topN )
+```
+
+| Parameter | Type      | Default value | Description               |
+|:----------|:---------:|:-------------:|:--------------------------|
+| userId    | mandatory | N.A.          | User identifier           |
+| topN      | optional  | 10            | Top N items to recommend  |
 
  * Testing and evaluation
 
@@ -218,6 +238,16 @@ prediction = obj.predict( userId, itemId )
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
 
+ * Top-N item recommendation
+
+```python
+>>> ranking = obj.recommend( userId, topN )
+```
+
+| Parameter | Type      | Default value | Description               |
+|:----------|:---------:|:-------------:|:--------------------------|
+| userId    | mandatory | N.A.          | User identifier           |
+| topN      | optional  | 10            | Top N items to recommend  |
 
  * Testing and evaluation
 
@@ -265,6 +295,17 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
 
+ * Top-N item recommendation
+
+```python
+>>> ranking = obj.recommend( userId, topN )
+```
+
+| Parameter | Type      | Default value | Description               |
+|:----------|:---------:|:-------------:|:--------------------------|
+| userId    | mandatory | N.A.          | User identifier           |
+| topN      | optional  | 10            | Top N items to recommend  |
+
  * Testing and evaluation
 
 ```python
@@ -310,6 +351,17 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 |:----------|:---------:|:-------------:|:------------------|
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
+
+ * Top-N item recommendation
+
+```python
+>>> ranking = obj.recommend( userId, topN )
+```
+
+| Parameter | Type      | Default value | Description               |
+|:----------|:---------:|:-------------:|:--------------------------|
+| userId    | mandatory | N.A.          | User identifier           |
+| topN      | optional  | 10            | Top N items to recommend  |
 
  * Testing and evaluation
 
@@ -360,6 +412,17 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 | userId    | mandatory | N.A.          | User identifier   |
 | itemId    | mandatory | N.A.          | Item identifier   |
 
+ * Top-N item recommendation
+
+```python
+>>> ranking = obj.recommend( userId, topN )
+```
+
+| Parameter | Type      | Default value | Description               |
+|:----------|:---------:|:-------------:|:--------------------------|
+| userId    | mandatory | N.A.          | User identifier           |
+| topN      | optional  | 10            | Top N items to recommend  |
+
  * Testing and evaluation
 
 ```python
@@ -389,33 +452,30 @@ predictionList, mae, rmse = obj.test( input_file = testset,
  * Training
 
 ```python
->>> obj.train( topN )
+>>> obj.train()
+```
+
+ * Top-N item recommendation
+
+```python
+>>> ranking = obj.recommend( userId, topN )
 ```
 
 | Parameter | Type      | Default value | Description               |
-|----------:|----------:|--------------:|:--------------------------|
+|:----------|:---------:|:-------------:|:--------------------------|
+| userId    | mandatory | N.A.          | User identifier           |
 | topN      | optional  | 10            | Top N items to recommend  |
 
 
- * Rating prediction
+ * Testing
 
 ```python
->>> ranking = obj.recommend( userId )
-```
-
-| Parameter | Type      | Default value | Description       |
-|:----------|:---------:|:-------------:|:------------------|
-| userId    | mandatory | N.A.          | User identifier   |
-
-
- * Testing and evaluation
-
-```python
->>> predictionList, mae, rmse = obj.test( input_file = testset,
-                                          dlmchar = b'\t',
-                                          header = False,
-                                          usercol = 0,
-                                          output_file = 'predictions.csv' )
+>>> predictionList = obj.test( input_file = testset,
+                               dlmchar = b'\t',
+                               header = False,
+                               usercol = 0,
+                               output_file = 'ranking.json',
+                               topN = 10 )
 ```
 
 | Parameter   | Type      | Default value | Description                                                 |
@@ -424,12 +484,12 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 | dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol     | optional  | 0             | User column position in dataset file                        |
-| output_file | optional  | N.A.          | Output file to write predictions                            |
+| output_file | optional  | N.A.          | Output file to write rankings                               |
+| topN        | optional  | 10            | Top N items to recommend                                    |
 
 
 ## <span style="font-size: 4em;">On roadmap</span>
 
- * Extend items recommendation methods to rating prediction algorithms.
  * Add ranking evaluation metrics.
  * Extend support for other operating systems like *Mac OS X* and *Windows*.
 

@@ -10,9 +10,10 @@ PyObject* FunkSvd_train( Recommender* self, PyObject* args, PyObject* kwdict );
 static
 PyMethodDef FunkSvd_methods[] =
 {
-   { "train",   (PyCFunction)FunkSvd_train,       METH_VARARGS|METH_KEYWORDS, "train model" },
-   { "test",    (PyCFunction)Recommender_test,    METH_VARARGS|METH_KEYWORDS, "test model" },
-   { "predict", (PyCFunction)Recommender_predict, METH_KEYWORDS,              "predict user's rating for an item" },
+   { "train",     (PyCFunction)FunkSvd_train,         METH_VARARGS|METH_KEYWORDS, "train model" },
+   { "test",      (PyCFunction)Recommender_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
+   { "predict",   (PyCFunction)Recommender_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
+   { "recommend", (PyCFunction)Recommender_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
    { NULL }
 };
 

@@ -31,16 +31,13 @@ public:
    void test( DataFrame& dataFrame ) = 0;
 
    virtual
-   double predict( std::string userId, std::string itemId )
-   {
-      return 0;
-   }
+   double predict( std::string userId, std::string itemId );
 
    virtual
-   bool rank( const std::string& userId, std::vector<std::string>& rank )
-   {
-      return false;
-   }
+   double predict( size_t row, size_t col );
+
+   virtual
+   bool recommend( const std::string& userId, size_t n, std::vector<std::string>& ranking );
 
    void stop()
    {

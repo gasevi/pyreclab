@@ -1,4 +1,5 @@
-set( SRCFILES AlgUserAvg.cpp
+set( SRCFILES RecSysAlgorithm.cpp
+              AlgUserAvg.cpp
               AlgItemAvg.cpp
               AlgSlopeOne.cpp
               AlgUserBasedKnn.cpp

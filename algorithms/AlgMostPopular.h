@@ -16,11 +16,9 @@ public:
 
    int train();
 
-   int train( size_t topn );
-
    void test( DataFrame& dataFrame );
 
-   bool rank( const std::string& userId, std::vector< std::string >& itemList );
+   bool recommend( const std::string& userId, size_t n, std::vector<std::string>& ranking );
  
 private:
 

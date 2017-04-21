@@ -5,15 +5,8 @@ using namespace std;
 
 
 AlgMostPopular::AlgMostPopular( RatingMatrix& ratingMatrix )
-: RecSysAlgorithm( ratingMatrix ),
-  m_topn( 10 )
+: RecSysAlgorithm( ratingMatrix )
 {
-}
-
-int AlgMostPopular::train( size_t topn )
-{
-   m_topn = topn;
-   return train();
 }
 
 int AlgMostPopular::train()
@@ -21,25 +14,16 @@ int AlgMostPopular::train()
    for( int i = 0 ; i < m_ratingMatrix.items() ; ++i )
    {
       double score = m_ratingMatrix.nonZeroCol( i );
-      if( m_itemList.size() < m_topn )
-      {
-         pair<double, size_t> e = pair<double, size_t>( score, i );
-         m_itemList.push_back( e );
-         sort( m_itemList.rbegin(), m_itemList.rend() );
-      }
-      else if( m_itemList.back().first < score )
-      {
-         pair<double, size_t> e = pair<double, size_t>( score, i );
-         m_itemList.push_back( e );
-         sort( m_itemList.rbegin(), m_itemList.rend() );
-         m_itemList.pop_back();
-      }
+      pair<double, size_t> e = pair<double, size_t>( score, i );
+      m_itemList.push_back( e );
 
       if( !m_running )
       {
+         sort( m_itemList.rbegin(), m_itemList.rend() );
          return STOPPED;
       }
    }
+   sort( m_itemList.rbegin(), m_itemList.rend() );
 
    return FINISHED;
 }
@@ -56,21 +40,20 @@ void AlgMostPopular::test( DataFrame& dataFrame )
    }
 }
 
-bool AlgMostPopular::rank( const string& userId, vector<string>& itemList )
+bool AlgMostPopular::recommend( const std::string& userId, size_t n, std::vector<std::string>& ranking )
 {
-   bool ret = false;
-   if( m_itemList.size() == m_topn )
+   for( int i = 0 ; i < n ; ++i )
    {
-      for( int i = 0 ; i < m_topn ; ++i )
+      if( m_itemList.size() <= i )
       {
-         size_t itemcol = m_itemList[i].second;
-         string itemId = m_ratingMatrix.itemId( itemcol );
-         itemList.push_back( itemId );
+         break;
       }
-      ret = true;
+      size_t itemcol = m_itemList[i].second;
+      string itemId = m_ratingMatrix.itemId( itemcol );
+      ranking.push_back( itemId );
    }
 
-   return ret;
+   return true;
 }
 
 

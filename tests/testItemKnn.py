@@ -39,11 +39,13 @@ if __name__ == '__main__':
    print( 'MAE: ' + str( mae ) )
    print( 'RMSE: ' + str( rmse ) )
 
-   pred = ibknn.predict( '457', '443' )
-   print( 'user 457, item 443, prediction ' + str( pred ) )
-
    print( 'train time: ' + str( traintime ) )
    print( 'test time: ' + str( testtime ) )
 
+   pred = ibknn.predict( '457', '443' )
+   print( 'user 457, item 443, prediction ' + str( pred ) )
+
+   ranking = ibknn.recommend( '457', 5 )
+   print( 'recommendation for user 457: ' + str( ranking ) )
 
 
