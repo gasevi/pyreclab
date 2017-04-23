@@ -26,7 +26,7 @@ static PyTypeObject MostPopularType =
    PyObject_HEAD_INIT( NULL )
    0,                                        /* ob_size */
 #endif
-   "pyreclab.MostPopular",                   /* tp_name */
+   "libpyreclab.MostPopular",                /* tp_name */
    sizeof(Recommender),                      /* tp_basicsize */
    0,                                        /* tp_itemsize */
    (destructor)Recommender_dealloc,          /* tp_dealloc */

@@ -2,6 +2,8 @@ cmake_minimum_required( VERSION 2.8 )
 
 project( pyreclab )
 
+set( PACKAGE_VERSION "0.1.0" )
+
 # Python version
 set( PY_MAJOR_VERSION 2 CACHE STRING "Python version" )
 find_package( PythonLibs ${PY_MAJOR_VERSION} REQUIRED )
@@ -42,14 +44,24 @@ add_library( pyreclab SHARED
                       $<TARGET_OBJECTS:eval_metrics>
                       $<TARGET_OBJECTS:pyinterface> )
 
-set_target_properties( pyreclab PROPERTIES PREFIX ""
-                                           LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/pyreclab" )
+set_target_properties( pyreclab PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/pyreclab" )
 
-install( TARGETS pyreclab DESTINATION ${PYTHON_LIB_DIR}/dist-packages/ )
+find_program( PYTHON "python" )
+if( PYTHON )
+   set( SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/pypackage/setup.py.in" )
+   set( SETUP_PY    "${CMAKE_CURRENT_BINARY_DIR}/pypackage/setup.py" )
+   set( OUTPUT      "${CMAKE_CURRENT_BINARY_DIR}/build/timestamp" )
+   set( DEPS        "pyreclab" )
 
-#add_executable( tests/test_itemavg tests/test_itemavg.cpp )
+   configure_file( ${SETUP_PY_IN} ${SETUP_PY} )
 
-#target_link_libraries( tests/test_itemavg pyreclab )
-#target_link_libraries( tests/test_itemavg python2.7 )
+   add_custom_command( OUTPUT ${OUTPUT}
+                       COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
+                       COMMAND ${PYTHON} ${SETUP_PY} bdist_egg
+                       COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
+                       DEPENDS ${DEPS} )
+
+   add_custom_target( target ALL DEPENDS ${OUTPUT} )
+endif()
 
 

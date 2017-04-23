@@ -25,7 +25,7 @@ static PyTypeObject ItemKnnType =
    PyObject_HEAD_INIT( NULL )
    0,                                        /* ob_size */
 #endif
-   "pyreclab.ItemKnn",                       /* tp_name */
+   "libpyreclab.ItemKnn",                    /* tp_name */
    sizeof(Recommender),                      /* tp_basicsize */
    0,                                        /* tp_itemsize */
    (destructor)Recommender_dealloc,          /* tp_dealloc */

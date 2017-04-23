@@ -24,7 +24,7 @@ static PyTypeObject SlopeOneType =
    PyObject_HEAD_INIT( NULL )
    0,                                        /* ob_size */
 #endif
-   "pyreclab.SlopeOne",                       /* tp_name */
+   "libpyreclab.SlopeOne",                   /* tp_name */
    sizeof(Recommender),                      /* tp_basicsize */
    0,                                        /* tp_itemsize */
    (destructor)Recommender_dealloc,          /* tp_dealloc */
