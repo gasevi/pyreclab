@@ -143,7 +143,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | userId    | mandatory | N.A.          | User identifier           |
 | topN      | optional  | 10            | Top N items to recommend  |
 
- * Testing and evaluation
+ * Testing and evaluation for prediction
 
 ```python
 >>> predictionList, mae, rmse = obj.test( input_file = testset,
@@ -163,6 +163,31 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | usercol     | optional  | 0             | User column position in dataset file                        |
 | itemcol     | optional  | 1             | Item column position in dataset file                        |
 | rating      | optional  | 2             | Rating column position in dataset file                      |
+| output_file | optional  | N.A.          | Output file to write predictions                            |
+
+
+ * Testing for recommendation
+
+```python
+>>> recommendationList = obj.testrec( input_file = testset,
+                                      dlmchar = b'\t',
+                                      header = False,
+                                      usercol = 0,
+                                      itemcol = 1,
+                                      ratingcol = 2,
+                                      topn = 10,
+                                      output_file = 'ranking.json' )
+```
+
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file  | mandatory | N.A.          | Testset filename                                            |
+| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header      | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol     | optional  | 0             | User column position in dataset file                        |
+| itemcol     | optional  | 1             | Item column position in dataset file                        |
+| rating      | optional  | 2             | Rating column position in dataset file                      |
+| topn        | optional  | 10            | Top N items to recommend                                    |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
 
@@ -196,7 +221,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | userId    | mandatory | N.A.          | User identifier           |
 | topN      | optional  | 10            | Top N items to recommend  |
 
- * Testing and evaluation
+ * Testing and evaluation for prediction
 
 ```python
 >>> predictionList, mae, rmse = obj.test( input_file = testset,
@@ -216,6 +241,30 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | usercol     | optional  | 0             | User column position in dataset file                        |
 | itemcol     | optional  | 1             | Item column position in dataset file                        |
 | rating      | optional  | 2             | Rating column position in dataset file                      |
+| output_file | optional  | N.A.          | Output file to write predictions                            |
+
+ * Testing for recommendation
+
+```python
+>>> recommendationList = obj.testrec( input_file = testset,
+                                      dlmchar = b'\t',
+                                      header = False,
+                                      usercol = 0,
+                                      itemcol = 1,
+                                      ratingcol = 2,
+                                      topn = 10,
+                                      output_file = 'ranking.json' )
+```
+
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file  | mandatory | N.A.          | Testset filename                                            |
+| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header      | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol     | optional  | 0             | User column position in dataset file                        |
+| itemcol     | optional  | 1             | Item column position in dataset file                        |
+| rating      | optional  | 2             | Rating column position in dataset file                      |
+| topn        | optional  | 10            | Top N items to recommend                                    |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
 
@@ -249,7 +298,7 @@ prediction = obj.predict( userId, itemId )
 | userId    | mandatory | N.A.          | User identifier           |
 | topN      | optional  | 10            | Top N items to recommend  |
 
- * Testing and evaluation
+ * Testing and evaluation for prediction
 
 ```python
 predictionList, mae, rmse = obj.test( input_file = testset,
@@ -269,6 +318,30 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 | usercol     | optional  | 0             | User column position in dataset file                        |
 | itemcol     | optional  | 1             | Item column position in dataset file                        |
 | rating      | optional  | 2             | Rating column position in dataset file                      |
+| output_file | optional  | N.A.          | Output file to write predictions                            |
+
+ * Testing for recommendation
+
+```python
+>>> recommendationList = obj.testrec( input_file = testset,
+                                      dlmchar = b'\t',
+                                      header = False,
+                                      usercol = 0,
+                                      itemcol = 1,
+                                      ratingcol = 2,
+                                      topn = 10,
+                                      output_file = 'ranking.json' )
+```
+
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file  | mandatory | N.A.          | Testset filename                                            |
+| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header      | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol     | optional  | 0             | User column position in dataset file                        |
+| itemcol     | optional  | 1             | Item column position in dataset file                        |
+| rating      | optional  | 2             | Rating column position in dataset file                      |
+| topn        | optional  | 10            | Top N items to recommend                                    |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
 
@@ -306,7 +379,7 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 | userId    | mandatory | N.A.          | User identifier           |
 | topN      | optional  | 10            | Top N items to recommend  |
 
- * Testing and evaluation
+ * Testing and evaluation for prediction
 
 ```python
 >>> predictionList, mae, rmse = obj.test( input_file = testset,
@@ -326,6 +399,30 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 | usercol     | optional  | 0             | User column position in dataset file                        |
 | itemcol     | optional  | 1             | Item column position in dataset file                        |
 | rating      | optional  | 2             | Rating column position in dataset file                      |
+| output_file | optional  | N.A.          | Output file to write predictions                            |
+
+ * Testing for recommendation
+
+```python
+>>> recommendationList = obj.testrec( input_file = testset,
+                                      dlmchar = b'\t',
+                                      header = False,
+                                      usercol = 0,
+                                      itemcol = 1,
+                                      ratingcol = 2,
+                                      topn = 10,
+                                      output_file = 'ranking.json' )
+```
+
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file  | mandatory | N.A.          | Testset filename                                            |
+| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header      | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol     | optional  | 0             | User column position in dataset file                        |
+| itemcol     | optional  | 1             | Item column position in dataset file                        |
+| rating      | optional  | 2             | Rating column position in dataset file                      |
+| topn        | optional  | 10            | Top N items to recommend                                    |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
 
@@ -363,7 +460,7 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 | userId    | mandatory | N.A.          | User identifier           |
 | topN      | optional  | 10            | Top N items to recommend  |
 
- * Testing and evaluation
+ * Testing and evaluation for prediction
 
 ```python
 >>> predictionList, mae, rmse = obj.test( input_file = testset,
@@ -383,6 +480,30 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 | usercol     | optional  | 0             | User column position in dataset file                        |
 | itemcol     | optional  | 1             | Item column position in dataset file                        |
 | rating      | optional  | 2             | Rating column position in dataset file                      |
+| output_file | optional  | N.A.          | Output file to write predictions                            |
+
+ * Testing for recommendation
+
+```python
+>>> recommendationList = obj.testrec( input_file = testset,
+                                      dlmchar = b'\t',
+                                      header = False,
+                                      usercol = 0,
+                                      itemcol = 1,
+                                      ratingcol = 2,
+                                      topn = 10,
+                                      output_file = 'ranking.json' )
+```
+
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file  | mandatory | N.A.          | Testset filename                                            |
+| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header      | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol     | optional  | 0             | User column position in dataset file                        |
+| itemcol     | optional  | 1             | Item column position in dataset file                        |
+| rating      | optional  | 2             | Rating column position in dataset file                      |
+| topn        | optional  | 10            | Top N items to recommend                                    |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
 
@@ -423,7 +544,7 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 | userId    | mandatory | N.A.          | User identifier           |
 | topN      | optional  | 10            | Top N items to recommend  |
 
- * Testing and evaluation
+ * Testing and evaluation for prediction
 
 ```python
 >>> predictionList, mae, rmse = obj.test( input_file = testset,
@@ -445,6 +566,29 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 | rating      | optional  | 2             | Rating column position in dataset file                      |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
+ * Testing for recommendation
+
+```python
+>>> recommendationList = obj.testrec( input_file = testset,
+                                      dlmchar = b'\t',
+                                      header = False,
+                                      usercol = 0,
+                                      itemcol = 1,
+                                      ratingcol = 2,
+                                      topn = 10,
+                                      output_file = 'ranking.json' )
+```
+
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file  | mandatory | N.A.          | Testset filename                                            |
+| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header      | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol     | optional  | 0             | User column position in dataset file                        |
+| itemcol     | optional  | 1             | Item column position in dataset file                        |
+| rating      | optional  | 2             | Rating column position in dataset file                      |
+| topn        | optional  | 10            | Top N items to recommend                                    |
+| output_file | optional  | N.A.          | Output file to write predictions                            |
 
 
 ### <a name="mostpopular"> pyreclab.MostPopular </a>
@@ -467,15 +611,15 @@ predictionList, mae, rmse = obj.test( input_file = testset,
 | topN      | optional  | 10            | Top N items to recommend  |
 
 
- * Testing
+ * Testing for recommendation
 
 ```python
->>> predictionList = obj.test( input_file = testset,
-                               dlmchar = b'\t',
-                               header = False,
-                               usercol = 0,
-                               output_file = 'ranking.json',
-                               topN = 10 )
+>>> recommendationList = obj.testrec( input_file = testset,
+                                      dlmchar = b'\t',
+                                      header = False,
+                                      usercol = 0,
+                                      output_file = 'ranking.json',
+                                      topN = 10 )
 ```
 
 | Parameter   | Type      | Default value | Description                                                 |

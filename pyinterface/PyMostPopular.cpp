@@ -103,7 +103,7 @@ PyObject* MostPopular_train( Recommender* self, PyObject* args, PyObject* kwdict
    return Py_None;
 }
 
-PyObject* MostPopular_test( Recommender* self, PyObject* args, PyObject* kwdict )
+PyObject* MostPopular_testrec( Recommender* self, PyObject* args, PyObject* kwdict )
 {
    const char* input_file = NULL;
    const char* output_file = NULL;

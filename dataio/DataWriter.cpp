@@ -6,17 +6,17 @@ using namespace std;
 
 DataWriter::DataWriter()
 : m_dlm( ',' ),
-  m_fieldsep( ' ' )
+  m_fieldsep( ' ' ),
+  m_fileFormat( UNDEFINED )
 {
 }
 
 DataWriter::~DataWriter()
 {
-   if( m_outfile.is_open() )
+   if( isOpen() )
    {
-      m_outfile << "}" << endl;
+      close();
    }
-   m_outfile.close();
 }
 
 bool DataWriter::open( string& filename, char dlm, string header )
@@ -30,8 +30,32 @@ bool DataWriter::open( string& filename, char dlm, string header )
    }
 }
 
-size_t DataWriter::write( vector<string>& line )
+void DataWriter::close()
 {
+   if( m_outfile.is_open() && m_fileFormat == JSON )
+   {
+      m_outfile << "}" << endl;
+   }
+   m_outfile.close();
+}
+
+bool DataWriter::isOpen()
+{
+   return m_outfile.is_open();
+}
+
+void DataWriter::write( vector<string>& line )
+{
+   if( m_fileFormat == UNDEFINED )
+   {
+      m_fileFormat = CSV;
+   }
+   else if( m_fileFormat != CSV )
+   {
+      cout << "Invalid line strucutre for CSV file format. Line discarded!." << endl;
+      return;
+   }
+
    if( m_outfile.is_open() )
    {
       vector<string>::iterator ind;
@@ -48,8 +72,18 @@ size_t DataWriter::write( vector<string>& line )
    }
 }
 
-size_t DataWriter::write( string& key, vector<string>& line )
+void DataWriter::write( string& key, vector<string>& line )
 {
+   if( m_fileFormat == UNDEFINED )
+   {
+      m_fileFormat = JSON;
+   }
+   else if( m_fileFormat != JSON )
+   {
+      cout << "Invalid line structure for JSON file format. Line discarded!." << endl;
+      return;
+   }
+
    if( m_fieldsep == ' ' )
    {
       m_outfile << "{" << endl;
@@ -75,11 +109,6 @@ size_t DataWriter::write( string& key, vector<string>& line )
    {
       m_fieldsep = ',';
    }
-}
-
-bool DataWriter::isOpen()
-{
-   return m_outfile.is_open();
 }
 
 

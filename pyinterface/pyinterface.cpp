@@ -62,6 +62,60 @@ PyObject* Recommender_train( Recommender* self, PyObject* args )
    return Py_None;
 }
 
+PyObject* Recommender_predict( Recommender* self, PyObject* args, PyObject* kwdict )
+{
+   const char* userId = NULL;
+   const char* itemId = NULL;
+   static char* kwlist[] = { const_cast<char*>( "user" ),
+                             const_cast<char*>( "item" ),
+                             NULL };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "ss|", kwlist, &userId, &itemId ) )
+   {
+      return NULL;
+   }
+
+   float prating = self->m_recAlgorithm->predict( userId, itemId );
+
+   return Py_BuildValue( "f", prating );
+}
+
+PyObject* Recommender_recommend( Recommender* self, PyObject* args, PyObject* kwds )
+{
+   const char* userId = NULL;
+   int topn = 10;
+
+   static char* kwlist[] = { const_cast<char*>( "user" ),
+                             const_cast<char*>( "topn" ),
+                             NULL };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwds, "s|i", kwlist, &userId, &topn ) )
+   {
+      return NULL;
+   }
+
+   vector<string> itemList;
+   self->m_recAlgorithm->recommend( userId, topn, itemList );
+
+   PyObject* pyList = PyList_New( 0 );
+   if( NULL == pyList )
+   {
+      return NULL;
+   }
+
+   vector<string>::iterator ind;
+   vector<string>::iterator end = itemList.end();
+   for( ind = itemList.begin() ; ind != end ; ++ind )
+   {
+      if( -1 == PyList_Append( pyList, Py_BuildValue( "s", ind->c_str() ) ) )
+      {
+         return NULL;
+      }
+   }
+
+   return pyList;
+}
+
 PyObject* Recommender_test( Recommender* self, PyObject* args, PyObject* kwdict )
 {
    const char* input_file = NULL;
@@ -167,58 +221,112 @@ PyObject* Recommender_test( Recommender* self, PyObject* args, PyObject* kwdict 
    return pyTupleResult;
 }
 
-PyObject* Recommender_predict( Recommender* self, PyObject* args, PyObject* kwdict )
+PyObject* Recommender_testrec( Recommender* self, PyObject* args, PyObject* kwdict )
 {
-   const char* userId = NULL;
-   const char* itemId = NULL;
-   static char* kwlist[] = { const_cast<char*>( "user" ),
-                             const_cast<char*>( "item" ),
-                             NULL };
-
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "ss|", kwlist, &userId, &itemId ) )
-   {
-      return NULL;
-   }
-
-   float prating = self->m_recAlgorithm->predict( userId, itemId );
-
-   return Py_BuildValue( "f", prating );
-}
-
-PyObject* Recommender_recommend( Recommender* self, PyObject* args, PyObject* kwds )
-{
-   const char* userId = NULL;
+   const char* input_file = NULL;
+   const char* output_file = NULL;
+   char dlmchar = ',';
+   int header = 0;
+   int usercol = 0;
+   int itemcol = 1;
+   int ratingcol = -1;
    int topn = 10;
 
-   static char* kwlist[] = { const_cast<char*>( "user" ),
+   static char* kwlist[] = { const_cast<char*>( "input_file" ),
+                             const_cast<char*>( "output_file" ),
+                             const_cast<char*>( "dlmchar" ),
+                             const_cast<char*>( "header" ),
+                             const_cast<char*>( "usercol" ),
+                             const_cast<char*>( "itemcol" ),
+                             const_cast<char*>( "ratingcol" ),
                              const_cast<char*>( "topn" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwds, "s|i", kwlist, &userId, &topn ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|sciiiii", kwlist, &input_file,
+                                     &output_file, &dlmchar, &header, &usercol, &itemcol, &ratingcol, &topn ) )
    {
       return NULL;
    }
 
-   vector<string> itemList;
-   self->m_recAlgorithm->recommend( userId, topn, itemList );
-
-   PyObject* pyList = PyList_New( 0 );
-   if( NULL == pyList )
+   if( NULL == input_file )
    {
       return NULL;
    }
 
-   vector<string>::iterator ind;
-   vector<string>::iterator end = itemList.end();
-   for( ind = itemList.begin() ; ind != end ; ++ind )
+   DataWriter dataWriter;
+   if( NULL != output_file )
    {
-      if( -1 == PyList_Append( pyList, Py_BuildValue( "s", ind->c_str() ) ) )
+      string strfilename = output_file;
+      dataWriter.open( strfilename );
+   }
+
+   DataReader testReader( input_file, dlmchar, header );
+   DataFrame testData( testReader, usercol, itemcol, ratingcol );
+
+   PyObject* pyDict = PyDict_New();
+   if( NULL == pyDict )
+   {
+      return NULL;
+   }
+
+   map<string, int> userFilter;
+   DataFrame::iterator ind;
+   DataFrame::iterator end = testData.end();
+   for( ind = testData.begin() ; ind != end ; ++ind )
+   {
+      // Recommned item list once per user
+      std::string userId = ind->first.first;
+      if( userFilter.find( userId ) != userFilter.end() )
       {
+         continue;
+      }
+      userFilter[userId] = 0;
+
+      vector<string> ranking;
+      if( !self->m_recAlgorithm->recommend( userId, topn, ranking ) )
+      {
+         continue;
+      }
+
+      PyObject* pyList = PyList_New( 0 );
+      vector<string>::iterator rankind;
+      vector<string>::iterator rankend = ranking.end();
+      for( rankind = ranking.begin() ; rankind != rankend ; ++rankind )
+      {
+#if PY_MAJOR_VERSION >= 3
+         if( -1 == PyList_Append( pyList, PyBytes_FromString( rankind->c_str() ) ) )
+#else
+         if( -1 == PyList_Append( pyList, PyString_FromString( rankind->c_str() ) ) )
+#endif
+         {
+            return NULL;
+         }
+      }
+
+      if( PyDict_SetItemString( pyDict, userId.c_str(), pyList ) < 0 )
+      {
+         Py_DECREF( pyList );
          return NULL;
+      }
+
+      if( itemcol >= 0 && ratingcol >= 0 )
+      {
+         // Calculate p@r, nDCG
+         ;
+      }
+
+      if( dataWriter.isOpen() )
+      {
+         dataWriter.write( userId, ranking );
       }
    }
 
-   return pyList;
+   PyObject* pyTupleResult = PyTuple_New( 1 );
+   PyTuple_SET_ITEM( pyTupleResult, 0, pyDict );
+   //PyTuple_SET_ITEM( pyTupleResult, 1, PyFloat_FromDouble( self->m_mae.eval() ) );
+   //PyTuple_SET_ITEM( pyTupleResult, 2, PyFloat_FromDouble( self->m_rmse.eval() ) );
+
+   return pyTupleResult;
 }
 
 static PyMethodDef libpyreclabMethods[] =

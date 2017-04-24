@@ -12,6 +12,7 @@ PyMethodDef UserKnn_methods[] =
 {
    { "train",     (PyCFunction)UserKnn_train,         METH_VARARGS|METH_KEYWORDS, "train model" },
    { "test",      (PyCFunction)Recommender_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
+   { "testrec",   (PyCFunction)Recommender_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)Recommender_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
    { "recommend", (PyCFunction)Recommender_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
    { NULL }

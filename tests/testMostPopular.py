@@ -2,11 +2,6 @@
 
 # Append pyreclab temporary directory
 import time
-import sys
-sys.path.append( '.' )
-sys.path.append( '..' )
-sys.path.append( '../pyreclab/' )
-
 import pyreclab
 
 if __name__ == '__main__':
@@ -18,27 +13,25 @@ if __name__ == '__main__':
                                 itemcol = 1,
                                 ratingcol = 2 )
 
-   print( 'training...' )
+   print( '-> training model' )
    start = time.clock()
    mpop.train( 5 )
    end = time.clock()
-   traintime = end - start
+   print( 'training time: ' + str( end - start ) )
 
-   print( 'testing...' )
-   start = time.clock()
-   predlist = mpop.test( input_file = 'dataset/u1.test',
-                         dlmchar = b'\t',
-                         header = False,
-                         usercol = 0,
-                         output_file = 'ranking.json' )
-   end = time.clock()
-   testtime = end - start
-
-   print( 'train time: ' + str( traintime ) )
-   print( 'test time: ' + str( testtime ) )
-
+   print( '-> individual test' )
    ranking = mpop.recommend( '457', 5 )
    print( 'user 457, recommended items ' + str( ranking ) )
 
+   print( '-> recommendation test' )
+   start = time.clock()
+   predlist = mpop.testrec( input_file = 'dataset/u1.test',
+                            dlmchar = b'\t',
+                            header = False,
+                            usercol = 0,
+                            topn = 10,
+                            output_file = 'ranking.json' )
+   end = time.clock()
+   print( 'recommendation time: ' + str( end - start ) )
 
 

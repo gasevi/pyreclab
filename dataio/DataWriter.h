@@ -15,13 +15,22 @@ public:
 
    bool open( std::string& filename, char dlm = ',', std::string header = "" );
 
-   size_t write( std::vector<std::string>& line );
-
-   size_t write( std::string& key, std::vector<std::string>& line );
+   void close();
 
    bool isOpen();
 
+   void write( std::vector<std::string>& line );
+
+   void write( std::string& key, std::vector<std::string>& line );
+
 private:
+
+   enum EFileFormat
+   {
+      UNDEFINED,
+      CSV,
+      JSON
+   };
 
    std::string m_filename;
 
@@ -30,6 +39,8 @@ private:
    char m_fieldsep;
 
    std::ofstream m_outfile;
+
+   EFileFormat m_fileFormat;
 
 };
 

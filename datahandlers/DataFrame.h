@@ -17,7 +17,7 @@ public:
 
    DataFrame();
 
-   DataFrame( DataReader& dreader, int userpos = 1, int itempos = 2, int ratingpos = -1 );
+   DataFrame( DataReader& dreader, int userpos = 0, int itempos = 1, int ratingpos = -1 );
 
    size_t columns();
 
@@ -31,7 +31,7 @@ public:
 
 private:
 
-   std::map<std::pair<std::string,std::string>,double> m_userItemPairs;
+   std::map< std::pair<std::string,std::string>, double > m_userItemPairs;
 
 };
 

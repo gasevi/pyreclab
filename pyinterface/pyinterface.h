@@ -32,9 +32,10 @@ typedef struct RecSysStruct
 
 void Recommender_dealloc( Recommender* self );
 PyObject* Recommender_train( Recommender* self, PyObject* args );
-PyObject* Recommender_test( Recommender* self, PyObject* args, PyObject* kwdict );
 PyObject* Recommender_predict( Recommender* self, PyObject* args, PyObject* kwdict );
 PyObject* Recommender_recommend( Recommender* self, PyObject* args, PyObject* kwds );
+PyObject* Recommender_test( Recommender* self, PyObject* args, PyObject* kwdict );
+PyObject* Recommender_testrec( Recommender* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_INTERFACE_H__
 

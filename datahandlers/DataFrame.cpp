@@ -19,9 +19,13 @@ DataFrame::DataFrame( DataReader& dreader, int userpos, int itempos, int ratingp
          break;
       }
       string userId = line[userpos];
-      string itemId = line[itempos];
+      string itemId = "";
+      if( line.size() > itempos )
+      {
+         itemId = line[itempos];
+      }
       double rating = -1;
-      if( ratingpos >= 0 )
+      if( line.size() > ratingpos && ratingpos >= 0 )
       {
          std::stringstream ss( line[ratingpos] );
          ss >> rating;
