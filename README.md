@@ -56,7 +56,7 @@ $ make
 4.- Install Pyreclab.
 
 ```sh
-$ make install
+$ sudo make install
 ```
 
 
