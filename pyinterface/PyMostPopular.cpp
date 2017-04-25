@@ -5,7 +5,6 @@
 #include "AlgMostPopular.h"
 
 #include <Python.h>
-#include <signal.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -82,14 +81,14 @@ PyObject* MostPopular_train( Recommender* self, PyObject* args, PyObject* kwdict
    }
 
    self->m_currentRecSys = self->m_recAlgorithm;
-   sighandler_t prevsighd = signal( SIGINT, Recommender::sighandler );
+   struct sigaction* pOldAction = self->handlesignal( SIGINT );
 
    int cause = 0;
    Py_BEGIN_ALLOW_THREADS
    cause = dynamic_cast<AlgMostPopular*>( self->m_recAlgorithm )->train();
    Py_END_ALLOW_THREADS
 
-   signal( SIGINT, prevsighd );
+   self->restoresignal( SIGINT, pOldAction );
 
    if( RecSysAlgorithm::STOPPED == cause )
    {

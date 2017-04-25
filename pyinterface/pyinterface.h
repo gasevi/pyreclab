@@ -8,6 +8,7 @@
 #include "RMSE.h"
 
 #include <Python.h>
+#include <signal.h>
 
 typedef struct RecSysStruct
 {
@@ -28,6 +29,25 @@ typedef struct RecSysStruct
          RecSysStruct::m_currentRecSys->stop();
       }
    }
+
+   static
+   struct sigaction* handlesignal( int signum )
+   {
+      struct sigaction newAction;
+      struct sigaction* pOldAction;
+      newAction.sa_handler = sighandler;
+      sigemptyset( &newAction.sa_mask );
+      newAction.sa_flags = 0;
+      sigaction( signum, &newAction, pOldAction );
+      return pOldAction;
+   }
+
+   static
+   void restoresignal( int signum, struct sigaction* pAction )
+   {
+      sigaction( SIGINT, NULL, pAction );
+   }
+
 } Recommender;
 
 void Recommender_dealloc( Recommender* self );

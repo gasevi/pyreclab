@@ -9,7 +9,6 @@
 #include "PySlopeOne.h"
 #include "PyFunkSvd.h"
 
-#include <signal.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -41,14 +40,16 @@ void Recommender_dealloc( Recommender* self )
 PyObject* Recommender_train( Recommender* self, PyObject* args )
 {
    self->m_currentRecSys = self->m_recAlgorithm;
-   sighandler_t prevsighd = signal( SIGINT, Recommender::sighandler );
+   struct sigaction* pOldAction = self->handlesignal( SIGINT );
 
    int cause = 0;
    Py_BEGIN_ALLOW_THREADS
+
+   sleep( 5 );
    cause = self->m_recAlgorithm->train();
    Py_END_ALLOW_THREADS
 
-   signal( SIGINT, prevsighd );
+   self->restoresignal( SIGINT, pOldAction );
 
    if( RecSysAlgorithm::STOPPED == cause )
    {

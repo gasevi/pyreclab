@@ -2,7 +2,7 @@ cmake_minimum_required( VERSION 2.8 )
 
 project( pyreclab )
 
-set( PACKAGE_VERSION "0.1.1" )
+set( PACKAGE_VERSION "0.1.2" )
 
 # Python version
 set( PY_MAJOR_VERSION 2 CACHE STRING "Python version" )

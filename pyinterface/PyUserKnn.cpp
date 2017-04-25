@@ -2,7 +2,6 @@
 #include "AlgFactory.h"
 #include "AlgUserBasedKnn.h"
 
-#include <signal.h>
 #include <iostream>
 #include <string>
 
@@ -78,14 +77,14 @@ PyObject* UserKnn_train( Recommender* self, PyObject* args, PyObject* kwdict )
    }
 
    self->m_currentRecSys = self->m_recAlgorithm;
-   sighandler_t prevsighd = signal( SIGINT, Recommender::sighandler );
+   struct sigaction* pOldAction = self->handlesignal( SIGINT );
 
    int cause = 0;
    Py_BEGIN_ALLOW_THREADS
    cause = dynamic_cast<AlgUserBasedKnn*>( self->m_recAlgorithm )->train( k );
    Py_END_ALLOW_THREADS
 
-   signal( SIGINT, prevsighd );
+   self->restoresignal( SIGINT, pOldAction );
 
    if( RecSysAlgorithm::STOPPED == cause )
    {
