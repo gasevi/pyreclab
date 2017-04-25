@@ -2,7 +2,7 @@ cmake_minimum_required( VERSION 2.8 )
 
 project( pyreclab )
 
-set( PACKAGE_VERSION "0.1.0" )
+set( PACKAGE_VERSION "0.1.1" )
 
 # Python version
 set( PY_MAJOR_VERSION 2 CACHE STRING "Python version" )
@@ -62,6 +62,8 @@ if( PYTHON )
                        DEPENDS ${DEPS} )
 
    add_custom_target( target ALL DEPENDS ${OUTPUT} )
+
+   install( CODE "execute_process(COMMAND python pypackage/setup.py install)" )
 endif()
 
 
