@@ -2,14 +2,16 @@ cmake_minimum_required( VERSION 2.8 )
 
 project( pyreclab )
 
-set( PACKAGE_VERSION "0.1.2" )
+set( MAJOR_VERSION "0" )
+set( MINOR_VERSION "1" )
+set( RELEASE_VERSION "3" )
+set( PACKAGE_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${RELEASE_VERSION}" )
 
 # Python version
-set( PY_MAJOR_VERSION 2 CACHE STRING "Python version" )
-find_package( PythonLibs ${PY_MAJOR_VERSION} REQUIRED )
+set( CMAKE_PYTHON_VERSION 2.7 CACHE STRING "Python version" )
+find_package( PythonLibs "${CMAKE_PYTHON_VERSION}" REQUIRED )
 
 # Compiler definitions
-add_definitions( -DPY_MAJOR_VERSION=${PY_MAJOR_VERSION} )
 add_definitions( -DNDEBUG )
 
 add_compile_options( -fPIC )
@@ -23,19 +25,27 @@ include_directories( algorithms )
 include_directories( eval_metrics )
 
 # External paths
-if( ${PY_MAJOR_VERSION} EQUAL "2" )
-   include_directories( ${PYTHON_INCLUDE_DIRS} )
-   set( PYTHON_LIB_DIR /usr/local/lib/python2.7/ )
-elseif( ${PY_MAJOR_VERSION} EQUAL "3" )
-   include_directories( /usr/include/python3.5 )
-   set( PYTHON_LIB_DIR /usr/local/lib/python3.5/ )
-endif( ${PY_MAJOR_VERSION} EQUAL "2" )
+include_directories( ${PYTHON_INCLUDE_DIRS} )
 
 add_subdirectory( dataio temp/dataio )
 add_subdirectory( datahandlers temp/datahandlers )
 add_subdirectory( algorithms temp/algorithms )
 add_subdirectory( pyinterface temp/pyinterface )
 add_subdirectory( eval_metrics temp/eval_metrics )
+
+if( APPLE )
+   set( CMAKE_MACOSX_RPATH 0 )
+   execute_process( COMMAND which python${CMAKE_PYTHON_VERSION} OUTPUT_VARIABLE PYTHON_EXE )
+   string( STRIP ${PYTHON_EXE} PYTHON_EXE )
+   if( DEFINED PYTHON_EXE )
+      execute_process( COMMAND otool -L ${PYTHON_EXE} OUTPUT_VARIABLE OUTPUT )
+      string( REPLACE "${PYTHON_EXE}:" "" OUTPUT ${OUTPUT} )
+      string( STRIP ${OUTPUT} OUTPUT )
+      string( REGEX MATCH ".*Python" MAC_PYTHON_LINKED_LIBRARY ${OUTPUT} )
+   else( DEFINED PYTHON_EXE )
+      error( "python${CMAKE_PYTHON_VERSION} not found!" )
+   endif( DEFINED PYTHON_EXE )
+endif( APPLE )
 
 add_library( pyreclab SHARED
                       $<TARGET_OBJECTS:dataio>
@@ -44,7 +54,14 @@ add_library( pyreclab SHARED
                       $<TARGET_OBJECTS:eval_metrics>
                       $<TARGET_OBJECTS:pyinterface> )
 
-set_target_properties( pyreclab PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/pyreclab" )
+if( APPLE AND DEFINED MAC_PYTHON_LINKED_LIBRARY )
+   target_link_libraries( pyreclab ${MAC_PYTHON_LINKED_LIBRARY} )
+endif( APPLE AND DEFINED MAC_PYTHON_LINKED_LIBRARY )
+
+set_target_properties( pyreclab PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/pyreclab"
+                                           SUFFIX .so
+                                           SOVERSION "${MAJOR_VERSION}"
+                                           VERSION "${PACKAGE_VERSION}" )
 
 find_program( PYTHON "python" )
 if( PYTHON )
@@ -64,6 +81,6 @@ if( PYTHON )
    add_custom_target( target ALL DEPENDS ${OUTPUT} )
 
    install( CODE "execute_process(COMMAND python pypackage/setup.py install)" )
-endif()
+endif( PYTHON )
 
 
