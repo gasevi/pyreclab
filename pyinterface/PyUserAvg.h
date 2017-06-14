@@ -1,19 +1,38 @@
 #ifndef __PY_USER_AVG_H__
 #define __PY_USER_AVG_H__
 
-#include "pyinterface.h"
+#include "AlgUserAvg.h"
+#include "DataReader.h"
+#include "MAE.h"
+#include "RMSE.h"
 
+#include <Python.h>
+
+typedef struct
+{
+   PyObject_HEAD
+   DataReader* m_trainingReader;
+   AlgUserAvg* m_recAlgorithm;
+   MAE m_mae;
+   RMSE m_rmse;
+} PyUserAvg;
 
 PyObject* UserAvg_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
+void UserAvg_dealloc( PyUserAvg* self );
+PyObject* UserAvg_train( PyUserAvg* self, PyObject* args );
+PyObject* UserAvg_predict( PyUserAvg* self, PyObject* args, PyObject* kwdict );
+PyObject* UserAvg_recommend( PyUserAvg* self, PyObject* args, PyObject* kwds );
+PyObject* UserAvg_test( PyUserAvg* self, PyObject* args, PyObject* kwdict );
+PyObject* UserAvg_testrec( PyUserAvg* self, PyObject* args, PyObject* kwdict );
 
 static
 PyMethodDef UserAvg_methods[] =
 {
-   { "train",     (PyCFunction)Recommender_train,     METH_NOARGS,                "train model" },
-   { "test",      (PyCFunction)Recommender_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
-   { "testrec",   (PyCFunction)Recommender_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "predict",   (PyCFunction)Recommender_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
-   { "recommend", (PyCFunction)Recommender_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
+   { "train",     (PyCFunction)UserAvg_train,     METH_NOARGS,                "train model" },
+   { "test",      (PyCFunction)UserAvg_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
+   { "testrec",   (PyCFunction)UserAvg_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
+   { "predict",   (PyCFunction)UserAvg_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
+   { "recommend", (PyCFunction)UserAvg_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
    { NULL }
 };
 
@@ -26,9 +45,9 @@ static PyTypeObject UserAvgType =
    0,                                        /* ob_size */
 #endif
    "libpyreclab.UserAvg",                    /* tp_name */
-   sizeof(Recommender),                      /* tp_basicsize */
+   sizeof(PyUserAvg),                          /* tp_basicsize */
    0,                                        /* tp_itemsize */
-   (destructor)Recommender_dealloc,          /* tp_dealloc */
+   (destructor)UserAvg_dealloc,              /* tp_dealloc */
    0,                                        /* tp_print */
    0,                                        /* tp_getattr */
    0,                                        /* tp_setattr */

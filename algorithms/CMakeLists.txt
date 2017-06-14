@@ -1,12 +1,10 @@
-set( SRCFILES RecSysAlgorithm.cpp
-              AlgUserAvg.cpp
+set( SRCFILES AlgUserAvg.cpp
               AlgItemAvg.cpp
               AlgSlopeOne.cpp
               AlgUserBasedKnn.cpp
               AlgItemBasedKnn.cpp
               AlgFunkSvd.cpp
-              AlgMostPopular.cpp
-              AlgFactory.cpp )
+              AlgMostPopular.cpp )
 
 add_library( algorithms OBJECT ${SRCFILES} )
 

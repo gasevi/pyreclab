@@ -12,11 +12,16 @@ RatingMatrix::RatingMatrix()
 {
 }
 
-RatingMatrix::RatingMatrix( DataReader& dreader, int userpos, int itempos, int ratingpos )
+RatingMatrix::RatingMatrix( DataReader& dreader,
+                            int userpos,
+                            int itempos,
+                            int ratingpos,
+                            SparseMatrix::EOrder order )
 : m_numRatings( 0 ),
   m_sumRatings( 0 ),
   m_minRating( INT_MAX ),
-  m_maxRating( INT_MIN )
+  m_maxRating( INT_MIN ),
+  m_smatrix( order )
 {
    map< pair<size_t,size_t>, double > inputData;
    while( !dreader.eof() )

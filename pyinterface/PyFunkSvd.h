@@ -1,20 +1,38 @@
 #ifndef __PY_FUNK_SVD_H__
 #define __PY_FUNK_SVD_H__
 
-#include "pyinterface.h"
+#include "AlgFunkSvd.h"
+#include "DataReader.h"
+#include "MAE.h"
+#include "RMSE.h"
 
+#include <Python.h>
+
+typedef struct
+{
+   PyObject_HEAD
+   DataReader* m_trainingReader;
+   AlgFunkSvd* m_recAlgorithm;
+   MAE m_mae;
+   RMSE m_rmse;
+} PyFunkSvd;
 
 PyObject* FunkSvd_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
-PyObject* FunkSvd_train( Recommender* self, PyObject* args, PyObject* kwdict );
+void FunkSvd_dealloc( PyFunkSvd* self );
+PyObject* FunkSvd_train( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
+PyObject* FunkSvd_predict( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
+PyObject* FunkSvd_recommend( PyFunkSvd* self, PyObject* args, PyObject* kwds );
+PyObject* FunkSvd_test( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
+PyObject* FunkSvd_testrec( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
 
 static
 PyMethodDef FunkSvd_methods[] =
 {
-   { "train",     (PyCFunction)FunkSvd_train,         METH_VARARGS|METH_KEYWORDS, "train model" },
-   { "test",      (PyCFunction)Recommender_test,      METH_VARARGS|METH_KEYWORDS, "test prediction model" },
-   { "testrec",   (PyCFunction)Recommender_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "predict",   (PyCFunction)Recommender_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
-   { "recommend", (PyCFunction)Recommender_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
+   { "train",     (PyCFunction)FunkSvd_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
+   { "test",      (PyCFunction)FunkSvd_test,      METH_VARARGS|METH_KEYWORDS, "test prediction model" },
+   { "testrec",   (PyCFunction)FunkSvd_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
+   { "predict",   (PyCFunction)FunkSvd_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
+   { "recommend", (PyCFunction)FunkSvd_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
    { NULL }
 };
 
@@ -27,9 +45,9 @@ static PyTypeObject FunkSvdType =
    0,                                        /* ob_size */
 #endif
    "libpyreclab.FunkSvd",                    /* tp_name */
-   sizeof(Recommender),                      /* tp_basicsize */
+   sizeof(PyFunkSvd),                        /* tp_basicsize */
    0,                                        /* tp_itemsize */
-   (destructor)Recommender_dealloc,          /* tp_dealloc */
+   (destructor)FunkSvd_dealloc,              /* tp_dealloc */
    0,                                        /* tp_print */
    0,                                        /* tp_getattr */
    0,                                        /* tp_setattr */
@@ -64,7 +82,6 @@ static PyTypeObject FunkSvdType =
    0,                                        /* tp_alloc */
    FunkSvd_new,                              /* tp_new */
 };
-
 
 #endif // __PY_FUNK_SVD_H__
 

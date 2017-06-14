@@ -1,20 +1,38 @@
 #ifndef __PY_ITEM_KNN_H__
 #define __PY_ITEM_KNN_H__
 
-#include "pyinterface.h"
+#include "AlgItemBasedKnn.h"
+#include "DataReader.h"
+#include "MAE.h"
+#include "RMSE.h"
 
+#include <Python.h>
+
+typedef struct
+{
+   PyObject_HEAD
+   DataReader* m_trainingReader;
+   AlgItemBasedKnn* m_recAlgorithm;
+   MAE m_mae;
+   RMSE m_rmse;
+} PyItemKnn;
 
 PyObject* ItemKnn_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
-PyObject* ItemKnn_train( Recommender* self, PyObject* args, PyObject* kwdict );
+void ItemKnn_dealloc( PyItemKnn* self );
+PyObject* ItemKnn_train( PyItemKnn* self, PyObject* args, PyObject* kwdict );
+PyObject* ItemKnn_predict( PyItemKnn* self, PyObject* args, PyObject* kwdict );
+PyObject* ItemKnn_recommend( PyItemKnn* self, PyObject* args, PyObject* kwds );
+PyObject* ItemKnn_test( PyItemKnn* self, PyObject* args, PyObject* kwdict );
+PyObject* ItemKnn_testrec( PyItemKnn* self, PyObject* args, PyObject* kwdict );
 
 static
 PyMethodDef ItemKnn_methods[] =
 {
-   { "train",     (PyCFunction)ItemKnn_train,         METH_VARARGS|METH_KEYWORDS, "train model" },
-   { "test",      (PyCFunction)Recommender_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
-   { "testrec",   (PyCFunction)Recommender_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "predict",   (PyCFunction)Recommender_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
-   { "recommend", (PyCFunction)Recommender_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
+   { "train",     (PyCFunction)ItemKnn_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
+   { "test",      (PyCFunction)ItemKnn_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
+   { "testrec",   (PyCFunction)ItemKnn_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
+   { "predict",   (PyCFunction)ItemKnn_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
+   { "recommend", (PyCFunction)ItemKnn_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
    { NULL }
 };
 
@@ -27,9 +45,9 @@ static PyTypeObject ItemKnnType =
    0,                                        /* ob_size */
 #endif
    "libpyreclab.ItemKnn",                    /* tp_name */
-   sizeof(Recommender),                      /* tp_basicsize */
+   sizeof(PyItemKnn),                        /* tp_basicsize */
    0,                                        /* tp_itemsize */
-   (destructor)Recommender_dealloc,          /* tp_dealloc */
+   (destructor)ItemKnn_dealloc,              /* tp_dealloc */
    0,                                        /* tp_print */
    0,                                        /* tp_getattr */
    0,                                        /* tp_setattr */

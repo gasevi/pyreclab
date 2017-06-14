@@ -4,8 +4,12 @@ project( pyreclab )
 
 set( MAJOR_VERSION "0" )
 set( MINOR_VERSION "1" )
-set( RELEASE_VERSION "3" )
+set( RELEASE_VERSION "4" )
 set( PACKAGE_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${RELEASE_VERSION}" )
+
+# Set CMake macros
+SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+                       ${PROJECT_SOURCE_DIR}/cmake_scripts )
 
 # Python version
 set( CMAKE_PYTHON_VERSION 2.7 CACHE STRING "Python version" )
@@ -25,7 +29,7 @@ include_directories( algorithms )
 include_directories( eval_metrics )
 
 # External paths
-include_directories( ${PYTHON_INCLUDE_DIRS} )
+include_directories( ${PYTHON_INCLUDE_DIR} )
 
 add_subdirectory( dataio temp/dataio )
 add_subdirectory( datahandlers temp/datahandlers )
@@ -63,7 +67,7 @@ set_target_properties( pyreclab PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_B
                                            SOVERSION "${MAJOR_VERSION}"
                                            VERSION "${PACKAGE_VERSION}" )
 
-find_program( PYTHON "python" )
+#find_program( PYTHON "python" )
 if( PYTHON )
    set( SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/pypackage/setup.py.in" )
    set( SETUP_PY    "${CMAKE_CURRENT_BINARY_DIR}/pypackage/setup.py" )

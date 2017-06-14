@@ -1,8 +1,7 @@
 #include "PyMostPopular.h"
+#include "pyinterface.h"
 #include "DataReader.h"
 #include "DataWriter.h"
-#include "AlgFactory.h"
-#include "AlgMostPopular.h"
 
 #include <Python.h>
 #include <iostream>
@@ -40,7 +39,7 @@ PyObject* MostPopular_new( PyTypeObject* type, PyObject* args, PyObject* kwdict 
       return NULL;
    }
 
-   Recommender* self = reinterpret_cast<Recommender*>( type->tp_alloc( type, 0 ) );
+   PyMostPopular* self = reinterpret_cast<PyMostPopular*>( type->tp_alloc( type, 0 ) );
    if( self != NULL )
    {
       self->m_trainingReader = new DataReader( dsfilename, dlmchar, header );
@@ -50,14 +49,7 @@ PyObject* MostPopular_new( PyTypeObject* type, PyObject* args, PyObject* kwdict 
          return NULL;
       }
 
-      self->m_ratingMatrix = new RatingMatrix( *(self->m_trainingReader), usercol, itemcol, ratingcol );
-      if( NULL == self->m_ratingMatrix )
-      {
-         Py_DECREF( self );
-         return NULL;
-      }
-
-      self->m_recAlgorithm = AlgFactory::getInstance( "MostPopular", *(self->m_ratingMatrix) );
+      self->m_recAlgorithm = new AlgMostPopular( *self->m_trainingReader, usercol, itemcol, ratingcol );
       if( NULL == self->m_recAlgorithm )
       {
          Py_DECREF( self );
@@ -68,7 +60,18 @@ PyObject* MostPopular_new( PyTypeObject* type, PyObject* args, PyObject* kwdict 
    return reinterpret_cast<PyObject*>( self );
 }
 
-PyObject* MostPopular_train( Recommender* self, PyObject* args, PyObject* kwdict )
+void MostPopular_dealloc( PyMostPopular* self )
+{
+   Py_XDECREF( self->m_trainingReader );
+   Py_XDECREF( self->m_recAlgorithm );
+#if PY_MAJOR_VERSION >= 3
+   Py_TYPE( self )->tp_free( reinterpret_cast<PyObject*>( self ) );
+#else
+   self->ob_type->tp_free( reinterpret_cast<PyObject*>( self ) );
+#endif
+}
+
+PyObject* MostPopular_train( PyMostPopular* self, PyObject* args, PyObject* kwdict )
 {
    int topn = 10;
 
@@ -80,17 +83,15 @@ PyObject* MostPopular_train( Recommender* self, PyObject* args, PyObject* kwdict
       return NULL;
    }
 
-   self->m_currentRecSys = self->m_recAlgorithm;
-   struct sigaction* pOldAction = self->handlesignal( SIGINT );
-
+   PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::MOST_POPULAR );
+   struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );
    int cause = 0;
    Py_BEGIN_ALLOW_THREADS
    cause = dynamic_cast<AlgMostPopular*>( self->m_recAlgorithm )->train();
    Py_END_ALLOW_THREADS
+   PrlSigHandler::restoresignal( SIGINT, pOldAction );
 
-   self->restoresignal( SIGINT, pOldAction );
-
-   if( RecSysAlgorithm::STOPPED == cause )
+   if( AlgMostPopular::STOPPED == cause )
    {
       PyGILState_STATE gstate = PyGILState_Ensure();
       PyErr_SetString( PyExc_KeyboardInterrupt, "SIGINT received" );
@@ -102,7 +103,7 @@ PyObject* MostPopular_train( Recommender* self, PyObject* args, PyObject* kwdict
    return Py_None;
 }
 
-PyObject* MostPopular_testrec( Recommender* self, PyObject* args, PyObject* kwdict )
+PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kwdict )
 {
    const char* input_file = NULL;
    const char* output_file = NULL;
@@ -197,7 +198,7 @@ PyObject* MostPopular_testrec( Recommender* self, PyObject* args, PyObject* kwdi
    return pyDict;
 }
 
-PyObject* MostPopular_recommend( Recommender* self, PyObject* args, PyObject* kwdict )
+PyObject* MostPopular_recommend( PyMostPopular* self, PyObject* args, PyObject* kwdict )
 {
    const char* userId = NULL;
    int topn = 10;

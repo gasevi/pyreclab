@@ -2,7 +2,6 @@
 #define __DATA_FRAME_H__
 
 #include "DataReader.h"
-#include "SparseMatrix.h"
 
 #include <string>
 #include <map>

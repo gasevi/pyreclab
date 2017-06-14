@@ -1,19 +1,38 @@
 #ifndef __PY_SLOPE_ONE_H__
 #define __PY_SLOPE_ONE_H__
 
-#include "pyinterface.h"
+#include "AlgSlopeOne.h"
+#include "DataReader.h"
+#include "MAE.h"
+#include "RMSE.h"
 
+#include <Python.h>
+
+typedef struct
+{
+   PyObject_HEAD
+   DataReader* m_trainingReader;
+   AlgSlopeOne* m_recAlgorithm;
+   MAE m_mae;
+   RMSE m_rmse;
+} PySlopeOne;
 
 PyObject* SlopeOne_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
+void SlopeOne_dealloc( PySlopeOne* self );
+PyObject* SlopeOne_train( PySlopeOne* self, PyObject* args );
+PyObject* SlopeOne_predict( PySlopeOne* self, PyObject* args, PyObject* kwdict );
+PyObject* SlopeOne_recommend( PySlopeOne* self, PyObject* args, PyObject* kwds );
+PyObject* SlopeOne_test( PySlopeOne* self, PyObject* args, PyObject* kwdict );
+PyObject* SlopeOne_testrec( PySlopeOne* self, PyObject* args, PyObject* kwdict );
 
 static
 PyMethodDef SlopeOne_methods[] =
 {
-   { "train",     (PyCFunction)Recommender_train,     METH_NOARGS,                "train model" },
-   { "test",      (PyCFunction)Recommender_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
-   { "testrec",   (PyCFunction)Recommender_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "predict",   (PyCFunction)Recommender_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
-   { "recommend", (PyCFunction)Recommender_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
+   { "train",     (PyCFunction)SlopeOne_train,     METH_NOARGS,                "train model" },
+   { "test",      (PyCFunction)SlopeOne_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
+   { "testrec",   (PyCFunction)SlopeOne_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
+   { "predict",   (PyCFunction)SlopeOne_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
+   { "recommend", (PyCFunction)SlopeOne_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
    { NULL }
 };
 
@@ -26,9 +45,9 @@ static PyTypeObject SlopeOneType =
    0,                                        /* ob_size */
 #endif
    "libpyreclab.SlopeOne",                   /* tp_name */
-   sizeof(Recommender),                      /* tp_basicsize */
+   sizeof(PySlopeOne),                       /* tp_basicsize */
    0,                                        /* tp_itemsize */
-   (destructor)Recommender_dealloc,          /* tp_dealloc */
+   (destructor)SlopeOne_dealloc,             /* tp_dealloc */
    0,                                        /* tp_print */
    0,                                        /* tp_getattr */
    0,                                        /* tp_setattr */

@@ -3,8 +3,11 @@
 using namespace std;
 
 
-AlgItemAvg::AlgItemAvg( RatingMatrix& ratingMatrix )
-: RecSysAlgorithm( ratingMatrix )
+AlgItemAvg::AlgItemAvg( DataReader& dreader,
+                        int userpos,
+                        int itempos,
+                        int ratingpos )
+: RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> >( dreader, userpos, itempos, ratingpos )
 {
 }
 

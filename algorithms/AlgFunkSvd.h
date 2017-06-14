@@ -7,11 +7,14 @@
 
 
 class AlgFunkSvd
-      : public RecSysAlgorithm
+      : public RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >
 {
 public:
 
-   AlgFunkSvd( RatingMatrix& ratingMatrix );
+   AlgFunkSvd( DataReader& dreader,
+               int userpos = 0,
+               int itempos = 1,
+               int ratingpos = 2 );
 
    ~AlgFunkSvd();
 

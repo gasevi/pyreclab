@@ -1,19 +1,38 @@
 #ifndef __PY_ITEM_AVG_H__
 #define __PY_ITEM_AVG_H__
 
-#include "pyinterface.h"
+#include "AlgItemAvg.h"
+#include "DataReader.h"
+#include "MAE.h"
+#include "RMSE.h"
 
+#include <Python.h>
+
+typedef struct
+{
+   PyObject_HEAD
+   DataReader* m_trainingReader;
+   AlgItemAvg* m_recAlgorithm;
+   MAE m_mae;
+   RMSE m_rmse;
+} PyItemAvg;
 
 PyObject* ItemAvg_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
+void ItemAvg_dealloc( PyItemAvg* self );
+PyObject* ItemAvg_train( PyItemAvg* self, PyObject* args );
+PyObject* ItemAvg_predict( PyItemAvg* self, PyObject* args, PyObject* kwdict );
+PyObject* ItemAvg_recommend( PyItemAvg* self, PyObject* args, PyObject* kwds );
+PyObject* ItemAvg_test( PyItemAvg* self, PyObject* args, PyObject* kwdict );
+PyObject* ItemAvg_testrec( PyItemAvg* self, PyObject* args, PyObject* kwdict );
 
 static
 PyMethodDef ItemAvg_methods[] =
 {
-   { "train",     (PyCFunction)Recommender_train,     METH_NOARGS,                "train model" },
-   { "test",      (PyCFunction)Recommender_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
-   { "testrec",   (PyCFunction)Recommender_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "predict",   (PyCFunction)Recommender_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
-   { "recommend", (PyCFunction)Recommender_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
+   { "train",     (PyCFunction)ItemAvg_train,     METH_NOARGS,                "train model" },
+   { "test",      (PyCFunction)ItemAvg_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
+   { "testrec",   (PyCFunction)ItemAvg_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
+   { "predict",   (PyCFunction)ItemAvg_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
+   { "recommend", (PyCFunction)ItemAvg_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
    { NULL }
 };
 
@@ -26,9 +45,9 @@ static PyTypeObject ItemAvgType =
    0,                                        /* ob_size */
 #endif
    "libpyreclab.ItemAvg",                    /* tp_name */
-   sizeof(Recommender),                      /* tp_basicsize */
+   sizeof(PyItemAvg),                        /* tp_basicsize */
    0,                                        /* tp_itemsize */
-   (destructor)Recommender_dealloc,          /* tp_dealloc */
+   (destructor)ItemAvg_dealloc,              /* tp_dealloc */
    0,                                        /* tp_print */
    0,                                        /* tp_getattr */
    0,                                        /* tp_setattr */

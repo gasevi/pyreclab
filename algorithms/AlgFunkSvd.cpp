@@ -9,8 +9,11 @@ using namespace std;
 using namespace boost;
 
 
-AlgFunkSvd::AlgFunkSvd( RatingMatrix& ratingMatrix )
-: RecSysAlgorithm( ratingMatrix ),
+AlgFunkSvd::AlgFunkSvd( DataReader& dreader,
+                        int userpos,
+                        int itempos,
+                        int ratingpos )
+: RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >( dreader, userpos, itempos, ratingpos ),
   m_nfactors( 1000 ),
   m_maxIter( 100 ),
   m_learningRate( 0.01 ),
@@ -51,9 +54,9 @@ int AlgFunkSvd::train()
       size_t nusers = m_ratingMatrix.users();
       for( int u = 0 ; u < nusers ; ++u )
       {
-         SparseRow row = m_ratingMatrix.userVector( u );
-         SparseRow::iterator ind;
-         SparseRow::iterator end = row.end();
+         SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > row = m_ratingMatrix.userVector( u );
+         SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator ind;
+         SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator end = row.end();
          for( ind = row.begin() ; ind != end ; ++ind )
          {
             int i = ind.index();

@@ -5,8 +5,11 @@
 using namespace std;
 
 
-AlgUserBasedKnn::AlgUserBasedKnn( RatingMatrix& ratingMatrix )
-: RecSysAlgorithm( ratingMatrix ),
+AlgUserBasedKnn::AlgUserBasedKnn( DataReader& dreader,
+                                  int userpos,
+                                  int itempos,
+                                  int ratingpos )
+: RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >( dreader, userpos, itempos, ratingpos ),
   m_knn( 10 )
 {
 }
@@ -19,20 +22,20 @@ int AlgUserBasedKnn::train()
 int AlgUserBasedKnn::train( size_t k )
 {
    m_knn = k;
-   Similarity<SparseRow> simfunc( Similarity<SparseRow>::PEARSON );
+   Similarity<SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > > simfunc( Similarity<SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > >::PEARSON );
    size_t nusers = m_ratingMatrix.users();
    m_simMatrix.resize( nusers, nusers );
    for( int i = 0 ; i < nusers ; ++i )
    {
       // Mean rating matrix
-      SparseRow rowi = m_ratingMatrix.userVector( i );
+      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major > > rowi = m_ratingMatrix.userVector( i );
       string userId = m_ratingMatrix.userId( i );
       m_meanRatingByUser[userId] = rowi.mean();
 
       // Similarity matrix
       for( int j = i + 1 ; j < nusers ; ++j )
       {
-         SparseRow rowj = m_ratingMatrix.userVector( j );
+         SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major > > rowj = m_ratingMatrix.userVector( j );
          double sim = simfunc.calculate( rowi, rowj );
          m_simMatrix.set( i, j, sim );
          m_simMatrix.set( j, i, sim );
@@ -70,9 +73,9 @@ double AlgUserBasedKnn::predict( string userId, string itemId )
    double ws = 0;
    if( userrow >=0 && itemcol >= 0 )
    {
-      SparseRow row = m_simMatrix.row( userrow );
-      SparseRow::iterator ind;
-      SparseRow::iterator end = row.end();
+      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major > > row = m_simMatrix.row( userrow );
+      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major > >::iterator ind;
+      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major > >::iterator end = row.end();
       for( ind = row.begin() ; ind != end ; ++ind )
       {
          double sim = *ind;

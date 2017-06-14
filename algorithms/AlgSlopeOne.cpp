@@ -3,8 +3,11 @@
 using namespace std;
 
 
-AlgSlopeOne::AlgSlopeOne( RatingMatrix& ratingMatrix )
-: RecSysAlgorithm( ratingMatrix )
+AlgSlopeOne::AlgSlopeOne( DataReader& dreader,
+                          int userpos,
+                          int itempos,
+                          int ratingpos )
+: RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >( dreader, userpos, itempos, ratingpos )
 {
    size_t nitems = m_ratingMatrix.items();
    m_devMatrix.resize( nitems, nitems );
@@ -20,14 +23,14 @@ int AlgSlopeOne::train()
 
    for( int u = 0 ; u < nusers ; ++u )
    {
-      SparseRow row = m_ratingMatrix.userVector( u );
-      SparseRow::iterator ind1;
-      SparseRow::iterator end = row.end();
+      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > row = m_ratingMatrix.userVector( u );
+      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator ind1;
+      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator end = row.end();
       for( ind1 = row.begin() ; ind1 != end ; ++ind1 )
       {
          double ru1 = *ind1;
-         SparseRow::iterator ind2;
-         SparseRow::iterator end2 = row.end();
+         SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator ind2;
+         SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator end2 = row.end();
          for( ind2 = row.begin() ; ind2 != end2 ; ++ind2 )
          {
             if( ind1 != ind2 )
@@ -95,9 +98,9 @@ double AlgSlopeOne::predict( string userId, string itemId )
    int col = m_ratingMatrix.column( itemId );
    if( col >= 0 )
    {
-      SparseRow row = m_ratingMatrix.userVector( userId );
-      SparseRow::iterator ind;
-      SparseRow::iterator end = row.end();
+      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > row = m_ratingMatrix.userVector( userId );
+      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator ind;
+      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator end = row.end();
       for( ind = row.begin() ; ind != end ; ++ind )
       {
          size_t itempos = ind.index();

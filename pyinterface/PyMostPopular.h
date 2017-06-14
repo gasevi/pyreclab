@@ -1,13 +1,27 @@
 #ifndef __PY_MOST_POPULAR_H__
 #define __PY_MOST_POPULAR_H__
 
-#include "pyinterface.h"
+#include "AlgMostPopular.h"
+#include "DataReader.h"
+#include "MAE.h"
+#include "RMSE.h"
 
+#include <Python.h>
+
+typedef struct
+{
+   PyObject_HEAD
+   DataReader* m_trainingReader;
+   AlgMostPopular* m_recAlgorithm;
+   MAE m_mae;
+   RMSE m_rmse;
+} PyMostPopular;
 
 PyObject* MostPopular_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
-PyObject* MostPopular_train( Recommender* self, PyObject* args, PyObject* kwdict );
-PyObject* MostPopular_testrec( Recommender* self, PyObject* args, PyObject* kwdict );
-PyObject* MostPopular_recommend( Recommender* self, PyObject* args, PyObject* kwdict );
+void MostPopular_dealloc( PyMostPopular* self );
+PyObject* MostPopular_train( PyMostPopular* self, PyObject* args, PyObject* kwdict );
+PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kwdict );
+PyObject* MostPopular_recommend( PyMostPopular* self, PyObject* args, PyObject* kwdict );
 
 static
 PyMethodDef MostPopular_methods[] =
@@ -27,9 +41,9 @@ static PyTypeObject MostPopularType =
    0,                                        /* ob_size */
 #endif
    "libpyreclab.MostPopular",                /* tp_name */
-   sizeof(Recommender),                      /* tp_basicsize */
+   sizeof(PyMostPopular),                    /* tp_basicsize */
    0,                                        /* tp_itemsize */
-   (destructor)Recommender_dealloc,          /* tp_dealloc */
+   (destructor)MostPopular_dealloc,          /* tp_dealloc */
    0,                                        /* tp_print */
    0,                                        /* tp_getattr */
    0,                                        /* tp_setattr */

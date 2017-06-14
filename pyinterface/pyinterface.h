@@ -8,13 +8,53 @@
 #include "RMSE.h"
 
 #include <Python.h>
-#include <signal.h>
 
+class PrlSigHandler
+{
+public:
+
+   enum EAlgType
+   {
+      UNKNOWN,
+      FUNK_SVD,
+      ITEM_AVG,
+      ITEM_KNN,
+      MOST_POPULAR,
+      SLOPE_ONE,
+      USER_AVG,
+      USER_KNN
+   };
+
+   static
+   void handler( int signum );
+
+   static
+   void registerObj( PyObject* obj, EAlgType type );
+
+   static
+   void unregisterObj();
+
+   static
+   struct sigaction* handlesignal( int signum );
+
+   static
+   void restoresignal( int signum, struct sigaction* pAction );
+
+private:
+
+   static
+   EAlgType m_algType;
+
+   static
+   PyObject* m_activeObj;
+
+};
+
+/*
 typedef struct RecSysStruct
 {
    PyObject_HEAD
    DataReader* m_trainingReader;
-   RatingMatrix* m_ratingMatrix;
    RecSysAlgorithm* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
@@ -56,6 +96,7 @@ PyObject* Recommender_predict( Recommender* self, PyObject* args, PyObject* kwdi
 PyObject* Recommender_recommend( Recommender* self, PyObject* args, PyObject* kwds );
 PyObject* Recommender_test( Recommender* self, PyObject* args, PyObject* kwdict );
 PyObject* Recommender_testrec( Recommender* self, PyObject* args, PyObject* kwdict );
+*/
 
 #endif // __PY_INTERFACE_H__
 

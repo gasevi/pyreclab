@@ -7,11 +7,14 @@
 
 
 class AlgSlopeOne
-      : public RecSysAlgorithm
+      : public RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >
 {
 public:
 
-   AlgSlopeOne( RatingMatrix& ratingMatrix );
+   AlgSlopeOne( DataReader& dreader,
+                int userpos = 0,
+                int itempos = 1,
+                int ratingpos = 2 );
 
    int train();
 
@@ -21,9 +24,9 @@ public:
  
 private:
 
-   SparseMatrix m_devMatrix;
+   SparseMatrix< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > m_devMatrix;
 
-   SparseMatrix m_cardMatrix;
+   SparseMatrix< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > m_cardMatrix;
 
 };
 

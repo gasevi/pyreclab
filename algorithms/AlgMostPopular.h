@@ -8,11 +8,14 @@
 
 
 class AlgMostPopular
-      : public RecSysAlgorithm
+      : public RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >
 {
 public:
 
-   AlgMostPopular( RatingMatrix& ratingMatrix );
+   AlgMostPopular( DataReader& dreader,
+                   int userpos = 0,
+                   int itempos = 1,
+                   int ratingpos = 2 );
 
    int train();
 
