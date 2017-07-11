@@ -67,7 +67,6 @@ set_target_properties( pyreclab PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_B
                                            SOVERSION "${MAJOR_VERSION}"
                                            VERSION "${PACKAGE_VERSION}" )
 
-#find_program( PYTHON "python" )
 if( PYTHON )
    set( SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/pypackage/setup.py.in" )
    set( SETUP_PY    "${CMAKE_CURRENT_BINARY_DIR}/pypackage/setup.py" )
@@ -84,7 +83,7 @@ if( PYTHON )
 
    add_custom_target( target ALL DEPENDS ${OUTPUT} )
 
-   install( CODE "execute_process(COMMAND python pypackage/setup.py install)" )
+   install( CODE "execute_process(COMMAND ${PYTHON} pypackage/setup.py install)" )
 endif( PYTHON )
 
 
