@@ -7,6 +7,7 @@
 #include "MAE.h"
 #include "RMSE.h"
 
+#include <signal.h>
 #include <Python.h>
 
 class PrlSigHandler
