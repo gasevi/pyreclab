@@ -8,14 +8,16 @@
 
 #include <Python.h>
 
-typedef struct
+class PyItemKnn
 {
+public:
+
    PyObject_HEAD
    DataReader* m_trainingReader;
    AlgItemBasedKnn* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
-} PyItemKnn;
+};
 
 PyObject* ItemKnn_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void ItemKnn_dealloc( PyItemKnn* self );

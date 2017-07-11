@@ -29,15 +29,35 @@ AlgFunkSvd::AlgFunkSvd( DataReader& dreader,
 
 AlgFunkSvd::~AlgFunkSvd()
 {
-   for( int i = 0 ; i < m_nfactors ; ++i )
+   if( NULL != m_userP )
    {
-      delete [] m_userP[i];
-      delete [] m_itemQ[i];
+      size_t nusers = m_ratingMatrix.users();
+      for( int i = 0 ; i < nusers ; ++i )
+      {
+         delete [] m_userP[i];
+      }
+      delete [] m_userP;
    }
-   delete [] m_userP;
-   delete [] m_itemQ;
-   delete [] m_userBias;
-   delete [] m_itemBias;
+
+   if( NULL != m_itemQ )
+   {
+      size_t nitems = m_ratingMatrix.items();
+      for( int i = 0 ; i < nitems ; ++i )
+      {
+         delete [] m_itemQ[i];
+      }
+      delete [] m_itemQ;
+   }
+
+   if( NULL != m_userBias )
+   {
+      delete [] m_userBias;
+   }
+
+   if( NULL != m_itemBias )
+   {
+      delete [] m_itemBias;
+   }
 }
 
 int AlgFunkSvd::train( size_t factors, size_t maxiter, float lrate, float lambda )
@@ -152,7 +172,8 @@ void AlgFunkSvd::reset( size_t factors, size_t maxiter, float lrate, float lambd
 {
    if( NULL != m_userP )
    {
-      for( int i = 0 ; i < m_nfactors ; ++i )
+      size_t nusers = m_ratingMatrix.users();
+      for( int i = 0 ; i < nusers ; ++i )
       {
          delete [] m_userP[i];
       }
@@ -161,7 +182,8 @@ void AlgFunkSvd::reset( size_t factors, size_t maxiter, float lrate, float lambd
 
    if( NULL != m_itemQ )
    {
-      for( int i = 0 ; i < m_nfactors ; ++i )
+      size_t nitems = m_ratingMatrix.items();
+      for( int i = 0 ; i < nitems ; ++i )
       {
          delete [] m_itemQ[i];
       }

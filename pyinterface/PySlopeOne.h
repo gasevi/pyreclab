@@ -8,14 +8,16 @@
 
 #include <Python.h>
 
-typedef struct
+class PySlopeOne
 {
+public:
+
    PyObject_HEAD
    DataReader* m_trainingReader;
    AlgSlopeOne* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
-} PySlopeOne;
+};
 
 PyObject* SlopeOne_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void SlopeOne_dealloc( PySlopeOne* self );

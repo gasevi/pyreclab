@@ -8,14 +8,16 @@
 
 #include <Python.h>
 
-typedef struct
+class PyItemAvg
 {
+public:
+
    PyObject_HEAD
    DataReader* m_trainingReader;
    AlgItemAvg* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
-} PyItemAvg;
+};
 
 PyObject* ItemAvg_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void ItemAvg_dealloc( PyItemAvg* self );

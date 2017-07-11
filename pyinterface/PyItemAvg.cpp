@@ -60,8 +60,14 @@ PyObject* ItemAvg_new( PyTypeObject* type, PyObject* args, PyObject* kwdict )
 
 void ItemAvg_dealloc( PyItemAvg* self )
 {
-   Py_XDECREF( self->m_trainingReader );
-   Py_XDECREF( self->m_recAlgorithm );
+   if( NULL != self->m_recAlgorithm )
+   {
+      delete self->m_recAlgorithm;
+   }
+   if( NULL != self->m_trainingReader )
+   {
+      delete self->m_trainingReader;
+   }
 #if PY_MAJOR_VERSION >= 3
    Py_TYPE( self )->tp_free( reinterpret_cast<PyObject*>( self ) );
 #else

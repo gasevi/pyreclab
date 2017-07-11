@@ -8,14 +8,16 @@
 
 #include <Python.h>
 
-typedef struct
+class PyFunkSvd
 {
+public:
+
    PyObject_HEAD
    DataReader* m_trainingReader;
    AlgFunkSvd* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
-} PyFunkSvd;
+};
 
 PyObject* FunkSvd_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void FunkSvd_dealloc( PyFunkSvd* self );

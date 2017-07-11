@@ -8,14 +8,16 @@
 
 #include <Python.h>
 
-typedef struct
+class PyUserKnn
 {
+public:
+
    PyObject_HEAD
    DataReader* m_trainingReader;
    AlgUserBasedKnn* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
-} PyUserKnn;
+};
 
 PyObject* UserKnn_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void UserKnn_dealloc( PyUserKnn* self );

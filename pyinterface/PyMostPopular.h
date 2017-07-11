@@ -8,14 +8,16 @@
 
 #include <Python.h>
 
-typedef struct
+class PyMostPopular
 {
+public:
+
    PyObject_HEAD
    DataReader* m_trainingReader;
    AlgMostPopular* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
-} PyMostPopular;
+};
 
 PyObject* MostPopular_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void MostPopular_dealloc( PyMostPopular* self );

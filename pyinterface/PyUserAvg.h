@@ -8,14 +8,16 @@
 
 #include <Python.h>
 
-typedef struct
+class PyUserAvg
 {
+public:
+
    PyObject_HEAD
    DataReader* m_trainingReader;
    AlgUserAvg* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
-} PyUserAvg;
+};
 
 PyObject* UserAvg_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void UserAvg_dealloc( PyUserAvg* self );

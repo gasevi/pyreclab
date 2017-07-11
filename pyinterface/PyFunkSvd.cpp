@@ -37,6 +37,7 @@ PyObject* FunkSvd_new( PyTypeObject* type, PyObject* args, PyObject* kwdict )
    }
 
    PyFunkSvd* self = reinterpret_cast<PyFunkSvd*>( type->tp_alloc( type, 0 ) );
+   //cout << "### ref count after: " << reinterpret_cast<PyObject*>( self )->ob_refcnt << endl;
    if( self != NULL )
    {
       self->m_trainingReader = new DataReader( dsfilename, dlmchar, header );
@@ -59,8 +60,14 @@ PyObject* FunkSvd_new( PyTypeObject* type, PyObject* args, PyObject* kwdict )
 
 void FunkSvd_dealloc( PyFunkSvd* self )
 {
-   Py_XDECREF( self->m_trainingReader );
-   Py_XDECREF( self->m_recAlgorithm );
+   if( NULL != self->m_recAlgorithm )
+   {
+      delete self->m_recAlgorithm;
+   }
+   if( NULL != self->m_trainingReader )
+   {
+      delete self->m_trainingReader;
+   }
 #if PY_MAJOR_VERSION >= 3
    Py_TYPE( self )->tp_free( reinterpret_cast<PyObject*>( self ) );
 #else
