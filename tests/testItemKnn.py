@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   ibknn.train( k = 100 )
+   ibknn.train( k = 100, similarity = 'pearson' )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 

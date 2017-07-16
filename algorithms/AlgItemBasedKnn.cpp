@@ -16,13 +16,14 @@ AlgItemBasedKnn::AlgItemBasedKnn( DataReader& dreader,
 
 int AlgItemBasedKnn::train()
 {  
-   return train( 10 );
+   string strSimType = "pearson";
+   return train( 10, strSimType );
 }
 
-int AlgItemBasedKnn::train( size_t k )
+int AlgItemBasedKnn::train( size_t k, string& similarity )
 {
    m_knn = k;
-   Similarity< SparseColumn< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> > >simfunc( Similarity<SparseColumn< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> > >::PEARSON );
+   Similarity< SparseColumn< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> > >simfunc( similarity );
    size_t nitems = m_ratingMatrix.items();
    m_simMatrix.resize( nitems, nitems );
    for( int i = 0 ; i < nitems ; ++i )

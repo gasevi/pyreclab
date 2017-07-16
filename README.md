@@ -365,12 +365,13 @@ predictionList, mae, rmse = obj.test( input_file = testset,
  * Training
 
 ```python
->>> obj.train( knn )
+>>> obj.train( knn, similarity )
 ```
 
-| Parameter | Type      | Default value | Description         |
-|:----------|:---------:|:-------------:|:--------------------|
-| knn       | optional  | 10            | K nearest neighbors |
+| Parameter  | Type      | Default value | Description         |
+|:-----------|:---------:|:-------------:|:--------------------|
+| knn        | optional  | 10            | K nearest neighbors |
+| similarity | optional  | 'pearson'     | Similarity metric   |
 
  * Rating prediction
 
@@ -446,12 +447,13 @@ predictionList, mae, rmse = obj.test( input_file = testset,
  * Training
 
 ```python
->>> obj.train( knn )
+>>> obj.train( knn, similarity )
 ```
 
-| Parameter | Type      | Default value | Description         |
-|:----------|:---------:|:-------------:|:--------------------|
-| knn       | optional  | 10            | K nearest neighbors |
+| Parameter  | Type      | Default value | Description         |
+|:-----------|:---------:|:-------------:|:--------------------|
+| knn        | optional  | 10            | K nearest neighbors |
+| similarity | optional  | 'pearson'     | Similarity metric   |
 
  * Rating prediction
 

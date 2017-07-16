@@ -16,13 +16,14 @@ AlgUserBasedKnn::AlgUserBasedKnn( DataReader& dreader,
 
 int AlgUserBasedKnn::train()
 {
-   return train( 10 );
+   string strSimType = "pearson";
+   return train( 10, strSimType );
 }
 
-int AlgUserBasedKnn::train( size_t k )
+int AlgUserBasedKnn::train( size_t k, string& similarity )
 {
    m_knn = k;
-   Similarity<SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > > simfunc( Similarity<SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > >::PEARSON );
+   Similarity<SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > > simfunc( similarity );
    size_t nusers = m_ratingMatrix.users();
    m_simMatrix.resize( nusers, nusers );
    for( int i = 0 ; i < nusers ; ++i )

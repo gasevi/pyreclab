@@ -77,20 +77,42 @@ void ItemKnn_dealloc( PyItemKnn* self )
 PyObject* ItemKnn_train( PyItemKnn* self, PyObject* args, PyObject* kwdict )
 {  
    int k = 10;
+   const char* simType = NULL;
 
    static char* kwlist[] = { const_cast<char*>( "k" ),
+                             const_cast<char*>( "similarity" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|i", kwlist, &k ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|is", kwlist, &k, &simType ) )
    {
+      return NULL;
+   }
+
+   string strSimType = NULL != simType ? simType : "pearson";
+   transform( strSimType.begin(), strSimType.end(), strSimType.begin(), ::tolower );
+   if( !strSimType.empty() && strSimType != "pearson" && strSimType != "cosine" )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      string eMsg = "Unknown similarity metric '";
+      eMsg += strSimType + "'";
+      PyErr_SetString( PyExc_ValueError, eMsg.c_str() );
+      PyGILState_Release( gstate );
       return NULL;
    }
 
    PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::ITEM_KNN );
    struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );
-   int cause = 0;
+   int cause = -1;
+   string eMsg;
    Py_BEGIN_ALLOW_THREADS
-   cause = dynamic_cast<AlgItemBasedKnn*>( self->m_recAlgorithm )->train( k );
+   try
+   {
+      cause = dynamic_cast<AlgItemBasedKnn*>( self->m_recAlgorithm )->train( k, strSimType );
+   }
+   catch( const char* e )
+   {
+      eMsg = e;
+   }
    Py_END_ALLOW_THREADS
    PrlSigHandler::restoresignal( SIGINT, pOldAction );
 
@@ -98,6 +120,13 @@ PyObject* ItemKnn_train( PyItemKnn* self, PyObject* args, PyObject* kwdict )
    {
       PyGILState_STATE gstate = PyGILState_Ensure();
       PyErr_SetString( PyExc_KeyboardInterrupt, "SIGINT received" );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+   else if( 0 > cause )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_RuntimeError, eMsg.c_str() );
       PyGILState_Release( gstate );
       return NULL;
    }

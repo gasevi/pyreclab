@@ -18,7 +18,7 @@ public:
 
    int train();
 
-   int train( size_t k );
+   int train( size_t k, std::string& similarity );
 
    void test( DataFrame& dataFrame );
 

@@ -1,6 +1,7 @@
 #ifndef __SIMILARITY_METRICS_H__
 #define __SIMILARITY_METRICS_H__
 
+#include <string>
 
 template<class VectorType>
 class SimStrategy
@@ -124,11 +125,41 @@ public:
       set( simType );
    }
 
+   Similarity( std::string& simType )
+   : m_similarity( NULL )
+   {
+      if( simType.empty() )
+      {
+         set( Similarity<VectorType>::PEARSON );
+      }
+      else
+      {
+         set( simType );
+      }
+   }
+
    ~Similarity()
    {
       if( NULL != m_similarity )
       {
          delete m_similarity;
+      }
+   }
+
+   void set( std::string& strSimType )
+   {
+      transform( strSimType.begin(), strSimType.end(), strSimType.begin(), ::tolower );
+      if( strSimType == "pearson" )
+      {
+         set( Similarity<VectorType>::PEARSON );
+      }
+      else if( strSimType == "cosine" )
+      {
+         set( Similarity<VectorType>::COSINE );
+      }
+      else
+      {
+         throw "Unknown similarity metric";
       }
    }
 
