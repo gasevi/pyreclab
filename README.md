@@ -1,5 +1,7 @@
 # <center> <span style="color:#00f; font-size: 4em;">*Pyreclab*: Recommendation lab for Python</span> </center>
 
+## <span style="font-size: 4em;">Overview</span>
+
    *Pyreclab* is a recommendation library designed for training recommendation models with a friendly and easy-to-use interface, keeping a good performance in memory and CPU usage.
 
    In order to achieve this, *Pyreclab* is built as a Python module to give a friendly access to its algorithms and it is completely developed in C++ to avoid the lack of performace of the interpreted languages.
@@ -21,6 +23,19 @@
 
 
    Although *Pyreclab* can be compiled on most popular operating system, it has been tested on Linux *Ubuntu 16.04*.
+
+## <span style="font-size: 4em;">Citations</span>
+
+If you use this library, please cite:
+
+@inproceedings{1706.06291v2,
+   author        = {Gabriel Sepulveda and Vicente Dominguez and Denis Parra},
+   title         = {pyRecLab: A Software Library for Quick Prototyping of Recommender Systems},
+   year          = {2017},
+   month         = {August},
+   eprint        = {arXiv:1706.06291v2},
+   keywords      = {Recommender Systems, Software Development, Recommender Library, Python Library}
+}
 
 
 ## <span style="font-size: 4em;">Build and install</span>
