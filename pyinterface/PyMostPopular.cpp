@@ -208,18 +208,20 @@ PyObject* MostPopular_recommend( PyMostPopular* self, PyObject* args, PyObject* 
 {
    const char* userId = NULL;
    int topn = 10;
+   int includeRated = 0;
 
    static char* kwlist[] = { const_cast<char*>( "user" ),
                              const_cast<char*>( "topn" ),
+                             const_cast<char*>( "includeRated" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|i", kwlist, &userId, &topn ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ii", kwlist, &userId, &topn, &includeRated ) )
    {
       return NULL;
    }
 
    vector<string> itemList;
-   self->m_recAlgorithm->recommend( userId, topn, itemList );
+   self->m_recAlgorithm->recommend( userId, topn, itemList, includeRated );
 
    PyObject* pyList = PyList_New( 0 );
    if( NULL == pyList )

@@ -150,13 +150,14 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
  * Top-N item recommendation
 
 ```python
->>> ranking = obj.recommend( userId, topN )
+>>> ranking = obj.recommend( userId, topN, includeRated )
 ```
 
-| Parameter | Type      | Default value | Description               |
-|:----------|:---------:|:-------------:|:--------------------------|
-| userId    | mandatory | N.A.          | User identifier           |
-| topN      | optional  | 10            | Top N items to recommend  |
+| Parameter    | Type      | Default value | Description                               |
+|:-------------|:---------:|:-------------:|:------------------------------------------|
+| userId       | mandatory | N.A.          | User identifier                           |
+| topN         | optional  | 10            | Top N items to recommend                  |
+| includeRated | optional  | false         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
@@ -228,13 +229,14 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
  * Top-N item recommendation
 
 ```python
->>> ranking = obj.recommend( userId, topN )
+>>> ranking = obj.recommend( userId, topN, includeRated )
 ```
 
-| Parameter | Type      | Default value | Description               |
-|:----------|:---------:|:-------------:|:--------------------------|
-| userId    | mandatory | N.A.          | User identifier           |
-| topN      | optional  | 10            | Top N items to recommend  |
+| Parameter    | Type      | Default value | Description                               |
+|:-------------|:---------:|:-------------:|:------------------------------------------|
+| userId       | mandatory | N.A.          | User identifier                           |
+| topN         | optional  | 10            | Top N items to recommend                  |
+| includeRated | optional  | false         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
@@ -305,24 +307,25 @@ prediction = obj.predict( userId, itemId )
  * Top-N item recommendation
 
 ```python
->>> ranking = obj.recommend( userId, topN )
+>>> ranking = obj.recommend( userId, topN, includeRated )
 ```
 
-| Parameter | Type      | Default value | Description               |
-|:----------|:---------:|:-------------:|:--------------------------|
-| userId    | mandatory | N.A.          | User identifier           |
-| topN      | optional  | 10            | Top N items to recommend  |
+| Parameter    | Type      | Default value | Description                               |
+|:-------------|:---------:|:-------------:|:------------------------------------------|
+| userId       | mandatory | N.A.          | User identifier                           |
+| topN         | optional  | 10            | Top N items to recommend                  |
+| includeRated | optional  | false         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
 ```python
-predictionList, mae, rmse = obj.test( input_file = testset,
-                                      dlmchar = b'\t',
-                                      header = False,
-                                      usercol = 0,
-                                      itemcol = 1,
-                                      ratingcol = 2,
-                                      output_file = 'predictions.csv' )
+>>> predictionList, mae, rmse = obj.test( input_file = testset,
+                                          dlmchar = b'\t',
+                                          header = False,
+                                          usercol = 0,
+                                          itemcol = 1,
+                                          ratingcol = 2,
+                                          output_file = 'predictions.csv' )
 ```
 
 | Parameter   | Type      | Default value | Description                                                 |
@@ -387,13 +390,14 @@ predictionList, mae, rmse = obj.test( input_file = testset,
  * Top-N item recommendation
 
 ```python
->>> ranking = obj.recommend( userId, topN )
+>>> ranking = obj.recommend( userId, topN, includeRated )
 ```
 
-| Parameter | Type      | Default value | Description               |
-|:----------|:---------:|:-------------:|:--------------------------|
-| userId    | mandatory | N.A.          | User identifier           |
-| topN      | optional  | 10            | Top N items to recommend  |
+| Parameter    | Type      | Default value | Description                               |
+|:-------------|:---------:|:-------------:|:------------------------------------------|
+| userId       | mandatory | N.A.          | User identifier                           |
+| topN         | optional  | 10            | Top N items to recommend                  |
+| includeRated | optional  | false         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
@@ -469,13 +473,14 @@ predictionList, mae, rmse = obj.test( input_file = testset,
  * Top-N item recommendation
 
 ```python
->>> ranking = obj.recommend( userId, topN )
+>>> ranking = obj.recommend( userId, topN, includeRated )
 ```
 
-| Parameter | Type      | Default value | Description               |
-|:----------|:---------:|:-------------:|:--------------------------|
-| userId    | mandatory | N.A.          | User identifier           |
-| topN      | optional  | 10            | Top N items to recommend  |
+| Parameter    | Type      | Default value | Description                               |
+|:-------------|:---------:|:-------------:|:------------------------------------------|
+| userId       | mandatory | N.A.          | User identifier                           |
+| topN         | optional  | 10            | Top N items to recommend                  |
+| includeRated | optional  | false         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
@@ -553,13 +558,14 @@ predictionList, mae, rmse = obj.test( input_file = testset,
  * Top-N item recommendation
 
 ```python
->>> ranking = obj.recommend( userId, topN )
+>>> ranking = obj.recommend( userId, topN, includeRated )
 ```
 
-| Parameter | Type      | Default value | Description               |
-|:----------|:---------:|:-------------:|:--------------------------|
-| userId    | mandatory | N.A.          | User identifier           |
-| topN      | optional  | 10            | Top N items to recommend  |
+| Parameter    | Type      | Default value | Description                               |
+|:-------------|:---------:|:-------------:|:------------------------------------------|
+| userId       | mandatory | N.A.          | User identifier                           |
+| topN         | optional  | 10            | Top N items to recommend                  |
+| includeRated | optional  | false         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
@@ -619,13 +625,14 @@ predictionList, mae, rmse = obj.test( input_file = testset,
  * Top-N item recommendation
 
 ```python
->>> ranking = obj.recommend( userId, topN )
+>>> ranking = obj.recommend( userId, topN, includeRated )
 ```
 
-| Parameter | Type      | Default value | Description               |
-|:----------|:---------:|:-------------:|:--------------------------|
-| userId    | mandatory | N.A.          | User identifier           |
-| topN      | optional  | 10            | Top N items to recommend  |
+| Parameter    | Type      | Default value | Description                               |
+|:-------------|:---------:|:-------------:|:------------------------------------------|
+| userId       | mandatory | N.A.          | User identifier                           |
+| topN         | optional  | 10            | Top N items to recommend                  |
+| includeRated | optional  | false         | Include rated items in ranking generation |
 
 
  * Testing for recommendation

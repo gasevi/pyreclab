@@ -20,7 +20,7 @@ if __name__ == '__main__':
    print( 'training time: ' + str( end - start ) )
 
    print( '-> individual test' )
-   ranking = mpop.recommend( '457', 5 )
+   ranking = mpop.recommend( '457', 5, includeRated = False )
    print( 'user 457, recommended items ' + str( ranking ) )
 
    print( '-> recommendation test' )

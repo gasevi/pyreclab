@@ -43,17 +43,25 @@ void AlgMostPopular::test( DataFrame& dataFrame )
    }
 }
 
-bool AlgMostPopular::recommend( const std::string& userId, size_t n, std::vector<std::string>& ranking )
+bool AlgMostPopular::recommend( const std::string& userId,
+                                size_t n,
+                                std::vector<std::string>& ranking,
+                                bool includeRated )
 {
-   for( int i = 0 ; i < n ; ++i )
+   int row = m_ratingMatrix.row( userId );
+   size_t nitems = m_itemList.size();
+   for( int col = 0 ; col < nitems ; ++col )
    {
-      if( m_itemList.size() <= i )
+      if( includeRated || ( 0 == m_ratingMatrix.get( row, col ) ) )
       {
-         break;
+         size_t itemcol = m_itemList[col].second;
+         string itemId = m_ratingMatrix.itemId( itemcol );
+         ranking.push_back( itemId );
+         if( ranking.size() == n )
+         {
+            break;
+         }
       }
-      size_t itemcol = m_itemList[i].second;
-      string itemId = m_ratingMatrix.itemId( itemcol );
-      ranking.push_back( itemId );
    }
 
    return true;

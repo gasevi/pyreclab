@@ -47,7 +47,10 @@ public:
    double predict( size_t row, size_t col );
 
    virtual
-   bool recommend( const std::string& userId, size_t n, std::vector<std::string>& ranking );
+   bool recommend( const std::string& userId,
+                   size_t n,
+                   std::vector<std::string>& ranking,
+                   bool includeRated = false );
 
    void stop()
    {
@@ -80,13 +83,16 @@ double RecSysAlgorithm<smatrix_t>::predict( size_t row, size_t col )
 }
 
 template <class smatrix_t>
-bool RecSysAlgorithm<smatrix_t>::recommend( const std::string& userId, size_t n, std::vector<std::string>& ranking )
+bool RecSysAlgorithm<smatrix_t>::recommend( const std::string& userId,
+                                            size_t n,
+                                            std::vector<std::string>& ranking,
+                                            bool includeRated )
 {
    int row = m_ratingMatrix.row( userId );
    MaxHeap maxheap;
    for( size_t col = 0 ; col < m_ratingMatrix.items() ; ++col )
    {
-      if( 0 == m_ratingMatrix.get( row, col ) )
+      if( includeRated || ( 0 == m_ratingMatrix.get( row, col ) ) )
       {
          double rating = predict( row, col );
          std::pair<double, size_t> e = std::pair<double, size_t>( rating, col );

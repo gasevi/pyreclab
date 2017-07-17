@@ -21,7 +21,10 @@ public:
 
    void test( DataFrame& dataFrame );
 
-   bool recommend( const std::string& userId, size_t n, std::vector<std::string>& ranking );
+   bool recommend( const std::string& userId,
+                   size_t n,
+                   std::vector<std::string>& ranking,
+                   bool includeRated = false );
  
 private:
 

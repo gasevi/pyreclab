@@ -22,7 +22,7 @@ if __name__ == '__main__':
    pred = ubknn.predict( '457', '443' )
    print( 'user 457, item 443, prediction ' + str( pred ) )
 
-   ranking = ubknn.recommend( '457', 5 )
+   ranking = ubknn.recommend( '457', 5, includeRated = False )
    print( 'recommendation for user 457: ' + str( ranking ) )
 
    print( '-> prediction test' )
