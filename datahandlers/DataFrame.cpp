@@ -65,7 +65,12 @@ DataFrame::iterator DataFrame::end()
 
 DataFrame& DataFrame::operator=( DataFrame& dataFrame )
 {
+   if( this == &dataFrame )
+   {
+      return *this;
+   }
    m_userItemPairs = dataFrame.m_userItemPairs;
+   return *this;
 }
 
 

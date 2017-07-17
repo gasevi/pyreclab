@@ -28,6 +28,7 @@ bool DataWriter::open( string& filename, char dlm, string header )
    {
       m_outfile << header << "\n";
    }
+   return m_outfile.is_open();
 }
 
 void DataWriter::close()

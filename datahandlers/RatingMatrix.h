@@ -298,7 +298,7 @@ SparseColumn<smatrix_t> RatingMatrix<smatrix_t>::itemVector( std::string itemId 
 template <class smatrix_t>
 int RatingMatrix<smatrix_t>::nonZeroRow( size_t row )
 {
-   m_smatrix.nonZeroRow( row );
+   return m_smatrix.nonZeroRow( row );
 }
 
 template <class smatrix_t>
@@ -316,7 +316,7 @@ double RatingMatrix<smatrix_t>::sumRatings()
 template <class smatrix_t>
 int RatingMatrix<smatrix_t>::nonZeroCol( size_t col )
 {
-   m_smatrix.nonZeroCol( col );
+   return m_smatrix.nonZeroCol( col );
 }
 
 template <class smatrix_t>

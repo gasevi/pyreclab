@@ -8,6 +8,11 @@ class SimStrategy
 {
 public:
 
+   virtual
+   ~SimStrategy()
+   {
+   }
+
    double similarity( VectorType& v1, VectorType& v2 )
    {
       return correlate( v1, v2 );
