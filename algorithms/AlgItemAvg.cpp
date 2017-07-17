@@ -51,9 +51,9 @@ double AlgItemAvg::predict( string userId, string itemId )
    return p > 0 ? p : m_globalMean;
 }
 
-double AlgItemAvg::predict( size_t row, size_t col )
+double AlgItemAvg::predict( size_t userrow, size_t itemcol )
 {
-   string itemId = m_ratingMatrix.itemId( col );
+   string itemId = m_ratingMatrix.itemId( itemcol );
    double p = m_meanRatingByItem[itemId];
    return p > 0 ? p : m_globalMean;
 }

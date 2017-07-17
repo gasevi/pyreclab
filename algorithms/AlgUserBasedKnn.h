@@ -24,6 +24,8 @@ public:
 
    double predict( std::string userId, std::string itemId );
 
+   double predict( size_t userrow, size_t itemcol );
+
 private:
 
    size_t m_knn;

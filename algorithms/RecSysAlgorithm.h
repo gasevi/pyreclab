@@ -109,7 +109,9 @@ bool RecSysAlgorithm<smatrix_t>::recommend( const std::string& userId,
    {
       std::pair<double, size_t> e = maxheap.pop();
       ranking.push_back( m_ratingMatrix.itemId( e.second ) );
+      //std::cout << "(" << e.first << ", " << e.second << ") ";
    }
+   //std::cout << std::endl;
 
    return true;
 }

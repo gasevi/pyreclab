@@ -65,10 +65,14 @@ void AlgUserBasedKnn::test( DataFrame& dataFrame )
 
 double AlgUserBasedKnn::predict( string userId, string itemId )
 {
-   MaxHeap maxheap;
-
    int userrow = m_ratingMatrix.row( userId );
    int itemcol = m_ratingMatrix.column( itemId );
+   return predict( userrow, itemcol );
+}
+
+double AlgUserBasedKnn::predict( size_t userrow, size_t itemcol )
+{
+   MaxHeap maxheap;
 
    double sum = 0;
    double ws = 0;
@@ -106,6 +110,7 @@ double AlgUserBasedKnn::predict( string userId, string itemId )
       }
    }
 
+   string userId = m_ratingMatrix.userId( userrow );
    return ws > 0 ? m_meanRatingByUser[userId] + sum / ws : m_globalMean;
 }
 

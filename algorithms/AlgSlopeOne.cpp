@@ -93,24 +93,30 @@ void AlgSlopeOne::test( DataFrame& dataFrame )
 
 double AlgSlopeOne::predict( string userId, string itemId )
 {
+   int userrow = m_ratingMatrix.row( userId );
+   int itemcol = m_ratingMatrix.column( itemId );
+   return predict( userrow, itemcol );
+}
+
+double AlgSlopeOne::predict( size_t userrow, size_t itemcol )
+{
    double sumpred = 0;
    double sumcard = 0;
-   int col = m_ratingMatrix.column( itemId );
-   if( col >= 0 )
+   if( itemcol >= 0 )
    {
-      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > row = m_ratingMatrix.userVector( userId );
+      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > row = m_ratingMatrix.userVector( userrow );
       SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator ind;
       SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator end = row.end();
       for( ind = row.begin() ; ind != end ; ++ind )
       {
          size_t itempos = ind.index();
-         if( col != itempos )
+         if( itemcol != itempos )
          {
             double rating = *ind;
-            double card = m_cardMatrix.get( col, itempos );
+            double card = m_cardMatrix.get( itemcol, itempos );
             if( card > 0 )
             {
-               sumpred += ( m_devMatrix.get( col, itempos ) + rating )*card;
+               sumpred += ( m_devMatrix.get( itemcol, itempos ) + rating )*card;
                sumcard += card;
             }
          }
