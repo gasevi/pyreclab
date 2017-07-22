@@ -60,11 +60,11 @@ $ cmake .
 $ make
 ```
 
-By default, it will be compiled for *Python 2.7*. If you want to build it for *Python 3*, you can execute the following steps:
+By default, it will be compiled for *Python 2.7*. If you want to build it for *Python 3.x*, you can execute the following steps:
 
 ```sh
 $ cd pyreclab
-$ cmake -DPY_MAJOR_VERSION=3 .
+$ cmake -DCMAKE_PYTHON_VERSION=3.x .
 $ make
 ```
 
