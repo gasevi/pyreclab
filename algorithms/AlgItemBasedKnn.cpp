@@ -52,11 +52,11 @@ int AlgItemBasedKnn::train( size_t k, string& similarity )
 }
 
 void AlgItemBasedKnn::test( DataFrame& dataFrame )
-{  
+{
    DataFrame::iterator ind;
    DataFrame::iterator end = dataFrame.end();
    for( ind = dataFrame.begin() ; ind != end ; ++ind )
-   {  
+   {
       string userId = ind->first.first;
       string itemId = ind->first.second;
       double prediction = predict( userId, itemId );
@@ -64,9 +64,22 @@ void AlgItemBasedKnn::test( DataFrame& dataFrame )
 }
 
 double AlgItemBasedKnn::predict( string& userId, string& itemId )
+throw( invalid_argument )
 {
    int userrow = m_ratingMatrix.row( userId );
+   if( userrow < 0 )
+   {
+      std::ostringstream eMsg;
+      eMsg << "user id '" << userId << "' was not included in training set";
+      throw invalid_argument( eMsg.str() );
+   }
    int itemcol = m_ratingMatrix.column( itemId );
+   if( itemcol < 0 )
+   {
+      std::ostringstream eMsg;
+      eMsg << "item id '" << itemId << "' was not included in training set";
+      throw invalid_argument( eMsg.str() );
+   }
    return predict( userrow, itemcol );
 }
 

@@ -4,6 +4,7 @@
 #include "RecSysAlgorithm.h"
 
 #include <string>
+#include <stdexcept>
 
 
 class AlgSlopeOne
@@ -20,7 +21,8 @@ public:
 
    void test( DataFrame& dataFrame );
 
-   double predict( std::string& userId, std::string& itemId );
+   double predict( std::string& userId, std::string& itemId )
+   throw( std::invalid_argument );
 
    double predict( size_t userrow, size_t itemcol );
  

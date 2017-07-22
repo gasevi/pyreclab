@@ -47,14 +47,22 @@ void AlgUserAvg::test( DataFrame& dataFrame )
 
 double AlgUserAvg::predict( string& userId, string& itemId )
 {
-   double p = m_meanRatingByUser[userId];
+   double p = -1;
+   if( m_meanRatingByUser.find( userId ) != m_meanRatingByUser.end() )
+   {
+      p = m_meanRatingByUser[userId];
+   }
    return p > 0 ? p : m_globalMean;
 }
 
 double AlgUserAvg::predict( size_t userrow, size_t itemcol )
 {
+   double p = -1;
    string userId = m_ratingMatrix.userId( userrow );
-   double p = m_meanRatingByUser[userId];
+   if( !userId.empty() )
+   {
+      p = m_meanRatingByUser[userId];
+   }
    return p > 0 ? p : m_globalMean;
 }
 

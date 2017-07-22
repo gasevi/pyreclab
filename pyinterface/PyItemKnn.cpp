@@ -147,7 +147,18 @@ PyObject* ItemKnn_predict( PyItemKnn* self, PyObject* args )
 
    string strUserId = userId;
    string strItemId = itemId;
-   float prating = self->m_recAlgorithm->predict( strUserId, strItemId );
+   float prating = -1;
+   try
+   {
+      prating = self->m_recAlgorithm->predict( strUserId, strItemId );
+   }
+   catch( invalid_argument& eMsg )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_ValueError, eMsg.what() );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
 
    return Py_BuildValue( "f", prating );
 }
@@ -245,9 +256,17 @@ PyObject* ItemKnn_test( PyItemKnn* self, PyObject* args, PyObject* kwdict )
    DataFrame::iterator end = testData.end();
    for( ind = testData.begin() ; ind != end ; ++ind )
    {
-      std::string userId = ind->first.first;
-      std::string itemId = ind->first.second;
-      double prediction = self->m_recAlgorithm->predict( userId, itemId );
+      string userId = ind->first.first;
+      string itemId = ind->first.second;
+      double prediction = -1;
+      try
+      {
+         prediction = self->m_recAlgorithm->predict( userId, itemId );
+      }
+      catch( invalid_argument& eMsg )
+      {
+         cerr << "Warning: " << eMsg.what() << endl;
+      }
 
       PyObject* pyTuple = PyTuple_New( 3 );
       if( NULL == pyTuple )
