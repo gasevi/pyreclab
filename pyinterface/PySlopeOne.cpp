@@ -96,15 +96,12 @@ PyObject* SlopeOne_train( PySlopeOne* self, PyObject* args )
    return Py_None;
 }
 
-PyObject* SlopeOne_predict( PySlopeOne* self, PyObject* args, PyObject* kwdict )
+PyObject* SlopeOne_predict( PySlopeOne* self, PyObject* args )
 {
    const char* userId = NULL;
    const char* itemId = NULL;
-   static char* kwlist[] = { const_cast<char*>( "user" ),
-                             const_cast<char*>( "item" ),
-                             NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "ss|", kwlist, &userId, &itemId ) )
+   if( !PyArg_ParseTuple( args, "ss|", &userId, &itemId ) )
    {
       return NULL;
    }

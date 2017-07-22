@@ -30,7 +30,7 @@ PyMethodDef MostPopular_methods[] =
 {
    { "train",     (PyCFunction)MostPopular_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
    { "testrec",   (PyCFunction)MostPopular_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "recommend", (PyCFunction)MostPopular_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
+   { "recommend", (PyCFunction)MostPopular_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
    { NULL }
 };
 

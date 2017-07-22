@@ -113,15 +113,12 @@ PyObject* FunkSvd_train( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
    return Py_None;
 }
 
-PyObject* FunkSvd_predict( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
+PyObject* FunkSvd_predict( PyFunkSvd* self, PyObject* args )
 {
    const char* userId = NULL;
    const char* itemId = NULL;
-   static char* kwlist[] = { const_cast<char*>( "user" ),
-                             const_cast<char*>( "item" ),
-                             NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "ss|", kwlist, &userId, &itemId ) )
+   if( !PyArg_ParseTuple( args, "ss|", &userId, &itemId ) )
    {
       return NULL;
    }
@@ -131,7 +128,7 @@ PyObject* FunkSvd_predict( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
    return Py_BuildValue( "f", prating );
 }
 
-PyObject* FunkSvd_recommend( PyFunkSvd* self, PyObject* args, PyObject* kwds )
+PyObject* FunkSvd_recommend( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
 {
    const char* userId = NULL;
    int topn = 10;
@@ -142,7 +139,7 @@ PyObject* FunkSvd_recommend( PyFunkSvd* self, PyObject* args, PyObject* kwds )
                              const_cast<char*>( "includeRated" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwds, "s|ii", kwlist, &userId, &topn, &includeRated ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ii", kwlist, &userId, &topn, &includeRated ) )
    {
       return NULL;
    }

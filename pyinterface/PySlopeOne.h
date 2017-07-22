@@ -22,8 +22,8 @@ public:
 PyObject* SlopeOne_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void SlopeOne_dealloc( PySlopeOne* self );
 PyObject* SlopeOne_train( PySlopeOne* self, PyObject* args );
-PyObject* SlopeOne_predict( PySlopeOne* self, PyObject* args, PyObject* kwdict );
-PyObject* SlopeOne_recommend( PySlopeOne* self, PyObject* args, PyObject* kwds );
+PyObject* SlopeOne_predict( PySlopeOne* self, PyObject* args );
+PyObject* SlopeOne_recommend( PySlopeOne* self, PyObject* args, PyObject* kwdict );
 PyObject* SlopeOne_test( PySlopeOne* self, PyObject* args, PyObject* kwdict );
 PyObject* SlopeOne_testrec( PySlopeOne* self, PyObject* args, PyObject* kwdict );
 
@@ -33,8 +33,8 @@ PyMethodDef SlopeOne_methods[] =
    { "train",     (PyCFunction)SlopeOne_train,     METH_NOARGS,                "train model" },
    { "test",      (PyCFunction)SlopeOne_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
    { "testrec",   (PyCFunction)SlopeOne_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "predict",   (PyCFunction)SlopeOne_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
-   { "recommend", (PyCFunction)SlopeOne_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
+   { "predict",   (PyCFunction)SlopeOne_predict,   METH_VARARGS,               "predict user's rating for an item" },
+   { "recommend", (PyCFunction)SlopeOne_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
    { NULL }
 };
 

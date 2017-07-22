@@ -22,8 +22,8 @@ public:
 PyObject* ItemKnn_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void ItemKnn_dealloc( PyItemKnn* self );
 PyObject* ItemKnn_train( PyItemKnn* self, PyObject* args, PyObject* kwdict );
-PyObject* ItemKnn_predict( PyItemKnn* self, PyObject* args, PyObject* kwdict );
-PyObject* ItemKnn_recommend( PyItemKnn* self, PyObject* args, PyObject* kwds );
+PyObject* ItemKnn_predict( PyItemKnn* self, PyObject* args );
+PyObject* ItemKnn_recommend( PyItemKnn* self, PyObject* args, PyObject* kwdict );
 PyObject* ItemKnn_test( PyItemKnn* self, PyObject* args, PyObject* kwdict );
 PyObject* ItemKnn_testrec( PyItemKnn* self, PyObject* args, PyObject* kwdict );
 
@@ -33,8 +33,8 @@ PyMethodDef ItemKnn_methods[] =
    { "train",     (PyCFunction)ItemKnn_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
    { "test",      (PyCFunction)ItemKnn_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
    { "testrec",   (PyCFunction)ItemKnn_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "predict",   (PyCFunction)ItemKnn_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
-   { "recommend", (PyCFunction)ItemKnn_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
+   { "predict",   (PyCFunction)ItemKnn_predict,   METH_VARARGS,               "predict user's rating for an item" },
+   { "recommend", (PyCFunction)ItemKnn_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
    { NULL }
 };
 

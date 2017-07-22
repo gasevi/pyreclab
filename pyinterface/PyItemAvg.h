@@ -21,9 +21,9 @@ public:
 
 PyObject* ItemAvg_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void ItemAvg_dealloc( PyItemAvg* self );
-PyObject* ItemAvg_train( PyItemAvg* self, PyObject* args );
-PyObject* ItemAvg_predict( PyItemAvg* self, PyObject* args, PyObject* kwdict );
-PyObject* ItemAvg_recommend( PyItemAvg* self, PyObject* args, PyObject* kwds );
+PyObject* ItemAvg_train( PyItemAvg* self );
+PyObject* ItemAvg_predict( PyItemAvg* self, PyObject* args );
+PyObject* ItemAvg_recommend( PyItemAvg* self, PyObject* args, PyObject* kwdict );
 PyObject* ItemAvg_test( PyItemAvg* self, PyObject* args, PyObject* kwdict );
 PyObject* ItemAvg_testrec( PyItemAvg* self, PyObject* args, PyObject* kwdict );
 
@@ -33,8 +33,8 @@ PyMethodDef ItemAvg_methods[] =
    { "train",     (PyCFunction)ItemAvg_train,     METH_NOARGS,                "train model" },
    { "test",      (PyCFunction)ItemAvg_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
    { "testrec",   (PyCFunction)ItemAvg_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "predict",   (PyCFunction)ItemAvg_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
-   { "recommend", (PyCFunction)ItemAvg_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
+   { "predict",   (PyCFunction)ItemAvg_predict,   METH_VARARGS,               "predict user's rating for an item" },
+   { "recommend", (PyCFunction)ItemAvg_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
    { NULL }
 };
 

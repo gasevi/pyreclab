@@ -75,7 +75,7 @@ void ItemAvg_dealloc( PyItemAvg* self )
 #endif
 }
 
-PyObject* ItemAvg_train( PyItemAvg* self, PyObject* args )
+PyObject* ItemAvg_train( PyItemAvg* self )
 {
    PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::ITEM_AVG );
    struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );
@@ -97,15 +97,12 @@ PyObject* ItemAvg_train( PyItemAvg* self, PyObject* args )
    return Py_None;
 }
 
-PyObject* ItemAvg_predict( PyItemAvg* self, PyObject* args, PyObject* kwdict )
+PyObject* ItemAvg_predict( PyItemAvg* self, PyObject* args )
 {
    const char* userId = NULL;
    const char* itemId = NULL;
-   static char* kwlist[] = { const_cast<char*>( "user" ),
-                             const_cast<char*>( "item" ),
-                             NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "ss|", kwlist, &userId, &itemId ) )
+   if( !PyArg_ParseTuple( args, "ss|", &userId, &itemId ) )
    {
       return NULL;
    }
@@ -115,7 +112,7 @@ PyObject* ItemAvg_predict( PyItemAvg* self, PyObject* args, PyObject* kwdict )
    return Py_BuildValue( "f", prating );
 }
 
-PyObject* ItemAvg_recommend( PyItemAvg* self, PyObject* args, PyObject* kwds )
+PyObject* ItemAvg_recommend( PyItemAvg* self, PyObject* args, PyObject* kwdict )
 {
    const char* userId = NULL;
    int topn = 10;
@@ -126,7 +123,7 @@ PyObject* ItemAvg_recommend( PyItemAvg* self, PyObject* args, PyObject* kwds )
                              const_cast<char*>( "includeRated" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwds, "s|ii", kwlist, &userId, &topn, &includeRated ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ii", kwlist, &userId, &topn, &includeRated ) )
    {
       return NULL;
    }

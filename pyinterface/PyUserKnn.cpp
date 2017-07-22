@@ -135,15 +135,12 @@ PyObject* UserKnn_train( PyUserKnn* self, PyObject* args, PyObject* kwdict )
    return Py_None;
 }
 
-PyObject* UserKnn_predict( PyUserKnn* self, PyObject* args, PyObject* kwdict )
+PyObject* UserKnn_predict( PyUserKnn* self, PyObject* args )
 {
    const char* userId = NULL;
    const char* itemId = NULL;
-   static char* kwlist[] = { const_cast<char*>( "user" ),
-                             const_cast<char*>( "item" ),
-                             NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "ss|", kwlist, &userId, &itemId ) )
+   if( !PyArg_ParseTuple( args, "ss|", &userId, &itemId ) )
    {
       return NULL;
    }
@@ -153,7 +150,7 @@ PyObject* UserKnn_predict( PyUserKnn* self, PyObject* args, PyObject* kwdict )
    return Py_BuildValue( "f", prating );
 }
 
-PyObject* UserKnn_recommend( PyUserKnn* self, PyObject* args, PyObject* kwds )
+PyObject* UserKnn_recommend( PyUserKnn* self, PyObject* args, PyObject* kwdict )
 {
    const char* userId = NULL;
    int topn = 10;
@@ -164,7 +161,7 @@ PyObject* UserKnn_recommend( PyUserKnn* self, PyObject* args, PyObject* kwds )
                              const_cast<char*>( "includeRated" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwds, "s|ii", kwlist, &userId, &topn, &includeRated ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ii", kwlist, &userId, &topn, &includeRated ) )
    {
       return NULL;
    }

@@ -22,8 +22,8 @@ public:
 PyObject* FunkSvd_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void FunkSvd_dealloc( PyFunkSvd* self );
 PyObject* FunkSvd_train( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
-PyObject* FunkSvd_predict( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
-PyObject* FunkSvd_recommend( PyFunkSvd* self, PyObject* args, PyObject* kwds );
+PyObject* FunkSvd_predict( PyFunkSvd* self, PyObject* args );
+PyObject* FunkSvd_recommend( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
 PyObject* FunkSvd_test( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
 PyObject* FunkSvd_testrec( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
 
@@ -33,8 +33,8 @@ PyMethodDef FunkSvd_methods[] =
    { "train",     (PyCFunction)FunkSvd_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
    { "test",      (PyCFunction)FunkSvd_test,      METH_VARARGS|METH_KEYWORDS, "test prediction model" },
    { "testrec",   (PyCFunction)FunkSvd_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "predict",   (PyCFunction)FunkSvd_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
-   { "recommend", (PyCFunction)FunkSvd_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
+   { "predict",   (PyCFunction)FunkSvd_predict,   METH_VARARGS,               "predict user's rating for an item" },
+   { "recommend", (PyCFunction)FunkSvd_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
    { NULL }
 };
 

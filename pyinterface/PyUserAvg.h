@@ -22,8 +22,8 @@ public:
 PyObject* UserAvg_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void UserAvg_dealloc( PyUserAvg* self );
 PyObject* UserAvg_train( PyUserAvg* self, PyObject* args );
-PyObject* UserAvg_predict( PyUserAvg* self, PyObject* args, PyObject* kwdict );
-PyObject* UserAvg_recommend( PyUserAvg* self, PyObject* args, PyObject* kwds );
+PyObject* UserAvg_predict( PyUserAvg* self, PyObject* args );
+PyObject* UserAvg_recommend( PyUserAvg* self, PyObject* args, PyObject* kwdict );
 PyObject* UserAvg_test( PyUserAvg* self, PyObject* args, PyObject* kwdict );
 PyObject* UserAvg_testrec( PyUserAvg* self, PyObject* args, PyObject* kwdict );
 
@@ -33,8 +33,8 @@ PyMethodDef UserAvg_methods[] =
    { "train",     (PyCFunction)UserAvg_train,     METH_NOARGS,                "train model" },
    { "test",      (PyCFunction)UserAvg_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
    { "testrec",   (PyCFunction)UserAvg_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "predict",   (PyCFunction)UserAvg_predict,   METH_KEYWORDS,              "predict user's rating for an item" },
-   { "recommend", (PyCFunction)UserAvg_recommend, METH_KEYWORDS,              "recommend ranked items to a user" },
+   { "predict",   (PyCFunction)UserAvg_predict,   METH_VARARGS,               "predict user's rating for an item" },
+   { "recommend", (PyCFunction)UserAvg_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
    { NULL }
 };
 
