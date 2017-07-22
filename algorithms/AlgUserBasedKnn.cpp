@@ -63,7 +63,7 @@ void AlgUserBasedKnn::test( DataFrame& dataFrame )
    }
 }
 
-double AlgUserBasedKnn::predict( string userId, string itemId )
+double AlgUserBasedKnn::predict( string& userId, string& itemId )
 {
    int userrow = m_ratingMatrix.row( userId );
    int itemcol = m_ratingMatrix.column( itemId );

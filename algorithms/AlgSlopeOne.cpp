@@ -91,7 +91,7 @@ void AlgSlopeOne::test( DataFrame& dataFrame )
    }
 }
 
-double AlgSlopeOne::predict( string userId, string itemId )
+double AlgSlopeOne::predict( string& userId, string& itemId )
 {
    int userrow = m_ratingMatrix.row( userId );
    int itemcol = m_ratingMatrix.column( itemId );

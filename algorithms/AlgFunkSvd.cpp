@@ -147,7 +147,7 @@ void AlgFunkSvd::test( DataFrame& dataFrame )
    }
 }
 
-double AlgFunkSvd::predict( string userId, string itemId )
+double AlgFunkSvd::predict( string& userId, string& itemId )
 {
    int userrow = m_ratingMatrix.row( userId );
    int itemcol = m_ratingMatrix.column( itemId );

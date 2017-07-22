@@ -41,7 +41,7 @@ public:
    void test( DataFrame& dataFrame ) = 0;
 
    virtual
-   double predict( std::string userId, std::string itemId );
+   double predict( std::string& userId, std::string& itemId );
 
    virtual
    double predict( size_t row, size_t col );
@@ -69,7 +69,7 @@ protected:
 
 
 template <class smatrix_t>
-double RecSysAlgorithm<smatrix_t>::predict( std::string userId, std::string itemId )
+double RecSysAlgorithm<smatrix_t>::predict( std::string& userId, std::string& itemId )
 {
    int userrow = m_ratingMatrix.row( userId );
    int itemcol = m_ratingMatrix.column( itemId );
@@ -79,6 +79,7 @@ double RecSysAlgorithm<smatrix_t>::predict( std::string userId, std::string item
 template <class smatrix_t>
 double RecSysAlgorithm<smatrix_t>::predict( size_t row, size_t col )
 {
+   std::cerr << "Warning: predict method not implemented" << std::endl;
    return 0;
 }
 

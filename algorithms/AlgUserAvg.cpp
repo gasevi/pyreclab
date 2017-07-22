@@ -45,7 +45,7 @@ void AlgUserAvg::test( DataFrame& dataFrame )
    }
 }
 
-double AlgUserAvg::predict( string userId, string itemId )
+double AlgUserAvg::predict( string& userId, string& itemId )
 {
    double p = m_meanRatingByUser[userId];
    return p > 0 ? p : m_globalMean;

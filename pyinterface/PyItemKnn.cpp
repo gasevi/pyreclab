@@ -145,7 +145,9 @@ PyObject* ItemKnn_predict( PyItemKnn* self, PyObject* args )
       return NULL;
    }
 
-   float prating = self->m_recAlgorithm->predict( userId, itemId );
+   string strUserId = userId;
+   string strItemId = itemId;
+   float prating = self->m_recAlgorithm->predict( strUserId, strItemId );
 
    return Py_BuildValue( "f", prating );
 }
