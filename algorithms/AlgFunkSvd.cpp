@@ -15,15 +15,15 @@ AlgFunkSvd::AlgFunkSvd( DataReader& dreader,
                         int ratingpos )
 : RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >( dreader, userpos, itempos, ratingpos ),
   m_nfactors( 1000 ),
-  m_maxIter( 100 ),
-  m_learningRate( 0.01 ),
-  m_decay( -1 ),
-  m_lambda( 0.1 ),
-  m_prevLoss( 0 ),
   m_userP( NULL ),
   m_itemQ( NULL ),
   m_userBias( NULL ),
-  m_itemBias( NULL )
+  m_itemBias( NULL ),
+  m_maxIter( 100 ),
+  m_lambda( 0.1 ),
+  m_learningRate( 0.01 ),
+  m_decay( -1 ),
+  m_prevLoss( 0 )
 {
 }
 
@@ -32,7 +32,7 @@ AlgFunkSvd::~AlgFunkSvd()
    if( NULL != m_userP )
    {
       size_t nusers = m_ratingMatrix.users();
-      for( int i = 0 ; i < nusers ; ++i )
+      for( size_t i = 0 ; i < nusers ; ++i )
       {
          delete [] m_userP[i];
       }
@@ -42,7 +42,7 @@ AlgFunkSvd::~AlgFunkSvd()
    if( NULL != m_itemQ )
    {
       size_t nitems = m_ratingMatrix.items();
-      for( int i = 0 ; i < nitems ; ++i )
+      for( size_t i = 0 ; i < nitems ; ++i )
       {
          delete [] m_itemQ[i];
       }
@@ -68,11 +68,11 @@ int AlgFunkSvd::train( size_t factors, size_t maxiter, float lrate, float lambda
 
 int AlgFunkSvd::train()
 {
-   for( int it = 0 ; it < m_maxIter ; ++it )
+   for( size_t it = 0 ; it < m_maxIter ; ++it )
    {
       double loss = 0;
       size_t nusers = m_ratingMatrix.users();
-      for( int u = 0 ; u < nusers ; ++u )
+      for( size_t u = 0 ; u < nusers ; ++u )
       {
          SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > row = m_ratingMatrix.userVector( u );
          SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator ind;
@@ -100,7 +100,7 @@ int AlgFunkSvd::train()
             double biNext = eui - m_lambda * bi;
             m_itemBias[i] += m_learningRate * biNext;
 
-            for( int f = 0 ; f < m_nfactors ; ++f )
+            for( size_t f = 0 ; f < m_nfactors ; ++f )
             {
                double puf = m_userP[u][f];
                double qif = m_itemQ[i][f];
@@ -133,18 +133,6 @@ int AlgFunkSvd::train()
    }
 
    return FINISHED;
-}
-
-void AlgFunkSvd::test( DataFrame& dataFrame )
-{
-   DataFrame::iterator ind;
-   DataFrame::iterator end = dataFrame.end();
-   for( ind = dataFrame.begin() ; ind != end ; ++ind )
-   {
-      string userId = ind->first.first;
-      string itemId = ind->first.second;
-      double prediction = predict( userId, itemId );
-   }
 }
 
 double AlgFunkSvd::predict( string& userId, string& itemId )
@@ -186,7 +174,7 @@ void AlgFunkSvd::reset( size_t factors, size_t maxiter, float lrate, float lambd
    if( NULL != m_userP )
    {
       size_t nusers = m_ratingMatrix.users();
-      for( int i = 0 ; i < nusers ; ++i )
+      for( size_t i = 0 ; i < nusers ; ++i )
       {
          delete [] m_userP[i];
       }
@@ -196,7 +184,7 @@ void AlgFunkSvd::reset( size_t factors, size_t maxiter, float lrate, float lambd
    if( NULL != m_itemQ )
    {
       size_t nitems = m_ratingMatrix.items();
-      for( int i = 0 ; i < nitems ; ++i )
+      for( size_t i = 0 ; i < nitems ; ++i )
       {
          delete [] m_itemQ[i];
       }
@@ -227,11 +215,11 @@ void AlgFunkSvd::reset( size_t factors, size_t maxiter, float lrate, float lambd
 
    m_userBias = new double[nusers];
    m_userP = new double*[nusers];
-   for( int i = 0 ; i < nusers ; ++i )
+   for( size_t i = 0 ; i < nusers ; ++i )
    {
       m_userBias[i] = var_nor();
       m_userP[i] = new double[m_nfactors];
-      for( int f = 0 ; f < m_nfactors ; ++f )
+      for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
          m_userP[i][f] = var_nor();
       }
@@ -239,11 +227,11 @@ void AlgFunkSvd::reset( size_t factors, size_t maxiter, float lrate, float lambd
 
    m_itemBias = new double[nitems];
    m_itemQ = new double*[nitems];
-   for( int i = 0 ; i < nitems ; ++i )
+   for( size_t i = 0 ; i < nitems ; ++i )
    {
       m_itemBias[i] = var_nor();
       m_itemQ[i] = new double[m_nfactors];
-      for( int f = 0 ; f < m_nfactors ; ++f )
+      for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
          m_itemQ[i][f] = var_nor();
       }
@@ -273,7 +261,7 @@ void AlgFunkSvd::adaptLR( double iter )
 double AlgFunkSvd::innerProduct( double v1[], double v2[], size_t size )
 {
    double sum = 0;
-   for( int i = 0 ; i < size ; ++i )
+   for( size_t i = 0 ; i < size ; ++i )
    {
       sum += v1[i] * v2[i];
    }

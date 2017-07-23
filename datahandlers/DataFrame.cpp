@@ -20,14 +20,18 @@ DataFrame::DataFrame( DataReader& dreader, int userpos, int itempos, int ratingp
       {
          break;
       }
+      int nfields = static_cast<int>( line.size() );
+
       string userId = line[userpos];
+
       string itemId = "";
-      if( line.size() > itempos )
+      if( itempos >= 0 && nfields > itempos )
       {
          itemId = line[itempos];
       }
+
       double rating = -1;
-      if( line.size() > ratingpos && ratingpos >= 0 )
+      if( ratingpos >= 0 && nfields > ratingpos )
       {
          std::stringstream ss( line[ratingpos] );
          ss >> rating;

@@ -35,10 +35,12 @@ public:
    }
 
    virtual
-   int train() = 0;
+   ~RecSysAlgorithm()
+   {
+   }
 
    virtual
-   void test( DataFrame& dataFrame ) = 0;
+   int train() = 0;
 
    virtual
    double predict( std::string& userId, std::string& itemId );
@@ -106,7 +108,7 @@ bool RecSysAlgorithm<smatrix_t>::recommend( const std::string& userId,
       return false;
    }
 
-   for( int i = 0 ; i < n ; ++i )
+   for( size_t i = 0 ; i < n ; ++i )
    {
       std::pair<double, size_t> e = maxheap.pop();
       ranking.push_back( m_ratingMatrix.itemId( e.second ) );

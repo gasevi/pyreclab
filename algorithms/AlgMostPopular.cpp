@@ -14,7 +14,7 @@ AlgMostPopular::AlgMostPopular( DataReader& dreader,
 
 int AlgMostPopular::train()
 {
-   for( int i = 0 ; i < m_ratingMatrix.items() ; ++i )
+   for( size_t i = 0 ; i < m_ratingMatrix.items() ; ++i )
    {
       double score = m_ratingMatrix.nonZeroCol( i );
       pair<double, size_t> e = pair<double, size_t>( score, i );
@@ -31,18 +31,6 @@ int AlgMostPopular::train()
    return FINISHED;
 }
 
-void AlgMostPopular::test( DataFrame& dataFrame )
-{
-   DataFrame::iterator ind;
-   DataFrame::iterator end = dataFrame.end();
-   for( ind = dataFrame.begin() ; ind != end ; ++ind )
-   {
-      string userId = ind->first.first;
-      string itemId = ind->first.second;
-      double prediction = predict( userId, itemId );
-   }
-}
-
 bool AlgMostPopular::recommend( const std::string& userId,
                                 size_t n,
                                 std::vector<std::string>& ranking,
@@ -50,7 +38,7 @@ bool AlgMostPopular::recommend( const std::string& userId,
 {
    int row = m_ratingMatrix.row( userId );
    size_t nitems = m_itemList.size();
-   for( int col = 0 ; col < nitems ; ++col )
+   for( size_t col = 0 ; col < nitems ; ++col )
    {
       if( includeRated || ( 0 == m_ratingMatrix.get( row, col ) ) )
       {

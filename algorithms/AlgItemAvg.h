@@ -19,8 +19,6 @@ public:
 
    int train();
 
-   void test( DataFrame& dataFrame );
-
    double predict( std::string& userId, std::string& itemId );
 
    double predict( size_t userrow, size_t itemcol );

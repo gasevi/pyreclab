@@ -13,7 +13,7 @@ AlgUserAvg::AlgUserAvg( DataReader& dreader,
 
 int AlgUserAvg::train()
 {
-   for( int u = 0 ; u < m_ratingMatrix.users() ; ++u )
+   for( size_t u = 0 ; u < m_ratingMatrix.users() ; ++u )
    {
       string userId = m_ratingMatrix.userId( u );
       double sumbyrow = 0;
@@ -30,19 +30,6 @@ int AlgUserAvg::train()
    }
 
    return FINISHED;
-}
-
-void AlgUserAvg::test( DataFrame& dataFrame )
-{
-   DataFrame::iterator ind;
-   DataFrame::iterator end = dataFrame.end();
-   for( ind = dataFrame.begin() ; ind != end ; ++ind )
-   {
-      string userId = ind->first.first;
-      string itemId = ind->first.second;
-      double prediction = predict( userId, itemId );
-      //cout << userId << "," << itemId << "," << prediction << endl;
-   }
 }
 
 double AlgUserAvg::predict( string& userId, string& itemId )

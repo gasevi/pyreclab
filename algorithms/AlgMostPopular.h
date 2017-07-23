@@ -19,8 +19,6 @@ public:
 
    int train();
 
-   void test( DataFrame& dataFrame );
-
    bool recommend( const std::string& userId,
                    size_t n,
                    std::vector<std::string>& ranking,

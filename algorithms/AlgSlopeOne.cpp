@@ -16,12 +16,10 @@ AlgSlopeOne::AlgSlopeOne( DataReader& dreader,
 
 int AlgSlopeOne::train()
 {
-   double ratesum = 0;
    size_t nusers = m_ratingMatrix.users();
    size_t nitems = m_ratingMatrix.items();
-   int porcent = -1;
 
-   for( int u = 0 ; u < nusers ; ++u )
+   for( size_t u = 0 ; u < nusers ; ++u )
    {
       SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > row = m_ratingMatrix.userVector( u );
       SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator ind1;
@@ -42,13 +40,7 @@ int AlgSlopeOne::train()
                m_devMatrix.add( i, j, diff );
                m_cardMatrix.add( i, j, 1 );
             }
-/*
-            if( static_cast<int>( 100*( u*nitems + ind1.index() ) / ( nitems*nusers ) ) > porcent )
-            {
-               porcent = 100*( u*nitems + ind1.index() ) / ( nitems*nusers );
-               cout << porcent << " %" << endl;
-            }
-*/
+
             if( !m_running )
             {
                return STOPPED;
@@ -58,9 +50,9 @@ int AlgSlopeOne::train()
       }
    }
 
-   for( int i = 0 ; i < nitems ; ++i )
+   for( size_t i = 0 ; i < nitems ; ++i )
    {
-      for( int j = 0 ; j < nitems ; ++j )
+      for( size_t j = 0 ; j < nitems ; ++j )
       {
          double card = m_cardMatrix.get( i, j );
          if( card > 0 )
@@ -77,18 +69,6 @@ int AlgSlopeOne::train()
    }
 
    return FINISHED;
-}
-
-void AlgSlopeOne::test( DataFrame& dataFrame )
-{
-   DataFrame::iterator ind;
-   DataFrame::iterator end = dataFrame.end();
-   for( ind = dataFrame.begin() ; ind != end ; ++ind )
-   {
-      string userId = ind->first.first;
-      string itemId = ind->first.second;
-      double prediction = predict( userId, itemId );
-   }
 }
 
 double AlgSlopeOne::predict( string& userId, string& itemId )

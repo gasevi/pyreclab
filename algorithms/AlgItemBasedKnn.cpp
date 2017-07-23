@@ -26,7 +26,7 @@ int AlgItemBasedKnn::train( size_t k, string& similarity )
    Similarity< SparseColumn< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> > >simfunc( similarity );
    size_t nitems = m_ratingMatrix.items();
    m_simMatrix.resize( nitems, nitems );
-   for( int i = 0 ; i < nitems ; ++i )
+   for( size_t i = 0 ; i < nitems ; ++i )
    {
       // Mean rating matrix
       SparseColumn< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> > coli = m_ratingMatrix.itemVector( i );
@@ -34,7 +34,7 @@ int AlgItemBasedKnn::train( size_t k, string& similarity )
       m_meanRatingByItem[itemId] = coli.mean();
 
       // Similarity matrix
-      for( int j = i + 1 ; j < nitems ; ++j )
+      for( size_t j = i + 1 ; j < nitems ; ++j )
       {
          SparseColumn< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> > colj = m_ratingMatrix.itemVector( j );
          double sim = simfunc.calculate( coli, colj );
@@ -49,18 +49,6 @@ int AlgItemBasedKnn::train( size_t k, string& similarity )
    }
 
    return FINISHED;
-}
-
-void AlgItemBasedKnn::test( DataFrame& dataFrame )
-{
-   DataFrame::iterator ind;
-   DataFrame::iterator end = dataFrame.end();
-   for( ind = dataFrame.begin() ; ind != end ; ++ind )
-   {
-      string userId = ind->first.first;
-      string itemId = ind->first.second;
-      double prediction = predict( userId, itemId );
-   }
 }
 
 double AlgItemBasedKnn::predict( string& userId, string& itemId )
@@ -105,7 +93,7 @@ double AlgItemBasedKnn::predict( size_t userrow, size_t itemcol )
          }
       }
 
-      for( int i = 0 ; i < m_knn ; ++i )
+      for( size_t i = 0 ; i < m_knn ; ++i )
       {
          if( maxheap.empty() )
          {

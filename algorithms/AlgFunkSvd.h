@@ -23,8 +23,6 @@ public:
 
    int train( size_t factors, size_t maxiter, float lrate, float lambda );
 
-   void test( DataFrame& dataFrame );
-
    double predict( std::string& userId, std::string& itemId )
    throw( std::invalid_argument );
 
@@ -59,8 +57,6 @@ private:
    double m_learningRate;
 
    double m_decay;
-
-   double m_loss;
 
    double m_prevLoss;
 

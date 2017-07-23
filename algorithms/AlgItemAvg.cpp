@@ -13,7 +13,7 @@ AlgItemAvg::AlgItemAvg( DataReader& dreader,
 
 int AlgItemAvg::train()
 {
-   for( int i = 0 ; i < m_ratingMatrix.items() ; ++i )
+   for( size_t i = 0 ; i < m_ratingMatrix.items() ; ++i )
    {
       string itemId = m_ratingMatrix.itemId( i );
       double sumbycol = 0;
@@ -30,19 +30,6 @@ int AlgItemAvg::train()
    }
 
    return FINISHED;
-}
-
-void AlgItemAvg::test( DataFrame& dataFrame )
-{
-   DataFrame::iterator ind;
-   DataFrame::iterator end = dataFrame.end();
-   for( ind = dataFrame.begin() ; ind != end ; ++ind )
-   {
-      string userId = ind->first.first;
-      string itemId = ind->first.second;
-      double prediction = predict( userId, itemId );
-      //cout << userId << "," << itemId << "," << prediction << endl;
-   }
 }
 
 double AlgItemAvg::predict( string& userId, string& itemId )
