@@ -95,7 +95,7 @@ double AlgSlopeOne::predict( size_t userrow, size_t itemcol )
 {
    double sumpred = 0;
    double sumcard = 0;
-   if( itemcol >= 0 )
+   if( m_ratingMatrix.items() > itemcol )
    {
       SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > row = m_ratingMatrix.userVector( userrow );
       SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >::iterator ind;
