@@ -1,12 +1,12 @@
 #ifndef __PY_SLOPE_ONE_H__
 #define __PY_SLOPE_ONE_H__
 
+#include <Python.h> // This header was set at the first place to avoid warnings
+
 #include "AlgSlopeOne.h"
 #include "DataReader.h"
 #include "MAE.h"
 #include "RMSE.h"
-
-#include <Python.h>
 
 class PySlopeOne
 {

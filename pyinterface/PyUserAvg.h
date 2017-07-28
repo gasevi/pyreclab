@@ -1,12 +1,12 @@
 #ifndef __PY_USER_AVG_H__
 #define __PY_USER_AVG_H__
 
+#include <Python.h> // This header was set at the first place to avoid warnings
+
 #include "AlgUserAvg.h"
 #include "DataReader.h"
 #include "MAE.h"
 #include "RMSE.h"
-
-#include <Python.h>
 
 class PyUserAvg
 {

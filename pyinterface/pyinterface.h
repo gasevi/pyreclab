@@ -1,14 +1,15 @@
 #ifndef __PY_INTERFACE_H__
 #define __PY_INTERFACE_H__
 
+#include <Python.h> // This header was set at the first place to avoid warnings
+#include <signal.h>
+
 #include "DataReader.h"
 #include "RatingMatrix.h"
 #include "RecSysAlgorithm.h"
 #include "MAE.h"
 #include "RMSE.h"
 
-#include <signal.h>
-#include <Python.h>
 
 class PrlSigHandler
 {
