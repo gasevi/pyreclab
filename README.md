@@ -25,7 +25,7 @@
    Although *Pyreclab* can be compiled on most popular operating system, it has been tested on the following distributions.
 
 | Operating System | Version              |
-|:-----------------|:--------------------:|
+|:-----------------|:---------------------|
 | Ubuntu           | 16.04                |
 | CentOS           | 6.4                  |
 | Mac OS X         | 10.11 ( El Capitan ) |
