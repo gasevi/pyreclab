@@ -10,8 +10,17 @@ AlgUserBasedKnn::AlgUserBasedKnn( DataReader& dreader,
                                   int itempos,
                                   int ratingpos )
 : RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >( dreader, userpos, itempos, ratingpos ),
-  m_knn( 10 )
+  m_knn( 10 ),
+  m_pSimMatrix( NULL )
 {
+}
+
+AlgUserBasedKnn::~AlgUserBasedKnn()
+{
+   if( NULL != m_pSimMatrix )
+   {
+      delete m_pSimMatrix;
+   }
 }
 
 int AlgUserBasedKnn::train()
@@ -25,7 +34,11 @@ int AlgUserBasedKnn::train( size_t k, string& similarity )
    m_knn = k;
    Similarity<SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > > simfunc( similarity );
    size_t nusers = m_ratingMatrix.users();
-   m_simMatrix.resize( nusers, nusers );
+   if( NULL != m_pSimMatrix )
+   {
+      delete m_pSimMatrix;
+   }
+   m_pSimMatrix = new SymmMatrix( nusers );
    for( size_t i = 0 ; i < nusers ; ++i )
    {
       // Mean rating matrix
@@ -38,8 +51,7 @@ int AlgUserBasedKnn::train( size_t k, string& similarity )
       {
          SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major > > rowj = m_ratingMatrix.userVector( j );
          double sim = simfunc.calculate( rowi, rowj );
-         m_simMatrix.set( i, j, sim );
-         m_simMatrix.set( j, i, sim );
+         m_pSimMatrix->set( i, j, sim );
 
          if( !m_running )
          {
@@ -77,18 +89,16 @@ double AlgUserBasedKnn::predict( size_t userrow, size_t itemcol )
 
    double sum = 0;
    double ws = 0;
+   int nusers = m_ratingMatrix.users();
    if( m_ratingMatrix.users() > userrow && m_ratingMatrix.items() > itemcol )
    {
-      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major > > row = m_simMatrix.row( userrow );
-      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major > >::iterator ind;
-      SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major > >::iterator end = row.end();
-      for( ind = row.begin() ; ind != end ; ++ind )
+      for( int i = 0 ; i < nusers ; ++i )
       {
-         double sim = *ind;
-         double rate = m_ratingMatrix.get( ind.index(), itemcol );
+         double sim = m_pSimMatrix->get( userrow, i );
+         double rate = m_ratingMatrix.get( i, itemcol );
          if( sim > 0 && rate > 0 )
          {
-            pair<double, size_t> e = pair<double, size_t>( sim, ind.index() );
+            pair<double, size_t> e = pair<double, size_t>( sim, i );
             maxheap.push( e );
          }
       }
