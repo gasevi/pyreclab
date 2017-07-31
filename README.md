@@ -22,7 +22,15 @@
   * Most Popular
 
 
-   Although *Pyreclab* can be compiled on most popular operating system, it has been tested on Linux *Ubuntu 16.04*.
+   Although *Pyreclab* can be compiled on most popular operating system, it has been tested on the following distributions.
+
+| Operating System | Version              |
+|:-----------------|:--------------------:|
+| Ubuntu           | 16.04                |
+| CentOS           | 6.4                  |
+| Mac OS X         | 10.11 ( El Capitan ) |
+| Mac OS X         | 10.12 ( Sierra )     |
+
 
 ## <span style="font-size: 4em;">Citations</span>
 
@@ -37,13 +45,31 @@ If you use this library, please cite:
    keywords      = {Recommender Systems, Software Development, Recommender Library, Python Library}
 }
 
+[Check out our paper](https://arxiv.org/pdf/1706.06291v2.pdf)
 
 ## <span style="font-size: 4em;">Build and install</span>
 
-1.- Before start, verify you have *libboost-dev* installed on your system. If not, install it using your favorite package manager.
+1.- Before starting, verify you have *libboost-dev* and *cmake* installed on your system. If not, install it through your distribution's package manager, as shown next.
+
+### Debian based OS's ( Ubuntu )
 
 ```sh
+$ sudo apt-get install cmake
 $ sudo apt-get install libboost-dev
+```
+
+### RedHat based OS's ( CentOS )
+
+```sh
+$ yum install cmake
+$ yum install boost-devel
+```
+
+### MAC OS X
+
+```sh
+$ brew install cmake
+$ brew install boost
 ```
 
 2.- Clone the source code of *Pyreclab* in a local directory.
@@ -60,7 +86,7 @@ $ cmake .
 $ make
 ```
 
-By default, it will be compiled for *Python 2.7*. If you want to build it for *Python 3.x*, you can execute the following steps:
+By default, PyRecLab will be compiled for *Python 2.7*. If you want to build it for *Python 3.x*, you can execute the following steps:
 
 ```sh
 $ cd pyreclab
@@ -68,7 +94,7 @@ $ cmake -DCMAKE_PYTHON_VERSION=3.x .
 $ make
 ```
 
-4.- Install Pyreclab.
+4.- Install PyRecLab.
 
 ```sh
 $ sudo make install
