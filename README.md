@@ -685,6 +685,5 @@ prediction = obj.predict( userId, itemId )
 ## <span style="font-size: 4em;">On roadmap</span>
 
  * Add ranking evaluation metrics.
- * Extend support for other operating systems like *Mac OS X* and *Windows*.
-
+ * Add *Windows* support.
 
