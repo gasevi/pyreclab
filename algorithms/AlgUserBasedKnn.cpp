@@ -96,7 +96,7 @@ double AlgUserBasedKnn::predict( size_t userrow, size_t itemcol )
       {
          double sim = m_pSimMatrix->get( userrow, i );
          double rate = m_ratingMatrix.get( i, itemcol );
-         if( rate > 0 && sim > 0 && i == userrow )
+         if( rate > 0 && sim > 0 && i != userrow )
          {
             pair<double, size_t> e = pair<double, size_t>( sim, i );
             maxheap.push( e );
