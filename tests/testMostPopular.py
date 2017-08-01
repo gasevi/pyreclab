@@ -1,6 +1,3 @@
-#! /usr/bin/env python
-
-# Append pyreclab temporary directory
 import time
 import pyreclab
 
