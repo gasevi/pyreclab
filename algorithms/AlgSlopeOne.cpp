@@ -10,8 +10,20 @@ AlgSlopeOne::AlgSlopeOne( DataReader& dreader,
 : RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >( dreader, userpos, itempos, ratingpos )
 {
    size_t nitems = m_ratingMatrix.items();
-   m_devMatrix.resize( nitems, nitems );
-   m_cardMatrix.resize( nitems, nitems );
+   m_pDevMatrix = new DenseMatrix( nitems, nitems );
+   m_pCardMatrix = new DenseMatrix( nitems, nitems );
+}
+
+AlgSlopeOne::~AlgSlopeOne()
+{
+   if( NULL != m_pDevMatrix )
+   {
+      delete m_pDevMatrix;
+   }
+   if( NULL != m_pCardMatrix )
+   {
+      delete m_pCardMatrix;
+   }
 }
 
 int AlgSlopeOne::train()
@@ -37,8 +49,8 @@ int AlgSlopeOne::train()
                size_t j = ind2.index();
                double ru2 = *ind2;
                double diff = ru1 - ru2;
-               m_devMatrix.add( i, j, diff );
-               m_cardMatrix.add( i, j, 1 );
+               m_pDevMatrix->add( i, j, diff );
+               m_pCardMatrix->add( i, j, 1 );
             }
 
             if( !m_running )
@@ -54,11 +66,11 @@ int AlgSlopeOne::train()
    {
       for( size_t j = 0 ; j < nitems ; ++j )
       {
-         double card = m_cardMatrix.get( i, j );
+         double card = m_pCardMatrix->get( i, j );
          if( card > 0 )
          {
-            double sum = m_devMatrix.get( i, j );
-            m_devMatrix.set( i, j, sum / card );
+            double sum = m_pDevMatrix->get( i, j );
+            m_pDevMatrix->set( i, j, sum / card );
          }
 
          if( !m_running )
@@ -106,10 +118,10 @@ double AlgSlopeOne::predict( size_t userrow, size_t itemcol )
          if( itemcol != itempos )
          {
             double rating = *ind;
-            double card = m_cardMatrix.get( itemcol, itempos );
+            double card = m_pCardMatrix->get( itemcol, itempos );
             if( card > 0 )
             {
-               sumpred += ( m_devMatrix.get( itemcol, itempos ) + rating )*card;
+               sumpred += ( m_pDevMatrix->get( itemcol, itempos ) + rating )*card;
                sumcard += card;
             }
          }

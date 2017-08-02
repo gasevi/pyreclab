@@ -27,7 +27,6 @@ private:
 
    int m_dim;
 
-   //std::vector<int> m_triangElements;
    double* m_elements;
 
 };

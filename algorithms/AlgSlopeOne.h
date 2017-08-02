@@ -6,6 +6,8 @@
 #include <string>
 #include <stdexcept>
 
+#include "DenseMatrix.h"
+
 
 class AlgSlopeOne
       : public RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >
@@ -17,6 +19,8 @@ public:
                 int itempos = 1,
                 int ratingpos = 2 );
 
+   ~AlgSlopeOne();
+
    int train();
 
    double predict( std::string& userId, std::string& itemId )
@@ -26,9 +30,9 @@ public:
  
 private:
 
-   SparseMatrix< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > m_devMatrix;
+   DenseMatrix* m_pDevMatrix;
 
-   SparseMatrix< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > m_cardMatrix;
+   DenseMatrix* m_pCardMatrix;
 
 };
 
