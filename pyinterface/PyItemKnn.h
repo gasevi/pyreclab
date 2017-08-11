@@ -35,7 +35,7 @@ PyMethodDef ItemKnn_methods[] =
    { "testrec",   (PyCFunction)ItemKnn_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)ItemKnn_predict,   METH_VARARGS,               "predict user's rating for an item" },
    { "recommend", (PyCFunction)ItemKnn_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { NULL }
+   { NULL, NULL, 0, NULL }
 };
 
 static PyTypeObject ItemKnnType =

@@ -21,7 +21,9 @@ public:
 
 PyObject* SlopeOne_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void SlopeOne_dealloc( PySlopeOne* self );
-PyObject* SlopeOne_train( PySlopeOne* self, PyObject* args );
+// It produces a segfault on Mac OS X EL Capitan / Python 3.6
+//PyObject* SlopeOne_train( PySlopeOne* self, PyObject* args );
+PyObject* SlopeOne_train( PySlopeOne* self, PyObject* args, PyObject* kwdict );
 PyObject* SlopeOne_predict( PySlopeOne* self, PyObject* args );
 PyObject* SlopeOne_recommend( PySlopeOne* self, PyObject* args, PyObject* kwdict );
 PyObject* SlopeOne_test( PySlopeOne* self, PyObject* args, PyObject* kwdict );
@@ -30,12 +32,14 @@ PyObject* SlopeOne_testrec( PySlopeOne* self, PyObject* args, PyObject* kwdict )
 static
 PyMethodDef SlopeOne_methods[] =
 {
-   { "train",     (PyCFunction)SlopeOne_train,     METH_NOARGS,                "train model" },
+   // It produces a segfault on Mac OS X EL Capitan / Python 3.6
+   //{ "train",     (PyCFunction)SlopeOne_train,     METH_NOARGS,                "train model" },
+   { "train",     (PyCFunction)SlopeOne_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
    { "test",      (PyCFunction)SlopeOne_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
    { "testrec",   (PyCFunction)SlopeOne_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)SlopeOne_predict,   METH_VARARGS,               "predict user's rating for an item" },
    { "recommend", (PyCFunction)SlopeOne_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { NULL }
+   { NULL, NULL, 0, NULL }
 };
 
 static PyTypeObject SlopeOneType =

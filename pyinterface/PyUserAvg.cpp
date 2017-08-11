@@ -76,7 +76,7 @@ void UserAvg_dealloc( PyUserAvg* self )
 #endif
 }
 
-PyObject* UserAvg_train( PyUserAvg* self, PyObject* args )
+PyObject* UserAvg_train( PyUserAvg* self, PyObject* args, PyObject* kwdict )
 {
    PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::USER_AVG );
    struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );

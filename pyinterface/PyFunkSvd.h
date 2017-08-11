@@ -35,7 +35,7 @@ PyMethodDef FunkSvd_methods[] =
    { "testrec",   (PyCFunction)FunkSvd_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)FunkSvd_predict,   METH_VARARGS,               "predict user's rating for an item" },
    { "recommend", (PyCFunction)FunkSvd_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { NULL }
+   { NULL, NULL, 0, NULL }
 };
 
 static PyTypeObject FunkSvdType =

@@ -35,7 +35,7 @@ PyMethodDef UserKnn_methods[] =
    { "testrec",   (PyCFunction)UserKnn_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)UserKnn_predict,   METH_VARARGS,               "predict user's rating for an item" },
    { "recommend", (PyCFunction)UserKnn_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { NULL }
+   { NULL, NULL, 0, NULL }
 };
 
 static PyTypeObject UserKnnType =

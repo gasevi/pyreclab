@@ -74,7 +74,7 @@ void SlopeOne_dealloc( PySlopeOne* self )
 #endif
 }
 
-PyObject* SlopeOne_train( PySlopeOne* self, PyObject* args )
+PyObject* SlopeOne_train( PySlopeOne* self, PyObject* args, PyObject* kwdict )
 {
    PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::SLOPE_ONE );
    struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );

@@ -75,7 +75,7 @@ void ItemAvg_dealloc( PyItemAvg* self )
 #endif
 }
 
-PyObject* ItemAvg_train( PyItemAvg* self )
+PyObject* ItemAvg_train( PyItemAvg* self, PyObject* args, PyObject* kwdict )
 {
    PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::ITEM_AVG );
    struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );

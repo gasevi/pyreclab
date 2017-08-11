@@ -21,7 +21,9 @@ public:
 
 PyObject* ItemAvg_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 void ItemAvg_dealloc( PyItemAvg* self );
-PyObject* ItemAvg_train( PyItemAvg* self );
+// It produces a segfault on Mac OS X EL Capitan / Python 3.6
+//PyObject* ItemAvg_train( PyItemAvg* self );
+PyObject* ItemAvg_train( PyItemAvg* self, PyObject* args, PyObject* kwdict );
 PyObject* ItemAvg_predict( PyItemAvg* self, PyObject* args );
 PyObject* ItemAvg_recommend( PyItemAvg* self, PyObject* args, PyObject* kwdict );
 PyObject* ItemAvg_test( PyItemAvg* self, PyObject* args, PyObject* kwdict );
@@ -30,12 +32,14 @@ PyObject* ItemAvg_testrec( PyItemAvg* self, PyObject* args, PyObject* kwdict );
 static
 PyMethodDef ItemAvg_methods[] =
 {
-   { "train",     (PyCFunction)ItemAvg_train,     METH_NOARGS,                "train model" },
+   // It produces a segfault on Mac OS X EL Capitan / Python 3.6
+   //{ "train",     (PyCFunction)ItemAvg_train,     METH_NOARGS,                "train model" },
+   { "train",     (PyCFunction)ItemAvg_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
    { "test",      (PyCFunction)ItemAvg_test,      METH_VARARGS|METH_KEYWORDS, "test model" },
    { "testrec",   (PyCFunction)ItemAvg_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)ItemAvg_predict,   METH_VARARGS,               "predict user's rating for an item" },
    { "recommend", (PyCFunction)ItemAvg_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { NULL }
+   { NULL, NULL, 0, NULL }
 };
 
 static PyTypeObject ItemAvgType =
