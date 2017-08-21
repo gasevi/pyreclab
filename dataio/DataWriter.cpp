@@ -92,7 +92,6 @@ void DataWriter::write( string& key, vector<string>& line )
 
    m_outfile << m_fieldsep << "\"" << key << "\": [";
 
-   vector<string>::iterator begin = line.begin();
    vector<string>::iterator end = line.end();
    vector<string>::iterator ind;
    for( ind = line.begin() ; ind != end ; ++ind )

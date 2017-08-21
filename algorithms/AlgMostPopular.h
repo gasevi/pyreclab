@@ -25,9 +25,6 @@ public:
                    bool includeRated = false );
  
 private:
-
-   size_t m_topn;
-
    std::vector< std::pair<double, size_t> > m_itemList;
 
 };
