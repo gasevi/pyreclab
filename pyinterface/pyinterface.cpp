@@ -58,7 +58,7 @@ PyMODINIT_FUNC PyInit_libpyreclab()
 extern "C" void initlibpyreclab()
 #endif
 {
-   if( PyType_Ready( &MostPopularType ) < 0 )
+   if( PyType_Ready( MostPopular_getTypeObject() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -67,7 +67,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( &ItemAvgType ) < 0 )
+   if( PyType_Ready( ItemAvg_getTypeObject() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -76,7 +76,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( &UserAvgType ) < 0 )
+   if( PyType_Ready( UserAvg_getTypeObject() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -85,7 +85,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( &UserKnnType ) < 0 )
+   if( PyType_Ready( UserKnn_getTypeObject() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -94,7 +94,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( &ItemKnnType ) < 0 )
+   if( PyType_Ready( ItemKnn_getTypeObject() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -103,7 +103,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( &SlopeOneType ) < 0 )
+   if( PyType_Ready( SlopeOne_getTypeObject() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -112,7 +112,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( &FunkSvdType ) < 0 )
+   if( PyType_Ready( FunkSvd_getTypeObject() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -135,20 +135,20 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   Py_INCREF( &MostPopularType );
-   PyModule_AddObject( module, "MostPopular", (PyObject*)&MostPopularType );
-   Py_INCREF( &UserAvgType );
-   PyModule_AddObject( module, "UserAvg", (PyObject*)&UserAvgType );
-   Py_INCREF( &ItemAvgType );
-   PyModule_AddObject( module, "ItemAvg", (PyObject*)&ItemAvgType );
-   Py_INCREF( &UserKnnType );
-   PyModule_AddObject( module, "UserKnn", (PyObject*)&UserKnnType );
-   Py_INCREF( &ItemKnnType );
-   PyModule_AddObject( module, "ItemKnn", (PyObject*)&ItemKnnType );
-   Py_INCREF( &SlopeOneType );
-   PyModule_AddObject( module, "SlopeOne", (PyObject*)&SlopeOneType );
-   Py_INCREF( &FunkSvdType );
-   PyModule_AddObject( module, "SVD", (PyObject*)&FunkSvdType );
+   Py_INCREF( MostPopular_getTypeObject() );
+   PyModule_AddObject( module, "MostPopular", (PyObject*)MostPopular_getTypeObject() );
+   Py_INCREF( UserAvg_getTypeObject() );
+   PyModule_AddObject( module, "UserAvg", (PyObject*)UserAvg_getTypeObject() );
+   Py_INCREF( ItemAvg_getTypeObject() );
+   PyModule_AddObject( module, "ItemAvg", (PyObject*)ItemAvg_getTypeObject() );
+   Py_INCREF( UserKnn_getTypeObject() );
+   PyModule_AddObject( module, "UserKnn", (PyObject*)UserKnn_getTypeObject() );
+   Py_INCREF( ItemKnn_getTypeObject() );
+   PyModule_AddObject( module, "ItemKnn", (PyObject*)ItemKnn_getTypeObject() );
+   Py_INCREF( SlopeOne_getTypeObject() );
+   PyModule_AddObject( module, "SlopeOne", (PyObject*)SlopeOne_getTypeObject() );
+   Py_INCREF( FunkSvd_getTypeObject() );
+   PyModule_AddObject( module, "SVD", (PyObject*)FunkSvd_getTypeObject() );
 
 #if PY_MAJOR_VERSION >= 3
     return module;
