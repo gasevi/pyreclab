@@ -79,9 +79,9 @@ int SymmMatrix::side()
    return m_dim;
 }
 
-void SymmMatrix::setToInf( int idx )
+void SymmMatrix::setToInf( size_t idx )
 {
-   for( int row = 0 ; row < m_dim ; ++row )
+   for( size_t row = 0 ; row < m_dim ; ++row )
    {
       if( row < idx )
       {
@@ -99,9 +99,9 @@ void SymmMatrix::setToInf( int idx )
 void SymmMatrix::print()
 {
    cout << endl;
-   for( int i = 0 ; i < m_dim ; ++i )
+   for( size_t i = 0 ; i < m_dim ; ++i )
    {
-      for( int j = 0 ; j < m_dim ; ++j )
+      for( size_t j = 0 ; j < m_dim ; ++j )
       {
          double n = get( i, j );
          if( n == numeric_limits<double>::max() )

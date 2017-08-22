@@ -19,13 +19,13 @@ public:
 
    int side();
 
-   void setToInf( int idx );
+   void setToInf( size_t idx );
 
    void print();
 
 private:
 
-   int m_dim;
+   size_t m_dim;
 
    double* m_elements;
 
