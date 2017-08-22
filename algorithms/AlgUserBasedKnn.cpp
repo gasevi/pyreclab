@@ -89,10 +89,10 @@ double AlgUserBasedKnn::predict( size_t userrow, size_t itemcol )
 
    double sum = 0;
    double ws = 0;
-   int nusers = m_ratingMatrix.users();
+   size_t nusers = m_ratingMatrix.users();
    if( m_ratingMatrix.users() > userrow && m_ratingMatrix.items() > itemcol )
    {
-      for( int i = 0 ; i < nusers ; ++i )
+      for( size_t i = 0 ; i < nusers ; ++i )
       {
          double sim = m_pSimMatrix->get( userrow, i );
          double rate = m_ratingMatrix.get( i, itemcol );
