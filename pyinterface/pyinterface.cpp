@@ -65,7 +65,7 @@ void PrlSigHandler::unregisterObj()
 struct sigaction* PrlSigHandler::handlesignal( int signum )
 {
    struct sigaction newAction;
-   struct sigaction* pOldAction;
+   struct sigaction* pOldAction = NULL;
    newAction.sa_handler = PrlSigHandler::handler;
    sigemptyset( &newAction.sa_mask );
    newAction.sa_flags = 0;

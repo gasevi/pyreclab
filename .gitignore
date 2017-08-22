@@ -7,3 +7,4 @@ dist/
 pypackage/
 pyreclab.egg-info/
 pyreclab/
+install_manifest.txt

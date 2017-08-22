@@ -20,6 +20,7 @@ add_definitions( -DNDEBUG )
 
 add_compile_options( -fPIC )
 add_compile_options( -O3 )
+add_compile_options( -Wall )
 
 # header directories
 include_directories( ${PROJECT_SOURCE_DIR} )
