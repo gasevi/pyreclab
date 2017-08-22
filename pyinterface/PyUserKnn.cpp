@@ -417,8 +417,6 @@ PyObject* UserKnn_testrec( PyUserKnn* self, PyObject* args, PyObject* kwdict )
 
    PyObject* pyTupleResult = PyTuple_New( 1 );
    PyTuple_SET_ITEM( pyTupleResult, 0, pyDict );
-   //PyTuple_SET_ITEM( pyTupleResult, 1, PyFloat_FromDouble( self->m_mae.eval() ) );
-   //PyTuple_SET_ITEM( pyTupleResult, 2, PyFloat_FromDouble( self->m_rmse.eval() ) );
 
    return pyTupleResult;
 }
