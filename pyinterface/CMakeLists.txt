@@ -5,6 +5,7 @@ set( SRCFILES PyMostPopular.cpp
               PyItemKnn.cpp
               PySlopeOne.cpp
               PyFunkSvd.cpp
+              PrlSigHandler.cpp
               pyinterface.cpp )
 
 add_library( pyinterface OBJECT ${SRCFILES} )

@@ -1,5 +1,5 @@
 #include "PyMostPopular.h"
-#include "pyinterface.h"
+#include "PrlSigHandler.h"
 #include "DataReader.h"
 #include "DataWriter.h"
 

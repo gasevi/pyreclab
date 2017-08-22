@@ -1,5 +1,5 @@
 #include "PySlopeOne.h"
-#include "pyinterface.h"
+#include "PrlSigHandler.h"
 #include "DataWriter.h"
 
 #include <iostream>
