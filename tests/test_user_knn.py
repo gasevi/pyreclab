@@ -2,14 +2,16 @@ import time
 import pyreclab
 
 
+expected_prediction = 4.33838129044
+prediction_epsilon = 0.0000005
+expected_ranking = ['1467', '1599', '1642', '1653', '1358']
+expected_mae = 0.753399181565
+mae_epsilon = 0.00005
+expected_rmse = 0.960097945921
+rmse_epsilon = 0.00005
+
+
 def test_user_knn():
-    expected_prediction = 4.33838129044
-    prediction_epsilon = 0.0000005
-    expected_ranking = ['1467', '1599', '1642', '1653', '1358']
-    expected_mae = 0.753399181565
-    mae_epsilon = 0.00005
-    expected_rmse = 0.960097945921
-    rmse_epsilon = 0.00005
 
     ubknn = pyreclab.UserKnn(dataset='dataset/u1.base',
                              dlmchar=b'\t',
