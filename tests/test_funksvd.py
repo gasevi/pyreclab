@@ -1,15 +1,16 @@
 import time
 import pyreclab
 
+expected_prediction = 4.40228557587
+prediction_epsilon = 0.005
+expected_ranking = ['408', '1449', '513', '603', '480']
+expected_mae = 0.735477664861
+mae_epsilon = 0.00005
+expected_rmse = 0.933232779736
+rmse_epsilon = 0.00005
+
 
 def test_funksvd():
-    expected_prediction = 4.40228557587
-    prediction_epsilon = 0.005
-    expected_ranking = ['408', '1449', '513', '603', '480']
-    expected_mae = 0.735477664861
-    mae_epsilon = 0.00005
-    expected_rmse = 0.933232779736
-    rmse_epsilon = 0.00005
 
     svd = pyreclab.SVD(dataset='dataset/u1.base',
                        dlmchar=b'\t',
