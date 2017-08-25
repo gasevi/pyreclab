@@ -1,4 +1,3 @@
-import time
 import pyreclab
 
 
@@ -18,24 +17,7 @@ def test_most_popular():
                                 itemcol=1,
                                 ratingcol=2)
 
-    print('-> training model')
-    start = time.clock()
     mpop.train(5)
-    end = time.clock()
-    print('training time: ' + str(end - start))
 
-    print('-> individual test')
     ranking = mpop.recommend('457', 5, includeRated=False)
-    print('user 457, recommended items ' + str(ranking))
     assert ranking == expected_ranking
-
-    print('-> recommendation test')
-    start = time.clock()
-    mpop.testrec(input_file='dataset/u1.test',
-                 dlmchar=b'\t',
-                 header=False,
-                 usercol=0,
-                 topn=10,
-                 output_file='ranking.json')
-    end = time.clock()
-    print('recommendation time: ' + str(end - start))
