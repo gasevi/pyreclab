@@ -15,6 +15,9 @@ before_install:
     - pwd
 
 script:
+    - cmake .
+    - make clean
+    - make
     - cd tests
     - pytest -v
     - cd -
