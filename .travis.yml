@@ -16,10 +16,10 @@ before_install:
     - sudo apt-get install libboost-dev
 
 script:
-    - mkdir install
-    - cmake -D CMAKE_INSTALL_PREFIX="../install" .
+    - cmake .
     - make clean
     - make
+    - sudo make install
     - cd tests
     - pytest -v
     - cd -
