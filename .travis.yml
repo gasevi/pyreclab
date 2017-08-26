@@ -2,17 +2,7 @@ language: cpp
 compiler: gcc
 os: linux
 before_install:
-    # - sudo wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
-    # - sudo tar xzvf release-1.8.0.tar.gz
-    # - cd googletest-release-1.8.0
-    # - sudo cmake -DBUILD_SHARED_LIBS=ON .
-    # - sudo make
-    # - sudo make install
-    # - sudo apt-get install libboost-all-dev
-    #
     - pip install -U pytest --user
-    - cd "${TRAVIS_BUILD_DIR}"
-    - pwd
     - sudo apt-get install libboost-dev
 
 script:
@@ -20,7 +10,7 @@ script:
     - make clean
     - make
     - sudo make install
+
     - cd tests
     - pytest -v
     - cd -
-    - pwd
