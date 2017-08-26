@@ -13,6 +13,7 @@ before_install:
     - pip install -U pytest --user
     - cd "${TRAVIS_BUILD_DIR}"
     - pwd
+    - sudo apt-get install libboost-dev
 
 script:
     - cmake .
