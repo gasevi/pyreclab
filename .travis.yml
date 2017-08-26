@@ -16,7 +16,10 @@ before_install:
     - sudo apt-get install libboost-dev
 
 script:
-    - cmake .
+    - mkdir build
+    - mkdir install
+    #- cmake .
+    - cmake -D CMAKE_INSTALL_PREFIX="../install" ../
     - make clean
     - make
     - cd tests
