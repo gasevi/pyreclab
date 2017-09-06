@@ -89,10 +89,10 @@ double AlgItemBasedKnn::predict( size_t userrow, size_t itemcol )
 
    double sum = 0;
    double ws = 0;
-   int nitems = m_ratingMatrix.items();
+   size_t nitems = m_ratingMatrix.items();
    if( m_ratingMatrix.users() > userrow && m_ratingMatrix.items() > itemcol )
    {
-      for( int i = 0 ; i < nitems ; ++i )
+      for( size_t i = 0 ; i < nitems ; ++i )
       {
          double sim = m_pSimMatrix->get( itemcol, i );
          double rate = m_ratingMatrix.get( userrow, i );
