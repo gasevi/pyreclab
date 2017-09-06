@@ -75,16 +75,19 @@ if( PYTHON )
    set( OUTPUT      "${CMAKE_CURRENT_BINARY_DIR}/build/timestamp" )
    set( DEPS        "pyreclab" )
 
-   execute_process( COMMAND python -c "import distutils.util; print(distutils.util.get_platform())" OUTPUT_VARIABLE PY_PLATFORM )
    configure_file( ${SETUP_PY_IN} ${SETUP_PY} )
 
-   add_custom_command( OUTPUT ${OUTPUT}
-                       COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
-                       COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" ${PY_PLATFORM}
-                       COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
-                       DEPENDS ${DEPS} )
+   if( UNIX AND NOT APPLE )
+      execute_process( COMMAND python -c "import distutils.util; print(distutils.util.get_platform())" OUTPUT_VARIABLE PY_PLATFORM )
 
-   add_custom_target( target ALL DEPENDS ${OUTPUT} )
+      add_custom_command( OUTPUT ${OUTPUT}
+                          COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
+                          COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" ${PY_PLATFORM}
+                          COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
+                          DEPENDS ${DEPS} )
+
+      add_custom_target( target ALL DEPENDS ${OUTPUT} )
+   endif( UNIX AND NOT APPLE )
 
    install( CODE "execute_process(COMMAND ${PYTHON} pypackage/setup.py install)" )
 endif( PYTHON )
