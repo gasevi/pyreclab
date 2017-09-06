@@ -2,6 +2,7 @@ cmake_minimum_required( VERSION 2.8 )
 
 project( pyreclab )
 
+
 set( MAJOR_VERSION "0" )
 set( MINOR_VERSION "1" )
 set( RELEASE_VERSION "7" )
@@ -76,13 +77,17 @@ if( PYTHON )
 
    configure_file( ${SETUP_PY_IN} ${SETUP_PY} )
 
-   add_custom_command( OUTPUT ${OUTPUT}
-                       COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
-                       COMMAND ${PYTHON} ${SETUP_PY} bdist_egg
-                       COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
-                       DEPENDS ${DEPS} )
+   if( UNIX AND NOT APPLE )
+      execute_process( COMMAND python -c "import distutils.util; print(distutils.util.get_platform())" OUTPUT_VARIABLE PY_PLATFORM )
 
-   add_custom_target( target ALL DEPENDS ${OUTPUT} )
+      add_custom_command( OUTPUT ${OUTPUT}
+                          COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
+                          COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" ${PY_PLATFORM}
+                          COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
+                          DEPENDS ${DEPS} )
+
+      add_custom_target( target ALL DEPENDS ${OUTPUT} )
+   endif( UNIX AND NOT APPLE )
 
    install( CODE "execute_process(COMMAND ${PYTHON} pypackage/setup.py install)" )
 endif( PYTHON )
