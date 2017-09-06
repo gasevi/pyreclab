@@ -3,6 +3,9 @@ from setuptools import setup
 setup(
    name         = 'pyreclab',
    version      = '${PACKAGE_VERSION}',
+   description  = 'Library for quickly testing and prototyping of traditional recommender system methods',
+   keywords     = 'recommendation rating ranking',
+   license      = 'GPL 3.0',
    author       = 'Gabriel Sepulveda',
    package_dir  = { '': '${CMAKE_CURRENT_SOURCE_DIR}' },
    packages     = ['pyreclab'],# , 'pyreclab.tests'],
