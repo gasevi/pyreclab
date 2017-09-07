@@ -1,16 +1,16 @@
-# <center> <span style="color:#00f; font-size: 4em;">*Pyreclab*: Recommendation lab for Python</span> </center>
+# <center> <span style="color:#00f; font-size: 4em;">*PyRecLab*: Recommendation lab for Python</span> </center>
 
 ## <span style="font-size: 4em;">Overview</span>
 
-   *Pyreclab* is a recommendation library designed for training recommendation models with a friendly and easy-to-use interface, keeping a good performance in memory and CPU usage.
+   *PyRecLab* is a recommendation library designed for training recommendation models with a friendly and easy-to-use interface, keeping a good performance in memory and CPU usage.
 
-   In order to achieve this, *Pyreclab* is built as a Python module to give a friendly access to its algorithms and it is completely developed in C++ to avoid the lack of performace of the interpreted languages.
+   In order to achieve this, *PyRecLab* is built as a Python module to give a friendly access to its algorithms and it is completely developed in C++ to avoid the lack of performace of the interpreted languages.
 
    At this moment, the following recommendation algorithms are supported:
 
 **Rating Prediction**
 
-  * User Avgerage
+  * User Average
   * Item Average
   * Slope One
   * User Based KNN
@@ -22,7 +22,7 @@
   * Most Popular
 
 
-   Although *Pyreclab* can be compiled on most popular operating system, it has been tested on the following distributions.
+   Although *PyRecLab* can be compiled on most popular operating system, it has been tested on the following distributions.
 
 | Operating System | Version              |
 |:-----------------|:---------------------|
@@ -49,18 +49,22 @@ If you use this library, please cite:
 
 ## <span style="font-size: 4em;">Build and install</span>
 
-1.- Before starting, verify you have *libboost-dev* and *cmake* installed on your system. If not, install it through your distribution's package manager, as shown next.
+1.- Before starting, verify you have *libpython-dev*, *boost* and *cmake* installed on your system. If not, install it through your distribution's package manager, as shown next.
 
 ### Debian based OS's ( Ubuntu )
 
 ```sh
+$ sudo apt-get install libpython-dev
 $ sudo apt-get install cmake
 $ sudo apt-get install libboost-dev
 ```
 
+Note: for Python 3.x, install *libpython3-dev* instead of *libpython-dev*.
+
 ### RedHat based OS's ( CentOS )
 
 ```sh
+$ yum install python-devel
 $ yum install cmake
 $ yum install boost-devel
 ```
@@ -72,7 +76,7 @@ $ brew install cmake
 $ brew install boost
 ```
 
-2.- Clone the source code of *Pyreclab* in a local directory.
+2.- Clone the source code of *PyRecLab* in a local directory.
 
 ```sh
 $ git clone https://github.com/gasevi/pyreclab.git
@@ -103,7 +107,7 @@ $ sudo make install
 
 ## <span style="font-size: 4em;">API Documentation</span>
 
-   Pyreclab provides the following classes for representing each of the recommendation algorithm currenly supported:
+   PyRecLab provides the following classes for representing each of the recommendation algorithm currenly supported:
 
  * [pyreclab.UserAvg](#useravg)
  * [pyreclab.ItemAvg](#itemavg)
@@ -183,7 +187,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 |:-------------|:---------:|:-------------:|:------------------------------------------|
 | userId       | mandatory | N.A.          | User identifier                           |
 | topN         | optional  | 10            | Top N items to recommend                  |
-| includeRated | optional  | false         | Include rated items in ranking generation |
+| includeRated | optional  | False         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
@@ -218,19 +222,21 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
                                       itemcol = 1,
                                       ratingcol = 2,
                                       topn = 10,
-                                      output_file = 'ranking.json' )
+                                      output_file = 'ranking.json',
+                                      includeRated = False )
 ```
 
-| Parameter   | Type      | Default value | Description                                                 |
-|:------------|:---------:|:-------------:|:------------------------------------------------------------|
-| input_file  | mandatory | N.A.          | Testset filename                                            |
-| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
-| header      | optional  | False         | Dataset filename contains first line header to skip         |
-| usercol     | optional  | 0             | User column position in dataset file                        |
-| itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
-| topn        | optional  | 10            | Top N items to recommend                                    |
-| output_file | optional  | N.A.          | Output file to write predictions                            |
+| Parameter    | Type      | Default value | Description                                                 |
+|:-------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file   | mandatory | N.A.          | Testset filename                                            |
+| dlmchar      | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header       | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol      | optional  | 0             | User column position in dataset file                        |
+| itemcol      | optional  | 1             | Item column position in dataset file                        |
+| rating       | optional  | 2             | Rating column position in dataset file                      |
+| topn         | optional  | 10            | Top N items to recommend                                    |
+| output_file  | optional  | N.A.          | Output file to write predictions                            |
+| includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="itemavg"> pyreclab.ItemAvg </a>
@@ -262,7 +268,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 |:-------------|:---------:|:-------------:|:------------------------------------------|
 | userId       | mandatory | N.A.          | User identifier                           |
 | topN         | optional  | 10            | Top N items to recommend                  |
-| includeRated | optional  | false         | Include rated items in ranking generation |
+| includeRated | optional  | False         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
@@ -296,19 +302,21 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
                                       itemcol = 1,
                                       ratingcol = 2,
                                       topn = 10,
-                                      output_file = 'ranking.json' )
+                                      output_file = 'ranking.json',
+                                      includeRated = False )
 ```
 
-| Parameter   | Type      | Default value | Description                                                 |
-|:------------|:---------:|:-------------:|:------------------------------------------------------------|
-| input_file  | mandatory | N.A.          | Testset filename                                            |
-| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
-| header      | optional  | False         | Dataset filename contains first line header to skip         |
-| usercol     | optional  | 0             | User column position in dataset file                        |
-| itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
-| topn        | optional  | 10            | Top N items to recommend                                    |
-| output_file | optional  | N.A.          | Output file to write predictions                            |
+| Parameter    | Type      | Default value | Description                                                 |
+|:-------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file   | mandatory | N.A.          | Testset filename                                            |
+| dlmchar      | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header       | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol      | optional  | 0             | User column position in dataset file                        |
+| itemcol      | optional  | 1             | Item column position in dataset file                        |
+| rating       | optional  | 2             | Rating column position in dataset file                      |
+| topn         | optional  | 10            | Top N items to recommend                                    |
+| output_file  | optional  | N.A.          | Output file to write predictions                            |
+| includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="slopeone"> pyreclab.SlopeOne </a>
@@ -340,7 +348,7 @@ prediction = obj.predict( userId, itemId )
 |:-------------|:---------:|:-------------:|:------------------------------------------|
 | userId       | mandatory | N.A.          | User identifier                           |
 | topN         | optional  | 10            | Top N items to recommend                  |
-| includeRated | optional  | false         | Include rated items in ranking generation |
+| includeRated | optional  | False         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
@@ -374,19 +382,21 @@ prediction = obj.predict( userId, itemId )
                                       itemcol = 1,
                                       ratingcol = 2,
                                       topn = 10,
-                                      output_file = 'ranking.json' )
+                                      output_file = 'ranking.json',
+                                      includeRated = False )
 ```
 
-| Parameter   | Type      | Default value | Description                                                 |
-|:------------|:---------:|:-------------:|:------------------------------------------------------------|
-| input_file  | mandatory | N.A.          | Testset filename                                            |
-| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
-| header      | optional  | False         | Dataset filename contains first line header to skip         |
-| usercol     | optional  | 0             | User column position in dataset file                        |
-| itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
-| topn        | optional  | 10            | Top N items to recommend                                    |
-| output_file | optional  | N.A.          | Output file to write predictions                            |
+| Parameter    | Type      | Default value | Description                                                 |
+|:-------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file   | mandatory | N.A.          | Testset filename                                            |
+| dlmchar      | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header       | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol      | optional  | 0             | User column position in dataset file                        |
+| itemcol      | optional  | 1             | Item column position in dataset file                        |
+| rating       | optional  | 2             | Rating column position in dataset file                      |
+| topn         | optional  | 10            | Top N items to recommend                                    |
+| output_file  | optional  | N.A.          | Output file to write predictions                            |
+| includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="userknn"> pyreclab.UserKnn </a>
@@ -423,7 +433,7 @@ prediction = obj.predict( userId, itemId )
 |:-------------|:---------:|:-------------:|:------------------------------------------|
 | userId       | mandatory | N.A.          | User identifier                           |
 | topN         | optional  | 10            | Top N items to recommend                  |
-| includeRated | optional  | false         | Include rated items in ranking generation |
+| includeRated | optional  | False         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
@@ -457,19 +467,21 @@ prediction = obj.predict( userId, itemId )
                                       itemcol = 1,
                                       ratingcol = 2,
                                       topn = 10,
-                                      output_file = 'ranking.json' )
+                                      output_file = 'ranking.json',
+                                      includeRated = False )
 ```
 
-| Parameter   | Type      | Default value | Description                                                 |
-|:------------|:---------:|:-------------:|:------------------------------------------------------------|
-| input_file  | mandatory | N.A.          | Testset filename                                            |
-| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
-| header      | optional  | False         | Dataset filename contains first line header to skip         |
-| usercol     | optional  | 0             | User column position in dataset file                        |
-| itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
-| topn        | optional  | 10            | Top N items to recommend                                    |
-| output_file | optional  | N.A.          | Output file to write predictions                            |
+| Parameter    | Type      | Default value | Description                                                 |
+|:-------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file   | mandatory | N.A.          | Testset filename                                            |
+| dlmchar      | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header       | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol      | optional  | 0             | User column position in dataset file                        |
+| itemcol      | optional  | 1             | Item column position in dataset file                        |
+| rating       | optional  | 2             | Rating column position in dataset file                      |
+| topn         | optional  | 10            | Top N items to recommend                                    |
+| output_file  | optional  | N.A.          | Output file to write predictions                            |
+| includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="itemknn"> pyreclab.ItemKnn </a>
@@ -506,7 +518,7 @@ prediction = obj.predict( userId, itemId )
 |:-------------|:---------:|:-------------:|:------------------------------------------|
 | userId       | mandatory | N.A.          | User identifier                           |
 | topN         | optional  | 10            | Top N items to recommend                  |
-| includeRated | optional  | false         | Include rated items in ranking generation |
+| includeRated | optional  | False         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
@@ -540,19 +552,21 @@ prediction = obj.predict( userId, itemId )
                                       itemcol = 1,
                                       ratingcol = 2,
                                       topn = 10,
-                                      output_file = 'ranking.json' )
+                                      output_file = 'ranking.json',
+                                      includeRated = False )
 ```
 
-| Parameter   | Type      | Default value | Description                                                 |
-|:------------|:---------:|:-------------:|:------------------------------------------------------------|
-| input_file  | mandatory | N.A.          | Testset filename                                            |
-| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
-| header      | optional  | False         | Dataset filename contains first line header to skip         |
-| usercol     | optional  | 0             | User column position in dataset file                        |
-| itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
-| topn        | optional  | 10            | Top N items to recommend                                    |
-| output_file | optional  | N.A.          | Output file to write predictions                            |
+| Parameter    | Type      | Default value | Description                                                 |
+|:-------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file   | mandatory | N.A.          | Testset filename                                            |
+| dlmchar      | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header       | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol      | optional  | 0             | User column position in dataset file                        |
+| itemcol      | optional  | 1             | Item column position in dataset file                        |
+| rating       | optional  | 2             | Rating column position in dataset file                      |
+| topn         | optional  | 10            | Top N items to recommend                                    |
+| output_file  | optional  | N.A.          | Output file to write predictions                            |
+| includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="svd"> pyreclab.SVD </a>
@@ -591,7 +605,7 @@ prediction = obj.predict( userId, itemId )
 |:-------------|:---------:|:-------------:|:------------------------------------------|
 | userId       | mandatory | N.A.          | User identifier                           |
 | topN         | optional  | 10            | Top N items to recommend                  |
-| includeRated | optional  | false         | Include rated items in ranking generation |
+| includeRated | optional  | False         | Include rated items in ranking generation |
 
  * Testing and evaluation for prediction
 
@@ -625,19 +639,21 @@ prediction = obj.predict( userId, itemId )
                                       itemcol = 1,
                                       ratingcol = 2,
                                       topn = 10,
-                                      output_file = 'ranking.json' )
+                                      output_file = 'ranking.json',
+                                      includeRated = False )
 ```
 
-| Parameter   | Type      | Default value | Description                                                 |
-|:------------|:---------:|:-------------:|:------------------------------------------------------------|
-| input_file  | mandatory | N.A.          | Testset filename                                            |
-| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
-| header      | optional  | False         | Dataset filename contains first line header to skip         |
-| usercol     | optional  | 0             | User column position in dataset file                        |
-| itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
-| topn        | optional  | 10            | Top N items to recommend                                    |
-| output_file | optional  | N.A.          | Output file to write predictions                            |
+| Parameter    | Type      | Default value | Description                                                 |
+|:-------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file   | mandatory | N.A.          | Testset filename                                            |
+| dlmchar      | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header       | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol      | optional  | 0             | User column position in dataset file                        |
+| itemcol      | optional  | 1             | Item column position in dataset file                        |
+| rating       | optional  | 2             | Rating column position in dataset file                      |
+| topn         | optional  | 10            | Top N items to recommend                                    |
+| output_file  | optional  | N.A.          | Output file to write predictions                            |
+| includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="mostpopular"> pyreclab.MostPopular </a>
@@ -658,7 +674,7 @@ prediction = obj.predict( userId, itemId )
 |:-------------|:---------:|:-------------:|:------------------------------------------|
 | userId       | mandatory | N.A.          | User identifier                           |
 | topN         | optional  | 10            | Top N items to recommend                  |
-| includeRated | optional  | false         | Include rated items in ranking generation |
+| includeRated | optional  | False         | Include rated items in ranking generation |
 
 
  * Testing for recommendation
@@ -669,17 +685,19 @@ prediction = obj.predict( userId, itemId )
                                       header = False,
                                       usercol = 0,
                                       output_file = 'ranking.json',
-                                      topN = 10 )
+                                      topN = 10,
+                                      includeRated = False )
 ```
 
-| Parameter   | Type      | Default value | Description                                                 |
-|:------------|:---------:|:-------------:|:------------------------------------------------------------|
-| input_file  | mandatory | N.A.          | Testset filename                                            |
-| dlmchar     | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
-| header      | optional  | False         | Dataset filename contains first line header to skip         |
-| usercol     | optional  | 0             | User column position in dataset file                        |
-| output_file | optional  | N.A.          | Output file to write rankings                               |
-| topN        | optional  | 10            | Top N items to recommend                                    |
+| Parameter    | Type      | Default value | Description                                                 |
+|:-------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file   | mandatory | N.A.          | Testset filename                                            |
+| dlmchar      | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header       | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol      | optional  | 0             | User column position in dataset file                        |
+| output_file  | optional  | N.A.          | Output file to write rankings                               |
+| topN         | optional  | 10            | Top N items to recommend                                    |
+| includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
 ## <span style="font-size: 4em;">On roadmap</span>

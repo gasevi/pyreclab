@@ -179,6 +179,7 @@ PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kw
    int usercol = 0;
    int itemcol = 1;
    int topn = 10;
+   int includeRated = 0;
 
    static char* kwlist[] = { const_cast<char*>( "input_file" ),
                              const_cast<char*>( "output_file" ),
@@ -186,10 +187,11 @@ PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kw
                              const_cast<char*>( "header" ),
                              const_cast<char*>( "usercol" ),
                              const_cast<char*>( "topn" ),
+                             const_cast<char*>( "includeRated" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|sciii", kwlist, &input_file,
-                                     &output_file, &dlmchar, &header, &usercol, &topn ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|sciiii", kwlist, &input_file,
+                                     &output_file, &dlmchar, &header, &usercol, &topn, &includeRated ) )
    {
       return NULL;
    }
@@ -229,7 +231,7 @@ PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kw
       std::string itemId = ind->first.second;
 
       vector<string> itemList;
-      if( !self->m_recAlgorithm->recommend( userId, topn, itemList ) )
+      if( !self->m_recAlgorithm->recommend( userId, topn, itemList, includeRated ) )
       {
          continue;
       }

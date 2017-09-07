@@ -27,7 +27,8 @@ if __name__ == '__main__':
                             header = False,
                             usercol = 0,
                             topn = 10,
-                            output_file = 'ranking.json' )
+                            output_file = 'ranking.json',
+                            includeRated = False )
    end = time.clock()
    print( 'recommendation time: ' + str( end - start ) )
 

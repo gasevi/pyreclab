@@ -366,6 +366,7 @@ PyObject* FunkSvd_testrec( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
    int itemcol = 1;
    int ratingcol = -1;
    int topn = 10;
+   int includeRated = 0;
 
    static char* kwlist[] = { const_cast<char*>( "input_file" ),
                              const_cast<char*>( "output_file" ),
@@ -375,10 +376,11 @@ PyObject* FunkSvd_testrec( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
                              const_cast<char*>( "itemcol" ),
                              const_cast<char*>( "ratingcol" ),
                              const_cast<char*>( "topn" ),
+                             const_cast<char*>( "includeRated" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|sciiiii", kwlist, &input_file,
-                                     &output_file, &dlmchar, &header, &usercol, &itemcol, &ratingcol, &topn ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|sciiiiii", kwlist, &input_file,
+                                     &output_file, &dlmchar, &header, &usercol, &itemcol, &ratingcol, &topn, &includeRated ) )
    {
       return NULL;
    }
@@ -418,7 +420,7 @@ PyObject* FunkSvd_testrec( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
       userFilter[userId] = 0;
 
       vector<string> ranking;
-      if( !self->m_recAlgorithm->recommend( userId, topn, ranking ) )
+      if( !self->m_recAlgorithm->recommend( userId, topn, ranking, includeRated ) )
       {
          continue;
       }

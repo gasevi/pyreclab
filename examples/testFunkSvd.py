@@ -47,8 +47,16 @@ if __name__ == '__main__':
                                 itemcol = 1,
                                 ratingcol = 2,
                                 topn = 10,
-                                output_file = 'ranking.json' )
+                                output_file = 'ranking.json',
+                                includeRated = False )
    end = time.clock()
    print( 'recommendation time: ' + str( end - start ) )
+
+
+   del svd
+
+   time.sleep( 10 )
+
+
 
 
