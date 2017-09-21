@@ -307,6 +307,7 @@ PyObject* FunkSvd_test( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
       catch( invalid_argument& eMsg )
       {
          cerr << "Warning: " << eMsg.what() << endl;
+         continue;
       }
 
       PyObject* pyTuple = PyTuple_New( 3 );

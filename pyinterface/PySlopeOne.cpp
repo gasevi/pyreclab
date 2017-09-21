@@ -292,6 +292,7 @@ PyObject* SlopeOne_test( PySlopeOne* self, PyObject* args, PyObject* kwdict )
       catch( invalid_argument& eMsg )
       {
          cerr << "Warning: " << eMsg.what() << endl;
+         continue;
       }
 
       PyObject* pyTuple = PyTuple_New( 3 );
