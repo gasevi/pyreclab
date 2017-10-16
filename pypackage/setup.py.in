@@ -1,16 +1,23 @@
 from setuptools import setup
+from setuptools.dist import Distribution
+
+class BinaryDistribution( Distribution ):
+   def has_ext_modules(self):
+      return True
 
 setup(
    name         = 'pyreclab',
    version      = '${PACKAGE_VERSION}',
    description  = 'Library for quickly testing and prototyping of traditional recommender system methods',
-   keywords     = 'recommendation rating ranking',
-   license      = 'GPL 3.0',
+   url          = 'https://github.com/gasevi/pyreclab',
    author       = 'Gabriel Sepulveda',
+   license      = 'GPL 3.0',
+   keywords     = 'recsys recommendation rating ranking',
+   packages     = ['pyreclab'],
    package_dir  = { '': '${CMAKE_CURRENT_SOURCE_DIR}' },
-   packages     = ['pyreclab'],# , 'pyreclab.tests'],
    package_data = { 'pyreclab': ['libpyreclab.so'] },
-   #data_files   = [('pyreclab/tests/dataset', ['pyreclab/tests/dataset/u1.base', 'pyreclab/tests/dataset/u1.test'])],
+   distclass    = BinaryDistribution,
    zip_safe     = False
+   #data_files   = [('pyreclab/tests/dataset', ['pyreclab/tests/dataset/u1.base', 'pyreclab/tests/dataset/u1.test'])],
 )
 

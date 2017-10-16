@@ -2,10 +2,9 @@ cmake_minimum_required( VERSION 2.8 )
 
 project( pyreclab )
 
-
 set( MAJOR_VERSION "0" )
 set( MINOR_VERSION "1" )
-set( RELEASE_VERSION "7" )
+set( RELEASE_VERSION "8" )
 set( PACKAGE_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${RELEASE_VERSION}" )
 
 # Set CMake macros
@@ -77,17 +76,31 @@ if( PYTHON )
 
    configure_file( ${SETUP_PY_IN} ${SETUP_PY} )
 
-   if( UNIX AND NOT APPLE )
-      execute_process( COMMAND python -c "import distutils.util; print(distutils.util.get_platform())" OUTPUT_VARIABLE PY_PLATFORM )
-
+   if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
       add_custom_command( OUTPUT ${OUTPUT}
                           COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
-                          COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" ${PY_PLATFORM}
+                          COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" manylinux1_${CMAKE_SYSTEM_PROCESSOR} # PEP 513
                           COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
                           DEPENDS ${DEPS} )
 
       add_custom_target( target ALL DEPENDS ${OUTPUT} )
-   endif( UNIX AND NOT APPLE )
+   endif( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
+
+   if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
+      execute_process( COMMAND python -c "import distutils.util; print(distutils.util.platform.machine())" OUTPUT_VARIABLE PY_PLATFORM )
+      string( REGEX REPLACE "\\." "_" PY_PLATFORM "${PY_PLATFORM}" )
+      string( REGEX REPLACE "-" "_" PY_PLATFORM "${PY_PLATFORM}" )
+
+      string( REGEX REPLACE "\\." "" CP_VERSION "${CMAKE_PYTHON_VERSION}" )
+
+      add_custom_command( OUTPUT ${OUTPUT}
+                          COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
+                          COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" ${PY_PLATFORM} "--py-limited-api" cp${CP_VERSION}
+                          COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
+                          DEPENDS ${DEPS} )
+
+      add_custom_target( target ALL DEPENDS ${OUTPUT} )
+   endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
 
    install( CODE "execute_process(COMMAND ${PYTHON} pypackage/setup.py install)" )
 endif( PYTHON )
