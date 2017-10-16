@@ -87,15 +87,13 @@ if( PYTHON )
    endif( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
 
    if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
-      execute_process( COMMAND python -c "import distutils.util; print(distutils.util.platform.machine())" OUTPUT_VARIABLE PY_PLATFORM )
+      execute_process( COMMAND python -c "import distutils.util; print(distutils.util.get_platform())" OUTPUT_VARIABLE PY_PLATFORM )
       string( REGEX REPLACE "\\." "_" PY_PLATFORM "${PY_PLATFORM}" )
       string( REGEX REPLACE "-" "_" PY_PLATFORM "${PY_PLATFORM}" )
 
-      string( REGEX REPLACE "\\." "" CP_VERSION "${CMAKE_PYTHON_VERSION}" )
-
       add_custom_command( OUTPUT ${OUTPUT}
                           COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
-                          COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" ${PY_PLATFORM} "--py-limited-api" cp${CP_VERSION}
+                          COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" ${PY_PLATFORM}
                           COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
                           DEPENDS ${DEPS} )
 
