@@ -13,6 +13,13 @@ SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
 
 # Python version
 set( CMAKE_PYTHON_VERSION 2.7 CACHE STRING "Python version" )
+
+if( ${CMAKE_PYTHON_VERSION} VERSION_LESS "3.3" ) # Before Python 3.3, there were two ABI-incompatible ways of building CPython
+   set( CMAKE_PYTHON_UCS4 ON CACHE BOOL "Enable unicode ucs4" )
+else( ${CMAKE_PYTHON_VERSION} VERSION_LESS "3.3" )
+   unset( CMAKE_PYTHON_UCS4 CACHE )
+endif( ${CMAKE_PYTHON_VERSION} VERSION_LESS "3.3" )
+
 find_package( PythonLibs "${CMAKE_PYTHON_VERSION}" REQUIRED )
 
 # Compiler definitions

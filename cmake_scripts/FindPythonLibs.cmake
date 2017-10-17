@@ -5,8 +5,19 @@
 
 set( PACKAGE_NAME PYTHON )
 
-string( REGEX REPLACE "\\." "" MANYLNX_SUBDIR "${CMAKE_PYTHON_VERSION}" )
-set( MANYLNX_SUBDIR "cp${MANYLNX_SUBDIR}-cp${MANYLNX_SUBDIR}m" )
+string( REGEX REPLACE "\\." "" PYTHON_TAG "cp${CMAKE_PYTHON_VERSION}" )
+
+if( CMAKE_PYTHON_UCS4 )
+   if( ${CMAKE_PYTHON_UCS4} )
+      string( REGEX REPLACE "\\." "" ABI_TAG "cp${CMAKE_PYTHON_VERSION}mu" )
+   else( ${CMAKE_PYTHON_UCS4} )
+      string( REGEX REPLACE "\\." "" ABI_TAG "cp${CMAKE_PYTHON_VERSION}m" )
+   endif( ${CMAKE_PYTHON_UCS4} )
+else( CMAKE_PYTHON_UCS4 )
+   string( REGEX REPLACE "\\." "" ABI_TAG "cp${CMAKE_PYTHON_VERSION}m" )
+endif( CMAKE_PYTHON_UCS4 )
+
+set( MANYLNX_SUBDIR "${PYTHON_TAG}-${ABI_TAG}" )
 
 #
 # Executable file
