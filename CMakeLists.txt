@@ -2,6 +2,10 @@ cmake_minimum_required( VERSION 2.8 )
 
 project( pyreclab )
 
+#
+# Project version
+#
+
 set( MAJOR_VERSION "0" )
 set( MINOR_VERSION "1" )
 set( RELEASE_VERSION "8" )
@@ -11,6 +15,11 @@ set( PACKAGE_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${RELEASE_VERSION}" )
 SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
                        ${PROJECT_SOURCE_DIR}/cmake_scripts )
 
+#
+# Compilation options
+#
+
+set( PRLOPT_BUILD_WHEEL OFF CACHE BOOL "Build wheel package" )
 # Python version
 set( CMAKE_PYTHON_VERSION 2.7 CACHE STRING "Python version" )
 
@@ -76,6 +85,7 @@ set_target_properties( pyreclab PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_B
                                            VERSION "${PACKAGE_VERSION}" )
 
 if( PYTHON )
+
    set( SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/pypackage/setup.py.in" )
    set( SETUP_PY    "${CMAKE_CURRENT_BINARY_DIR}/pypackage/setup.py" )
    set( OUTPUT      "${CMAKE_CURRENT_BINARY_DIR}/build/timestamp" )
@@ -83,31 +93,36 @@ if( PYTHON )
 
    configure_file( ${SETUP_PY_IN} ${SETUP_PY} )
 
-   if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
-      add_custom_command( OUTPUT ${OUTPUT}
-                          COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
-                          COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" manylinux1_${CMAKE_SYSTEM_PROCESSOR} # PEP 513
-                          COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
-                          DEPENDS ${DEPS} )
-
-      add_custom_target( target ALL DEPENDS ${OUTPUT} )
-   endif( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
-
-   if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
-      execute_process( COMMAND python -c "import distutils.util; print(distutils.util.get_platform())" OUTPUT_VARIABLE PY_PLATFORM )
-      string( REGEX REPLACE "\\." "_" PY_PLATFORM "${PY_PLATFORM}" )
-      string( REGEX REPLACE "-" "_" PY_PLATFORM "${PY_PLATFORM}" )
-
-      add_custom_command( OUTPUT ${OUTPUT}
-                          COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
-                          COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" ${PY_PLATFORM}
-                          COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
-                          DEPENDS ${DEPS} )
-
-      add_custom_target( target ALL DEPENDS ${OUTPUT} )
-   endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
-
    install( CODE "execute_process(COMMAND ${PYTHON} pypackage/setup.py install)" )
+
+   if( ${PRLOPT_BUILD_WHEEL} )
+
+      if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
+         add_custom_command( OUTPUT ${OUTPUT}
+                             COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
+                             COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" manylinux1_${CMAKE_SYSTEM_PROCESSOR} # PEP 513
+                             COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
+                             DEPENDS ${DEPS} )
+
+         add_custom_target( target ALL DEPENDS ${OUTPUT} )
+      endif( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
+
+      if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
+         execute_process( COMMAND python -c "import distutils.util; print(distutils.util.get_platform())" OUTPUT_VARIABLE PY_PLATFORM )
+         string( REGEX REPLACE "\\." "_" PY_PLATFORM "${PY_PLATFORM}" )
+         string( REGEX REPLACE "-" "_" PY_PLATFORM "${PY_PLATFORM}" )
+
+         add_custom_command( OUTPUT ${OUTPUT}
+                             COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
+                             COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" ${PY_PLATFORM}
+                             COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
+                             DEPENDS ${DEPS} )
+
+         add_custom_target( target ALL DEPENDS ${OUTPUT} )
+      endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
+
+   endif( ${PRLOPT_BUILD_WHEEL})
+
 endif( PYTHON )
 
 
