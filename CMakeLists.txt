@@ -8,7 +8,7 @@ project( pyreclab )
 
 set( MAJOR_VERSION "0" )
 set( MINOR_VERSION "1" )
-set( RELEASE_VERSION "8" )
+set( RELEASE_VERSION "9" )
 set( PACKAGE_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${RELEASE_VERSION}" )
 
 # Set CMake macros
@@ -54,19 +54,9 @@ add_subdirectory( algorithms temp/algorithms )
 add_subdirectory( pyinterface temp/pyinterface )
 add_subdirectory( eval_metrics temp/eval_metrics )
 
-if( APPLE )
+if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
    set( CMAKE_MACOSX_RPATH 0 )
-   execute_process( COMMAND which python${CMAKE_PYTHON_VERSION} OUTPUT_VARIABLE PYTHON_EXE )
-   string( STRIP ${PYTHON_EXE} PYTHON_EXE )
-   if( DEFINED PYTHON_EXE )
-      execute_process( COMMAND otool -L ${PYTHON_EXE} OUTPUT_VARIABLE OUTPUT )
-      string( REPLACE "${PYTHON_EXE}:" "" OUTPUT ${OUTPUT} )
-      string( STRIP ${OUTPUT} OUTPUT )
-      string( REGEX MATCH ".*Python" MAC_PYTHON_LINKED_LIBRARY ${OUTPUT} )
-   else( DEFINED PYTHON_EXE )
-      error( "python${CMAKE_PYTHON_VERSION} not found!" )
-   endif( DEFINED PYTHON_EXE )
-endif( APPLE )
+endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
 
 add_library( pyreclab SHARED
                       $<TARGET_OBJECTS:dataio>
@@ -75,9 +65,9 @@ add_library( pyreclab SHARED
                       $<TARGET_OBJECTS:eval_metrics>
                       $<TARGET_OBJECTS:pyinterface> )
 
-if( APPLE AND DEFINED MAC_PYTHON_LINKED_LIBRARY )
-   target_link_libraries( pyreclab ${MAC_PYTHON_LINKED_LIBRARY} )
-endif( APPLE AND DEFINED MAC_PYTHON_LINKED_LIBRARY )
+if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
+   target_link_libraries( pyreclab ${PYTHON_LIBRARY} )
+endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
 
 set_target_properties( pyreclab PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/pyreclab"
                                            SUFFIX .so
