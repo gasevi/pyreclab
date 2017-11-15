@@ -1,10 +1,10 @@
-# <center> <span style="color:#00f; font-size: 4em;">*PyRecLab*: Recommendation lab for Python</span> </center>
+# <center> <span style="color:#00f; font-size: 4em;">*pyRecLab*: Recommendation lab for Python</span> </center>
 
 ## <span style="font-size: 4em;">Overview</span>
 
-   *PyRecLab* is a recommendation library designed for training recommendation models with a friendly and easy-to-use interface, keeping a good performance in memory and CPU usage.
+   *pyRecLab* is a recommendation library designed for training recommendation models with a friendly and easy-to-use interface, keeping a good performance in memory and CPU usage.
 
-   In order to achieve this, *PyRecLab* is built as a Python module to give a friendly access to its algorithms and it is completely developed in C++ to avoid the lack of performace of the interpreted languages.
+   In order to achieve this, *pyRecLab* is built as a Python module to give a friendly access to its algorithms and it is completely developed in C++ to avoid the lack of performace of the interpreted languages.
 
    At this moment, the following recommendation algorithms are supported:
 
@@ -22,7 +22,7 @@
   * Most Popular
 
 
-   Although *PyRecLab* can be compiled on most popular operating system, it has been tested on the following distributions.
+   Although *pyRecLab* can be compiled on most popular operating system, it has been tested on the following distributions.
 
 | Operating System | Version              |
 |:-----------------|:---------------------|
@@ -47,7 +47,29 @@ If you use this library, please cite:
 
 [Check out our paper](https://arxiv.org/pdf/1706.06291v2.pdf)
 
-## <span style="font-size: 4em;">Build and install</span>
+
+## <span style="font-size: 4em;">Install</span>
+
+*pyRecLab* can be installed directly using pip as follow:
+
+### Python 2
+
+```sh
+sudo pip install pyreclab
+```
+
+### Python 3
+
+```sh
+sudo pip3 install pyreclab
+```
+
+Note: Users of Python 2.7 on Mac OS X please make sure that the pip version used is the one that comes with the operating system ( Python 2.7.10 ).
+
+
+## <span style="font-size: 4em;">Build and Install</span>
+
+In case there is not a package available for your favorite operating system, you can build *pyRecLab* through the following steps:
 
 1.- Before starting, verify you have *libpython-dev*, *boost* and *cmake* installed on your system. If not, install it through your distribution's package manager, as shown next.
 
@@ -76,7 +98,7 @@ $ brew install cmake
 $ brew install boost
 ```
 
-2.- Clone the source code of *PyRecLab* in a local directory.
+2.- Clone the source code of *pyRecLab* in a local directory.
 
 ```sh
 $ git clone https://github.com/gasevi/pyreclab.git
@@ -90,7 +112,7 @@ $ cmake .
 $ make
 ```
 
-By default, PyRecLab will be compiled for *Python 2.7*. If you want to build it for *Python 3.x*, you can execute the following steps:
+By default, pyRecLab will be compiled for *Python 2.7*. If you want to build it for *Python 3.x*, you can execute the following steps:
 
 ```sh
 $ cd pyreclab
@@ -98,7 +120,7 @@ $ cmake -DCMAKE_PYTHON_VERSION=3.x .
 $ make
 ```
 
-4.- Install PyRecLab.
+4.- Install pyRecLab.
 
 ```sh
 $ sudo make install
@@ -107,7 +129,7 @@ $ sudo make install
 
 ## <span style="font-size: 4em;">API Documentation</span>
 
-   PyRecLab provides the following classes for representing each of the recommendation algorithm currenly supported:
+   pyRecLab provides the following classes for representing each of the recommendation algorithm currenly supported:
 
  * [pyreclab.UserAvg](#useravg)
  * [pyreclab.ItemAvg](#itemavg)
