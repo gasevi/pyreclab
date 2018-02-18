@@ -4,6 +4,7 @@ set( SRCFILES AlgUserAvg.cpp
               AlgUserBasedKnn.cpp
               AlgItemBasedKnn.cpp
               AlgFunkSvd.cpp
+              AlgIFAls.cpp
               AlgMostPopular.cpp )
 
 add_library( algorithms OBJECT ${SRCFILES} )

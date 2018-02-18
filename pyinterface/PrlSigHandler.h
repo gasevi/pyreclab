@@ -18,7 +18,8 @@ public:
       MOST_POPULAR,
       SLOPE_ONE,
       USER_AVG,
-      USER_KNN
+      USER_KNN,
+      IF_ALS
    };
 
    static

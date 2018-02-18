@@ -6,6 +6,7 @@
 #include "PyItemKnn.h"
 #include "PySlopeOne.h"
 #include "PyFunkSvd.h"
+#include "PyIFAls.h"
 
 using namespace std;
 
@@ -38,6 +39,9 @@ void PrlSigHandler::handler( int signum )
          break;
       case USER_KNN:
          reinterpret_cast<PyUserKnn*>( m_activeObj )->m_recAlgorithm->stop();
+         break;
+      case IF_ALS:
+         reinterpret_cast<PyIFAls*>( m_activeObj )->m_recAlgorithm->stop();
          break;
       default:
          break;

@@ -5,6 +5,7 @@ set( SRCFILES PyMostPopular.cpp
               PyItemKnn.cpp
               PySlopeOne.cpp
               PyFunkSvd.cpp
+              PyIFAls.cpp
               PrlSigHandler.cpp
               pyinterface.cpp )
 

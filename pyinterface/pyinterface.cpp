@@ -6,6 +6,7 @@
 #include "PyItemKnn.h"
 #include "PySlopeOne.h"
 #include "PyFunkSvd.h"
+#include "PyIFAls.h"
 
 #include <iostream>
 #include <signal.h>
@@ -121,6 +122,15 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
+   if( PyType_Ready( IFAls_getTypeObject() ) < 0 )
+   {
+#if PY_MAJOR_VERSION >= 3
+      return NULL;
+#else
+      return;
+#endif
+   }
+
 #if PY_MAJOR_VERSION >= 3
    PyObject* module = PyModule_Create( &moduledef );
 #else
@@ -149,6 +159,8 @@ extern "C" void initlibpyreclab()
    PyModule_AddObject( module, "SlopeOne", (PyObject*)SlopeOne_getTypeObject() );
    Py_INCREF( FunkSvd_getTypeObject() );
    PyModule_AddObject( module, "SVD", (PyObject*)FunkSvd_getTypeObject() );
+   Py_INCREF( IFAls_getTypeObject() );
+   PyModule_AddObject( module, "IFAls", (PyObject*)IFAls_getTypeObject() );
 
 #if PY_MAJOR_VERSION >= 3
     return module;
