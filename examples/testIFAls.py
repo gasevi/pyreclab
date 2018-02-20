@@ -1,18 +1,14 @@
 import time
-
-import sys
-sys.path.append( '/home/gasevi/sandbox/pyreclab/pyreclab/' )
-
-import libpyreclab
+import pyreclab
 
 if __name__ == '__main__':
 
-   ifals = libpyreclab.IFAls( dataset = 'lastfm-dataset.txt',
-                              dlmchar = b'\t',
-                              header = False,
-                              usercol = 0,
-                              itemcol = 1,
-                              observationcol = 2 )
+   ifals = pyreclab.IFAls( dataset = 'lastfm-dataset.txt',
+                           dlmchar = b'\t',
+                           header = False,
+                           usercol = 0,
+                           itemcol = 1,
+                           observationcol = 2 )
 
    print( '-> training model' )
    start = time.clock()
