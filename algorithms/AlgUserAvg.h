@@ -17,6 +17,8 @@ public:
                int itempos = 1,
                int ratingpos = 2 );
 
+   ~AlgUserAvg();
+
    int train();
 
    double predict( std::string& userId, std::string& itemId );
@@ -25,7 +27,7 @@ public:
  
 private:
 
-   std::map<std::string, double> m_meanRatingByUser;
+   double* m_meanRatingByUserRow;
 
 };
 

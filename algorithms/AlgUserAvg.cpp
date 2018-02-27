@@ -9,18 +9,26 @@ AlgUserAvg::AlgUserAvg( DataReader& dreader,
                         int ratingpos )
 : RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >( dreader, userpos, itempos, ratingpos )
 {
+   m_meanRatingByUserRow = new double[m_ratingMatrix.users()];
+}
+
+AlgUserAvg::~AlgUserAvg()
+{
+   if( NULL != m_meanRatingByUserRow )
+   {
+      delete m_meanRatingByUserRow;
+   }
 }
 
 int AlgUserAvg::train()
 {
-   for( size_t u = 0 ; u < m_ratingMatrix.users() ; ++u )
+   for( size_t row = 0 ; row < m_ratingMatrix.users() ; ++row )
    {
-      string userId = m_ratingMatrix.userId( u );
       double sumbyrow = 0;
-      int countbyrow = m_ratingMatrix.sumRow( u, sumbyrow );
+      int countbyrow = m_ratingMatrix.sumRow( row, sumbyrow );
       if( 0 < countbyrow )
       {
-         m_meanRatingByUser[userId] = sumbyrow/countbyrow;
+         m_meanRatingByUserRow[row] = sumbyrow/countbyrow;
       }
 
       if( !m_running )
@@ -35,9 +43,10 @@ int AlgUserAvg::train()
 double AlgUserAvg::predict( string& userId, string& itemId )
 {
    double p = -1;
-   if( m_meanRatingByUser.find( userId ) != m_meanRatingByUser.end() )
+   int row = m_ratingMatrix.row( userId );
+   if( -1 < row )
    {
-      p = m_meanRatingByUser[userId];
+      p = m_meanRatingByUserRow[row];
    }
    return p > 0 ? p : m_globalMean;
 }
@@ -46,9 +55,9 @@ double AlgUserAvg::predict( size_t userrow, size_t itemcol )
 {
    double p = -1;
    string userId = m_ratingMatrix.userId( userrow );
-   if( !userId.empty() )
+   if( userrow < m_ratingMatrix.users() )
    {
-      p = m_meanRatingByUser[userId];
+      p = m_meanRatingByUserRow[userrow];
    }
    return p > 0 ? p : m_globalMean;
 }

@@ -13,6 +13,7 @@ AlgItemBasedKnn::AlgItemBasedKnn( DataReader& dreader,
   m_knn( 10 ),
   m_pSimMatrix( NULL )
 {
+   m_meanRatingByItemCol = new double[m_ratingMatrix.items()];
 }
 
 AlgItemBasedKnn::~AlgItemBasedKnn()
@@ -20,6 +21,11 @@ AlgItemBasedKnn::~AlgItemBasedKnn()
    if( NULL != m_pSimMatrix )
    {
       delete m_pSimMatrix;
+   }
+
+   if( NULL != m_meanRatingByItemCol )
+   {
+      delete m_meanRatingByItemCol;
    }
 }
 
@@ -32,19 +38,21 @@ int AlgItemBasedKnn::train()
 int AlgItemBasedKnn::train( size_t k, string& similarity )
 {
    m_knn = k;
-   Similarity< SparseColumn< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> > >simfunc( similarity );
    size_t nitems = m_ratingMatrix.items();
+   Similarity< SparseColumn< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> > >simfunc( similarity );
+
    if( NULL != m_pSimMatrix )
    {
       delete m_pSimMatrix;
    }
    m_pSimMatrix = new SymmMatrix( nitems );
+
    for( size_t i = 0 ; i < nitems ; ++i )
    {
       // Mean rating matrix
       SparseColumn< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> > coli = m_ratingMatrix.itemVector( i );
       string itemId = m_ratingMatrix.itemId( i );
-      m_meanRatingByItem[itemId] = coli.mean();
+      m_meanRatingByItemCol[i] = coli.mean();
 
       // Similarity matrix
       for( size_t j = i + 1 ; j < nitems ; ++j )
@@ -103,7 +111,7 @@ double AlgItemBasedKnn::predict( size_t userrow, size_t itemcol )
          }
       }
 
-      for( size_t i = 0 ; i < m_knn ; ++i )
+      for( size_t k = 0 ; k < m_knn ; ++k )
       {
          if( maxheap.empty() )
          {
@@ -114,15 +122,13 @@ double AlgItemBasedKnn::predict( size_t userrow, size_t itemcol )
          size_t idx = e.second;
 
          double rate = m_ratingMatrix.get( userrow, idx );
-         string simItemId = m_ratingMatrix.itemId( idx );
 
-         sum += sim * ( rate - m_meanRatingByItem[simItemId] );
+         sum += sim * ( rate - m_meanRatingByItemCol[idx] );
          ws += abs( sim );
       }
    }
 
-   string itemId = m_ratingMatrix.itemId( itemcol );
-   return ws > 0 ? m_meanRatingByItem[itemId] + sum / ws : m_globalMean;
+   return ws > 0 ? m_meanRatingByItemCol[itemcol] + sum / ws : m_globalMean;
 }
 
 

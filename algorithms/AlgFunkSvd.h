@@ -38,8 +38,6 @@ private:
 
    double innerProduct( double v1[], double v2[], size_t size );
 
-   std::map<std::string, double> m_meanRatingByUser;
-
    size_t m_nfactors;
 
    double** m_userP;

@@ -35,7 +35,7 @@ private:
 
    size_t m_knn;
 
-   std::map<std::string, double> m_meanRatingByItem;
+   double* m_meanRatingByItemCol;
 
    SymmMatrix* m_pSimMatrix;
 

@@ -66,9 +66,13 @@ public:
 
 private:
 
-   std::map<std::string,size_t> m_userMapper;
+   std::map<std::string, size_t> m_fwUserMapper;
 
-   std::map<std::string,size_t> m_itemMapper;
+   std::map<size_t, std::string> m_bwUserMapper;
+
+   std::map<std::string, size_t> m_fwItemMapper;
+
+   std::map<size_t, std::string> m_bwItemMapper;
 
    SparseMatrix<smatrix_t> m_smatrix;
 
@@ -116,22 +120,24 @@ RatingMatrix<smatrix_t>::RatingMatrix( DataReader& dreader,
       size_t row, col;
       std::map<std::string,size_t>::iterator ind;
 
-      ind = m_userMapper.find( userId );
-      if( ind == m_userMapper.end() )
+      ind = m_fwUserMapper.find( userId );
+      if( ind == m_fwUserMapper.end() )
       {
-         row = m_userMapper.size();
-         m_userMapper[userId] = row;
+         row = m_fwUserMapper.size();
+         m_fwUserMapper[userId] = row;
+         m_bwUserMapper[row] = userId;
       }
       else
       {
          row = ind->second;
       }
 
-      ind = m_itemMapper.find( itemId );
-      if( ind == m_itemMapper.end() )
+      ind = m_fwItemMapper.find( itemId );
+      if( ind == m_fwItemMapper.end() )
       {
-         col = m_itemMapper.size();
-         m_itemMapper[itemId] = col;
+         col = m_fwItemMapper.size();
+         m_fwItemMapper[itemId] = col;
+         m_bwItemMapper[col] = itemId;
       }
       else
       {
@@ -158,7 +164,7 @@ RatingMatrix<smatrix_t>::RatingMatrix( DataReader& dreader,
       }
    }
 
-   m_smatrix.resize( m_userMapper.size(), m_itemMapper.size() );
+   m_smatrix.resize( m_fwUserMapper.size(), m_fwItemMapper.size() );
    std::map< std::pair<size_t,size_t>, double >::iterator ind;
    std::map< std::pair<size_t,size_t>, double >::iterator end = inputData.end();
    for( ind = inputData.begin() ; ind != end ; ++ind )
@@ -197,15 +203,9 @@ template <class smatrix_t>
 std::string RatingMatrix<smatrix_t>::userId( size_t row )
 {
    std::string userId;
-   std::map<std::string,size_t>::iterator ind;
-   std::map<std::string,size_t>::iterator end = m_userMapper.end();
-   for( ind = m_userMapper.begin() ; ind != end ; ++ind )
+   if( m_bwUserMapper.find( row ) != m_bwUserMapper.end() )
    {
-      if( ind->second == row )
-      {
-         userId = ind->first;
-         break;
-      }
+      userId = m_bwUserMapper[row];
    }
    return userId;
 }
@@ -214,15 +214,9 @@ template <class smatrix_t>
 std::string RatingMatrix<smatrix_t>::itemId( size_t col )
 {
    std::string itemId;
-   std::map<std::string,size_t>::iterator ind;
-   std::map<std::string,size_t>::iterator end = m_itemMapper.end();
-   for( ind = m_itemMapper.begin() ; ind != end ; ++ind )
+   if( m_bwItemMapper.find( col ) != m_bwItemMapper.end() )
    {
-      if( ind->second == col )
-      {
-         itemId = ind->first;
-         break;
-      }
+      itemId = m_bwItemMapper[col];
    }
    return itemId;
 }
@@ -231,9 +225,9 @@ template <class smatrix_t>
 int RatingMatrix<smatrix_t>::row( std::string userId )
 {
    int row = -1;
-   if( m_userMapper.find( userId ) != m_userMapper.end() )
+   if( m_fwUserMapper.find( userId ) != m_fwUserMapper.end() )
    {
-      row = m_userMapper[userId];
+      row = m_fwUserMapper[userId];
    }
    return row;
 }
@@ -242,9 +236,9 @@ template <class smatrix_t>
 int RatingMatrix<smatrix_t>::column( std::string itemId )
 {
    int column = -1;
-   if( m_itemMapper.find( itemId ) != m_itemMapper.end() )
+   if( m_fwItemMapper.find( itemId ) != m_fwItemMapper.end() )
    {
-      column = m_itemMapper[itemId];
+      column = m_fwItemMapper[itemId];
    }
    return column;
 }
@@ -264,9 +258,9 @@ template <class smatrix_t>
 SparseRow<smatrix_t> RatingMatrix<smatrix_t>::userVector( std::string userId )
 {
    SparseRow<smatrix_t> uvec;
-   if( m_userMapper.find( userId ) != m_userMapper.end() )
+   if( m_fwUserMapper.find( userId ) != m_fwUserMapper.end() )
    {
-      size_t row = m_userMapper[userId];
+      size_t row = m_fwUserMapper[userId];
       uvec = m_smatrix.row( row );
    }
    return uvec;
@@ -287,9 +281,9 @@ template <class smatrix_t>
 SparseColumn<smatrix_t> RatingMatrix<smatrix_t>::itemVector( std::string itemId )
 {
    SparseColumn<smatrix_t> ivec;
-   if( m_itemMapper.find( itemId ) != m_itemMapper.end() )
+   if( m_fwItemMapper.find( itemId ) != m_fwItemMapper.end() )
    {
-      size_t col = m_itemMapper[itemId];
+      size_t col = m_fwItemMapper[itemId];
       ivec = m_smatrix.column( col );
    }
    return ivec;

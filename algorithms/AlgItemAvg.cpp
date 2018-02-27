@@ -9,18 +9,26 @@ AlgItemAvg::AlgItemAvg( DataReader& dreader,
                         int ratingpos )
 : RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> >( dreader, userpos, itempos, ratingpos )
 {
+   m_meanRatingByItemCol = new double[m_ratingMatrix.items()];
+}
+
+AlgItemAvg::~AlgItemAvg()
+{
+   if( NULL != m_meanRatingByItemCol )
+   {
+      delete m_meanRatingByItemCol;
+   }
 }
 
 int AlgItemAvg::train()
 {
-   for( size_t i = 0 ; i < m_ratingMatrix.items() ; ++i )
+   for( size_t col = 0 ; col < m_ratingMatrix.items() ; ++col )
    {
-      string itemId = m_ratingMatrix.itemId( i );
       double sumbycol = 0;
-      int countbycol = m_ratingMatrix.sumColumn( i, sumbycol );
+      int countbycol = m_ratingMatrix.sumColumn( col, sumbycol );
       if( 0 < countbycol )
       {
-         m_meanRatingByItem[itemId] = sumbycol/countbycol;
+         m_meanRatingByItemCol[col] = sumbycol/countbycol;
       }
 
       if( !m_running )
@@ -35,9 +43,10 @@ int AlgItemAvg::train()
 double AlgItemAvg::predict( string& userId, string& itemId )
 {
    double p = -1;
-   if( m_meanRatingByItem.find( itemId ) != m_meanRatingByItem.end() )
+   int col = m_ratingMatrix.column( itemId );
+   if( -1 < col )
    {
-      p = m_meanRatingByItem[itemId];
+      p = m_meanRatingByItemCol[col];
    }
    return p > 0 ? p : m_globalMean;
 }
@@ -45,10 +54,9 @@ double AlgItemAvg::predict( string& userId, string& itemId )
 double AlgItemAvg::predict( size_t userrow, size_t itemcol )
 {
    double p = -1;
-   string itemId = m_ratingMatrix.itemId( itemcol );
-   if( !itemId.empty() )
+   if( itemcol < m_ratingMatrix.items() )
    {
-      p = m_meanRatingByItem[itemId];
+      p = m_meanRatingByItemCol[itemcol];
    }
    return p > 0 ? p : m_globalMean;
 }
