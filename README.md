@@ -429,10 +429,10 @@ prediction = obj.predict( userId, itemId )
 >>> obj.train( knn, similarity )
 ```
 
-| Parameter  | Type      | Default value | Description         |
-|:-----------|:---------:|:-------------:|:--------------------|
-| knn        | optional  | 10            | K nearest neighbors |
-| similarity | optional  | 'pearson'     | Similarity metric   |
+| Parameter  | Type      | Default value | Valid values      | Description         |
+|:-----------|:---------:|:-------------:|:-----------------:|:--------------------|
+| knn        | optional  | 10            | positive integer  | K nearest neighbors |
+| similarity | optional  | 'pearson'     |'pearson', 'cosine'| Similarity metric   |
 
  * Rating prediction
 
@@ -514,10 +514,10 @@ prediction = obj.predict( userId, itemId )
 >>> obj.train( knn, similarity )
 ```
 
-| Parameter  | Type      | Default value | Description         |
-|:-----------|:---------:|:-------------:|:--------------------|
-| knn        | optional  | 10            | K nearest neighbors |
-| similarity | optional  | 'pearson'     | Similarity metric   |
+| Parameter  | Type      | Default value | Valid values      | Description         |
+|:-----------|:---------:|:-------------:|:-----------------:|:--------------------|
+| knn        | optional  | 10            | positive integer  | K nearest neighbors |
+| similarity | optional  | 'pearson'     |'pearson', 'cosine'| Similarity metric   |
 
  * Rating prediction
 
