@@ -186,7 +186,7 @@ throw( runtime_error& )
    {
       // User stage
       matrix<double> Yt = trans( m_Yi );
-      matrix<double> YtY = prod( Yt, m_Yi );
+      matrix<double> YtYlambdaI = prod( Yt, m_Yi ) + If*m_lambda;
       for( size_t u = 0 ; u < nusers ; ++u )
       {
 /*
@@ -215,7 +215,7 @@ throw( runtime_error& )
          // End: Cu - I
          subterm = prod( Yt, CuminI );
 
-         subterm = prod( subterm, m_Yi ) + YtY + If*m_lambda;
+         subterm = prod( subterm, m_Yi ) + YtYlambdaI;
          matrix<double> invYtCuYlI( m_nfactors, m_nfactors );
          bool inverted = invert( subterm, invYtCuYlI );
          if( !inverted )
@@ -258,7 +258,7 @@ throw( runtime_error& )
 
       // Item stage
       matrix<double> Xt = trans( m_Xu );
-      matrix<double> XtX = prod( Xt, m_Xu );
+      matrix<double> XtXlambdaI = prod( Xt, m_Xu ) + If*m_lambda;
       for( size_t i = 0 ; i < nitems ; ++i )
       {
 /*
@@ -288,7 +288,7 @@ throw( runtime_error& )
          // End: Ci - I
          subterm = prod( Xt, CiminI );
 
-         subterm = prod( subterm, m_Xu ) + XtX + If*m_lambda;
+         subterm = prod( subterm, m_Xu ) + XtXlambdaI;
          matrix<double> invXtCiXlI( m_nfactors, m_nfactors );
          bool inverted = invert( subterm, invXtCiXlI );
          if( !inverted )
