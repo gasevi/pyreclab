@@ -1,5 +1,5 @@
-#ifndef __PY_FAST_ALS_H__
-#define __PY_FAST_ALS_H__
+#ifndef __PY_IF_ALS_H__
+#define __PY_IF_ALS_H__
 
 #include <Python.h> // This header was set at the first place to avoid warnings
 
@@ -26,5 +26,5 @@ PyObject* IFAls_train( PyIFAls* self, PyObject* args, PyObject* kwdict );
 PyObject* IFAls_recommend( PyIFAls* self, PyObject* args, PyObject* kwdict );
 PyObject* IFAls_testrec( PyIFAls* self, PyObject* args, PyObject* kwdict );
 
-#endif // __PY_FAST_ALS_H__
+#endif // __PY_IF_ALS_H__
 
