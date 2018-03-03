@@ -51,7 +51,6 @@ int AlgItemBasedKnn::train( size_t k, string& similarity )
    {
       // Mean rating matrix
       SparseColumn< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::column_major> > coli = m_ratingMatrix.itemVector( i );
-      string itemId = m_ratingMatrix.itemId( i );
       m_meanRatingByItemCol[i] = coli.mean();
 
       // Similarity matrix
