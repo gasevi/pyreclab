@@ -33,7 +33,7 @@ private:
 
    size_t m_knn;
 
-   std::map<std::string, double> m_meanRatingByUser;
+   double* m_meanRatingByUserRow;
 
    SymmMatrix* m_pSimMatrix;
 

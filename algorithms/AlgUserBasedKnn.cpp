@@ -13,6 +13,7 @@ AlgUserBasedKnn::AlgUserBasedKnn( DataReader& dreader,
   m_knn( 10 ),
   m_pSimMatrix( NULL )
 {
+   m_meanRatingByUserRow = new double[m_ratingMatrix.users()];
 }
 
 AlgUserBasedKnn::~AlgUserBasedKnn()
@@ -20,6 +21,11 @@ AlgUserBasedKnn::~AlgUserBasedKnn()
    if( NULL != m_pSimMatrix )
    {
       delete m_pSimMatrix;
+   }
+
+   if( NULL != m_meanRatingByUserRow )
+   {
+      delete m_meanRatingByUserRow;
    }
 }
 
@@ -32,19 +38,20 @@ int AlgUserBasedKnn::train()
 int AlgUserBasedKnn::train( size_t k, string& similarity )
 {
    m_knn = k;
-   Similarity<SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > > simfunc( similarity );
    size_t nusers = m_ratingMatrix.users();
+   Similarity<SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > > simfunc( similarity );
+
    if( NULL != m_pSimMatrix )
    {
       delete m_pSimMatrix;
    }
    m_pSimMatrix = new SymmMatrix( nusers );
+
    for( size_t i = 0 ; i < nusers ; ++i )
    {
       // Mean rating matrix
       SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major > > rowi = m_ratingMatrix.userVector( i );
-      string userId = m_ratingMatrix.userId( i );
-      m_meanRatingByUser[userId] = rowi.mean();
+      m_meanRatingByUserRow[i] = rowi.mean();
 
       // Similarity matrix
       for( size_t j = i + 1 ; j < nusers ; ++j )
@@ -114,15 +121,13 @@ double AlgUserBasedKnn::predict( size_t userrow, size_t itemcol )
          size_t idx = e.second;
 
          double rate = m_ratingMatrix.get( idx, itemcol );
-         string simUserId = m_ratingMatrix.userId( idx );
 
-         sum += sim * ( rate - m_meanRatingByUser[simUserId] );
+         sum += sim * ( rate - m_meanRatingByUserRow[idx] );
          ws += abs( sim );
       }
    }
 
-   string userId = m_ratingMatrix.userId( userrow );
-   return ws > 0 ? m_meanRatingByUser[userId] + sum / ws : m_globalMean;
+   return ws > 0 ? m_meanRatingByUserRow[userrow] + sum / ws : m_globalMean;
 }
 
 
