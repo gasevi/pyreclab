@@ -75,9 +75,9 @@ private:
 
    boost::numeric::ublas::mapped_vector<double>** m_pVecPi;
 
-   boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major>** m_pMatCu;
+   boost::numeric::ublas::diagonal_matrix<double>** m_pMatCu;
 
-   boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major>** m_pMatCi;
+   boost::numeric::ublas::diagonal_matrix<double>** m_pMatCi;
 
    boost::numeric::ublas::matrix<double> m_Xu;
 

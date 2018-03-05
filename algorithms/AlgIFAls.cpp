@@ -7,6 +7,7 @@
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
 #include <boost/numeric/ublas/triangular.hpp>
+#include </usr/include/boost/numeric/ublas/banded.hpp>
 #include <boost/numeric/ublas/lu.hpp>
 
 #include <cstdlib>
@@ -27,7 +28,9 @@ AlgIFAls::AlgIFAls( DataReader& dreader,
   m_alpha( 40 ),
   m_lambda( 10 ),
   m_pVecPu( NULL ),
-  m_pMatCu( NULL )
+  m_pVecPi( NULL ),
+  m_pMatCu( NULL ),
+  m_pMatCi( NULL )
 {
    map< pair<size_t, size_t>, double > inputData;
    while( !dreader.eof() )
@@ -87,10 +90,10 @@ AlgIFAls::AlgIFAls( DataReader& dreader,
       m_pVecPu[u] = new mapped_vector<double>( m_fItemMapper.size() );
    }
 
-   m_pMatCu = new mapped_matrix<double, row_major>*[m_fUserMapper.size()];
+   m_pMatCu = new diagonal_matrix<double>*[m_fUserMapper.size()];
    for( size_t u = 0 ; u < m_fUserMapper.size() ; u++ )
    {
-      m_pMatCu[u] = new mapped_matrix<double, row_major>( m_fItemMapper.size(), m_fItemMapper.size() );
+      m_pMatCu[u] = new diagonal_matrix<double>( m_fItemMapper.size() );
    }
 
    m_pVecPi = new mapped_vector<double>*[m_fItemMapper.size()];
@@ -99,10 +102,10 @@ AlgIFAls::AlgIFAls( DataReader& dreader,
       m_pVecPi[i] = new mapped_vector<double>( m_fUserMapper.size() );
    }
 
-   m_pMatCi = new mapped_matrix<double, row_major>*[m_fItemMapper.size()];
+   m_pMatCi = new diagonal_matrix<double>*[m_fItemMapper.size()];
    for( size_t i = 0 ; i < m_fItemMapper.size() ; i++ )
    {
-      m_pMatCi[i] = new mapped_matrix<double, row_major>( m_fUserMapper.size(), m_fUserMapper.size() );
+      m_pMatCi[i] = new diagonal_matrix<double, row_major>( m_fUserMapper.size() );
    }
 
    map< pair<size_t, size_t>, double >::iterator ind;
@@ -198,15 +201,15 @@ throw( runtime_error& )
          matrix<double> subterm;
 
          // Begin: Cu - I
-         mapped_matrix<double> CuminI( nitems, nitems );
+         diagonal_matrix<double> CuminI( nitems, nitems );
          {
-         mapped_matrix<double>::iterator1 ind1;
-         mapped_matrix<double>::iterator1 end1 = m_pMatCu[u]->end1();
+         diagonal_matrix<double>::iterator1 ind1;
+         diagonal_matrix<double>::iterator1 end1 = m_pMatCu[u]->end1();
          for( ind1 = m_pMatCu[u]->begin1() ; ind1 != end1 ; ++ind1 )
          {
-            mapped_matrix<double>::iterator2 ind2;
-            mapped_matrix<double>::iterator2 end2 = m_pMatCu[u]->end2();
-            for( ind2 = m_pMatCu[u]->begin2() ; ind2 != end2 ; ++ind2 )
+            diagonal_matrix<double>::iterator2 ind2;
+            diagonal_matrix<double>::iterator2 end2 = ind1.end();
+            for( ind2 = ind1.begin() ; ind2 != end2 ; ++ind2 )
             {
                CuminI( ind2.index1(), ind2.index2() ) = *ind2 - 1;
             }
@@ -227,13 +230,13 @@ throw( runtime_error& )
          // Begin: Cu * Pu
          mapped_vector<double> CuPu( nitems );
          {
-         mapped_matrix<double>::iterator1 ind1;
-         mapped_matrix<double>::iterator1 end1 = m_pMatCu[u]->end1();
+         diagonal_matrix<double>::iterator1 ind1;
+         diagonal_matrix<double>::iterator1 end1 = m_pMatCu[u]->end1();
          for( ind1 = m_pMatCu[u]->begin1() ; ind1 != end1 ; ++ind1 )
          {
-            mapped_matrix<double>::iterator2 ind2;
-            mapped_matrix<double>::iterator2 end2 = m_pMatCu[u]->end2();
-            for( ind2 = m_pMatCu[u]->begin2() ; ind2 != end2 ; ++ind2 )
+            diagonal_matrix<double>::iterator2 ind2;
+            diagonal_matrix<double>::iterator2 end2 = ind1.end();
+            for( ind2 = ind1.begin() ; ind2 != end2 ; ++ind2 )
             {
                CuPu( ind2.index1() ) = *ind2;
             }
@@ -271,15 +274,15 @@ throw( runtime_error& )
          matrix<double> subterm;
 
          // Begin: Ci - I
-         mapped_matrix<double, boost::numeric::ublas::row_major> CiminI( nusers, nusers );
+         diagonal_matrix<double, boost::numeric::ublas::row_major> CiminI( nusers, nusers );
          {
-         mapped_matrix<double>::iterator1 ind1;
-         mapped_matrix<double>::iterator1 end1 = m_pMatCi[i]->end1();
+         diagonal_matrix<double>::iterator1 ind1;
+         diagonal_matrix<double>::iterator1 end1 = m_pMatCi[i]->end1();
          for( ind1 = m_pMatCi[i]->begin1() ; ind1 != end1 ; ++ind1 )
          {
-            mapped_matrix<double>::iterator2 ind2;
-            mapped_matrix<double>::iterator2 end2 = m_pMatCi[i]->end2();
-            for( ind2 = m_pMatCi[i]->begin2() ; ind2 != end2 ; ++ind2 )
+            diagonal_matrix<double>::iterator2 ind2;
+            diagonal_matrix<double>::iterator2 end2 = ind1.end();
+            for( ind2 = ind1.begin() ; ind2 != end2 ; ++ind2 )
             {
                CiminI( ind2.index1(), ind2.index2() ) = *ind2 - 1;
             }
@@ -300,13 +303,13 @@ throw( runtime_error& )
          // Begin: Ci * Pi
          mapped_vector<double> CiPi( nusers );
          {
-         mapped_matrix<double>::iterator1 ind1;
-         mapped_matrix<double>::iterator1 end1 = m_pMatCi[i]->end1();
+         diagonal_matrix<double>::iterator1 ind1;
+         diagonal_matrix<double>::iterator1 end1 = m_pMatCi[i]->end1();
          for( ind1 = m_pMatCi[i]->begin1() ; ind1 != end1 ; ++ind1 )
          {
-            mapped_matrix<double>::iterator2 ind2;
-            mapped_matrix<double>::iterator2 end2 = m_pMatCi[i]->end2();
-            for( ind2 = m_pMatCi[i]->begin2() ; ind2 != end2 ; ++ind2 )
+            diagonal_matrix<double>::iterator2 ind2;
+            diagonal_matrix<double>::iterator2 end2 = ind1.end();
+            for( ind2 = ind1.begin() ; ind2 != end2 ; ++ind2 )
             {
                CiPi( ind2.index1() ) = *ind2;
             }
