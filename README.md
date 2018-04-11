@@ -21,6 +21,11 @@
 
   * Most Popular
 
+**Implicit Feedback**
+
+  * ALS
+  * ALS with Conjugate Gradient method
+
 
    Although *pyRecLab* can be compiled on most popular operating system, it has been tested on the following distributions.
 
@@ -138,6 +143,8 @@ $ sudo make install
  * [pyreclab.ItemKnn](#itemknn)
  * [pyreclab.SVD](#svd)
  * [pyreclab.MostPopular](#mostpopular)
+ * [pyreclab.IFAls](#ifals)
+ * [pyreclab.IFAlsConjugateGradient](#ifalscg)
 
    So, you can import any of them as follows:
 
@@ -720,6 +727,61 @@ prediction = obj.predict( userId, itemId )
 | output_file  | optional  | N.A.          | Output file to write rankings                               |
 | topN         | optional  | 10            | Top N items to recommend                                    |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+### <a name="ifals"> pyreclab.IFAls </a>
+
+ * Training
+
+```python
+>>> obj.train( factors, maxiter, lamb )
+```
+
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
+| factors     | optional  | 50            | Number of latent factors in matrix factorization            |
+| alsNumIter  | optional  | 5             | Number of iterations in ALS algorithm                       |
+| lambd       | optional  | 10            | Regularization parameter                                    |
+
+ * Top-N item recommendation
+
+```python
+>>> ranking = obj.recommend( userId, topN, includeRated )
+```
+
+| Parameter    | Type      | Default value | Description                               |
+|:-------------|:---------:|:-------------:|:------------------------------------------|
+| userId       | mandatory | N.A.          | User identifier                           |
+| topN         | optional  | 10            | Top N items to recommend                  |
+| includeRated | optional  | False         | Include rated items in ranking generation |
+
+
+### <a name="ifalscg"> pyreclab.IFAlsConjugateGradient </a>
+
+ * Training
+
+```python
+>>> obj.train( factors, alsNumIter, lambd, cgNumIter )
+```
+
+| Parameter   | Type      | Default value | Description                                                 |
+|:------------|:---------:|:-------------:|:------------------------------------------------------------|
+| factors     | optional  | 50            | Number of latent factors in matrix factorization            |
+| alsNumIter  | optional  | 5             | Number of iterations in ALS algorithm                       |
+| lambd       | optional  | 10            | Regularization parameter                                    |
+| cgNumIter   | optional  | 2             | Number of iterations in Conjugate Gradient algorithm        |
+
+ * Top-N item recommendation
+
+```python
+>>> ranking = obj.recommend( userId, topN, includeRated )
+```
+
+| Parameter    | Type      | Default value | Description                               |
+|:-------------|:---------:|:-------------:|:------------------------------------------|
+| userId       | mandatory | N.A.          | User identifier                           |
+| topN         | optional  | 10            | Top N items to recommend                  |
+| includeRated | optional  | False         | Include rated items in ranking generation |
 
 
 ## <span style="font-size: 4em;">On roadmap</span>

@@ -31,7 +31,7 @@ public:
    int train()
    throw( std::runtime_error& );
 
-   int train( size_t factors, size_t maxiter, float lambda );
+   int train( size_t factors, size_t alsNumIter, float lambda );
 
    double predict( size_t userrow, size_t itemcol );
 
@@ -57,7 +57,7 @@ private:
 
    size_t m_nfactors;
 
-   size_t m_maxIter;
+   size_t m_alsNumIter;
 
    float m_alpha;
 

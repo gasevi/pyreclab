@@ -1,4 +1,4 @@
-#include "AlgIFAls.h"
+#include "AlgIFAlsConjugateGradient.h"
 #include "Similarity.h"
 #include "MaxHeap.h"
 #include "RecSysAlgorithm.h"
@@ -18,15 +18,16 @@ using namespace boost;
 using namespace boost::numeric::ublas;
 
 
-AlgIFAls::AlgIFAls( DataReader& dreader,
-                    int userpos,
-                    int itempos,
-                    int obspos )
+AlgIFAlsConjugateGradient::AlgIFAlsConjugateGradient( DataReader& dreader,
+                                                      int userpos,
+                                                      int itempos,
+                                                      int obspos )
 : m_running( true ),
   m_nfactors( 100 ),
   m_alsNumIter( 5 ),
-  m_alpha( 40 ),
   m_lambda( 10 ),
+  m_alpha( 40 ),
+  m_cgNumIter( 2 ),
   m_pVecPu( NULL ),
   m_pVecPi( NULL ),
   m_pMatCu( NULL ),
@@ -90,10 +91,10 @@ AlgIFAls::AlgIFAls( DataReader& dreader,
       m_pVecPu[u] = new mapped_vector<double>( m_fItemMapper.size() );
    }
 
-   m_pMatCu = new diagonal_matrix<double>*[m_fUserMapper.size()];
+   m_pMatCu = new diagonal_matrix<double, row_major>*[m_fUserMapper.size()];
    for( size_t u = 0 ; u < m_fUserMapper.size() ; u++ )
    {
-      m_pMatCu[u] = new diagonal_matrix<double>( m_fItemMapper.size() );
+      m_pMatCu[u] = new diagonal_matrix<double, row_major>( m_fItemMapper.size(), m_fItemMapper.size() );
    }
 
    m_pVecPi = new mapped_vector<double>*[m_fItemMapper.size()];
@@ -102,10 +103,10 @@ AlgIFAls::AlgIFAls( DataReader& dreader,
       m_pVecPi[i] = new mapped_vector<double>( m_fUserMapper.size() );
    }
 
-   m_pMatCi = new diagonal_matrix<double>*[m_fItemMapper.size()];
+   m_pMatCi = new diagonal_matrix<double, row_major>*[m_fItemMapper.size()];
    for( size_t i = 0 ; i < m_fItemMapper.size() ; i++ )
    {
-      m_pMatCi[i] = new diagonal_matrix<double, row_major>( m_fUserMapper.size() );
+      m_pMatCi[i] = new diagonal_matrix<double, row_major>( m_fUserMapper.size(), m_fUserMapper.size() );
    }
 
    map< pair<size_t, size_t>, double >::iterator ind;
@@ -124,7 +125,7 @@ AlgIFAls::AlgIFAls( DataReader& dreader,
    }
 }
 
-AlgIFAls::~AlgIFAls()
+AlgIFAlsConjugateGradient::~AlgIFAlsConjugateGradient()
 {
    m_Xu.clear();
    m_Yi.clear();
@@ -170,173 +171,150 @@ AlgIFAls::~AlgIFAls()
    }
 }
 
-int AlgIFAls::train( size_t factors, size_t alsNumIter, float lambda )
+int AlgIFAlsConjugateGradient::train( size_t factors, size_t alsNumIter, float lambda, size_t cgNumIter )
 {
-   reset( factors, alsNumIter, lambda );
+   reset( factors, alsNumIter, lambda, cgNumIter );
    return train();
 }
 
-int AlgIFAls::train()
+int AlgIFAlsConjugateGradient::train()
 throw( runtime_error& )
 {
    size_t nusers = m_fUserMapper.size();
    size_t nitems = m_fItemMapper.size();
    identity_matrix<double> Iu( nusers );
    identity_matrix<double> Ii( nitems );
-   identity_matrix<double> If( m_nfactors );
 
-   for( size_t it = 0 ; it < m_alsNumIter ; ++it )
+   for( size_t i = 0 ; i < m_alsNumIter ; ++i )
    {
       // User stage
-      matrix<double> Yt = trans( m_Yi );
-      matrix<double> YtYlambdaI = prod( Yt, m_Yi ) + If*m_lambda;
-      for( size_t u = 0 ; u < nusers ; ++u )
+      conjugateGradient( m_Yi, m_Xu, m_pMatCu, m_cgNumIter );
+      if( !m_running )
       {
-/*
-         struct timeval tv1;
-         struct timeval tv2;
-         gettimeofday( &tv1, NULL );
-         cout << "user " << u << endl;
-*/
-         matrix<double> subterm;
-
-         // Begin: Cu - I
-         diagonal_matrix<double> CuminI( nitems, nitems );
-         {
-         diagonal_matrix<double>::iterator1 ind1;
-         diagonal_matrix<double>::iterator1 end1 = m_pMatCu[u]->end1();
-         for( ind1 = m_pMatCu[u]->begin1() ; ind1 != end1 ; ++ind1 )
-         {
-            diagonal_matrix<double>::iterator2 ind2;
-            diagonal_matrix<double>::iterator2 end2 = ind1.end();
-            for( ind2 = ind1.begin() ; ind2 != end2 ; ++ind2 )
-            {
-               CuminI( ind2.index1(), ind2.index2() ) = *ind2 - 1;
-            }
-         }
-         }
-         // End: Cu - I
-         subterm = prod( Yt, CuminI );
-
-         subterm = prod( subterm, m_Yi ) + YtYlambdaI;
-         matrix<double> invYtCuYlI( m_nfactors, m_nfactors );
-         bool inverted = invert( subterm, invYtCuYlI );
-         if( !inverted )
-         {
-            throw runtime_error( "Matrix could not be inverted" );
-         }
-         subterm = prod( invYtCuYlI, Yt );
-
-         // Begin: Cu * Pu
-         mapped_vector<double> CuPu( nitems );
-         {
-         diagonal_matrix<double>::iterator1 ind1;
-         diagonal_matrix<double>::iterator1 end1 = m_pMatCu[u]->end1();
-         for( ind1 = m_pMatCu[u]->begin1() ; ind1 != end1 ; ++ind1 )
-         {
-            diagonal_matrix<double>::iterator2 ind2;
-            diagonal_matrix<double>::iterator2 end2 = ind1.end();
-            for( ind2 = ind1.begin() ; ind2 != end2 ; ++ind2 )
-            {
-               CuPu( ind2.index1() ) = *ind2;
-            }
-         }
-         }
-         // End: Cu * Pu
-
-         matrix_row< matrix<double> > xu( m_Xu, u );
-         xu = prod( subterm, CuPu );
-
-         if( !m_running )
-         {
-            return STOPPED;
-         }
-
-/*
-         gettimeofday( &tv2, NULL );
-         float dt = (double) (tv2.tv_usec - tv1.tv_usec) / 1000000 + (double) (tv2.tv_sec - tv1.tv_sec);
-         cout << "elapsed time: " << dt << endl;
-*/
+         return STOPPED;
       }
 
       // Item stage
-      matrix<double> Xt = trans( m_Xu );
-      matrix<double> XtXlambdaI = prod( Xt, m_Xu ) + If*m_lambda;
-      for( size_t i = 0 ; i < nitems ; ++i )
+      conjugateGradient( m_Xu, m_Yi, m_pMatCi, m_cgNumIter );
+      if( !m_running )
       {
-/*
-         struct timeval tv1;
-         struct timeval tv2;
-         gettimeofday( &tv1, NULL );
-         cout << "item " << i << endl;
-*/
-
-         matrix<double> subterm;
-
-         // Begin: Ci - I
-         diagonal_matrix<double, boost::numeric::ublas::row_major> CiminI( nusers, nusers );
-         {
-         diagonal_matrix<double>::iterator1 ind1;
-         diagonal_matrix<double>::iterator1 end1 = m_pMatCi[i]->end1();
-         for( ind1 = m_pMatCi[i]->begin1() ; ind1 != end1 ; ++ind1 )
-         {
-            diagonal_matrix<double>::iterator2 ind2;
-            diagonal_matrix<double>::iterator2 end2 = ind1.end();
-            for( ind2 = ind1.begin() ; ind2 != end2 ; ++ind2 )
-            {
-               CiminI( ind2.index1(), ind2.index2() ) = *ind2 - 1;
-            }
-         }
-         }
-         // End: Ci - I
-         subterm = prod( Xt, CiminI );
-
-         subterm = prod( subterm, m_Xu ) + XtXlambdaI;
-         matrix<double> invXtCiXlI( m_nfactors, m_nfactors );
-         bool inverted = invert( subterm, invXtCiXlI );
-         if( !inverted )
-         {
-            throw runtime_error( "Matrix could not be inverted" );
-         }
-         subterm = prod( invXtCiXlI, Xt );
-
-         // Begin: Ci * Pi
-         mapped_vector<double> CiPi( nusers );
-         {
-         diagonal_matrix<double>::iterator1 ind1;
-         diagonal_matrix<double>::iterator1 end1 = m_pMatCi[i]->end1();
-         for( ind1 = m_pMatCi[i]->begin1() ; ind1 != end1 ; ++ind1 )
-         {
-            diagonal_matrix<double>::iterator2 ind2;
-            diagonal_matrix<double>::iterator2 end2 = ind1.end();
-            for( ind2 = ind1.begin() ; ind2 != end2 ; ++ind2 )
-            {
-               CiPi( ind2.index1() ) = *ind2;
-            }
-         }
-         }
-         // End: Ci * Pi
-
-         matrix_row< matrix<double> > yi( m_Yi, i );
-         yi = prod( subterm, CiPi );
-
-         if( !m_running )
-         {
-            return STOPPED;
-         }
-
-/*
-         gettimeofday( &tv2, NULL );
-         float dt = (double) (tv2.tv_usec - tv1.tv_usec) / 1000000 + (double) (tv2.tv_sec - tv1.tv_sec);
-         cout << "elapsed time: " << dt << endl;
-*/
+         return STOPPED;
       }
    }
 
    return FINISHED;
 }
 
-double AlgIFAls::predict( size_t userrow, size_t itemcol )
+void AlgIFAlsConjugateGradient::conjugateGradient( matrix<double>& Y,
+                                                   matrix<double>& X,
+                                                   diagonal_matrix<double, row_major>** Cu,
+                                                   size_t numIter )
+{
+   identity_matrix<double> If( m_nfactors );
+   matrix<double> Yt = trans( Y );
+   matrix<double> YtYlambdaI = prod( Yt, Y ) + If*m_lambda;
+
+   size_t numElements = X.size1();
+   for( size_t i = 0 ; i < numElements ; ++i )
+  {
+      matrix_row< matrix<double> > Xi( X, i );
+      boost::numeric::ublas::vector<double> R = -prod( YtYlambdaI, Xi );
+
+      diagonal_matrix<double>::iterator1 ind1;
+      diagonal_matrix<double>::iterator1 end1 = Cu[i]->end1();
+      for( ind1 = Cu[i]->begin1() ; ind1 != end1 ; ++ind1 )
+      {
+         diagonal_matrix<double>::iterator2 ind2;
+         diagonal_matrix<double>::iterator2 end2 = ind1.end();
+         for( ind2 = ind1.begin() ; ind2 != end2 ; ++ind2 )
+         {
+            double cui = *ind2;
+            matrix_row< matrix<double> > Yi( Y, ind1.index1() );
+            double yixi = inner_prod( Yi, Xi );
+            R += ( cui - ( cui - 1 ) * yixi ) * Yi;
+         }
+      }
+
+      boost::numeric::ublas::vector<double> P = R;
+      double rtrOld = inner_prod( R, R );
+
+      // Conjugate gradient body
+      for( size_t j = 0 ; j < numIter ; ++j )
+      {
+         boost::numeric::ublas::vector<double> AP = prod( YtYlambdaI, P );
+         diagonal_matrix<double>::iterator1 ind1;
+         diagonal_matrix<double>::iterator1 end1 = Cu[i]->end1();
+         for( ind1 = Cu[i]->begin1() ; ind1 != end1 ; ++ind1 )
+         {  
+            diagonal_matrix<double>::iterator2 ind2;
+            diagonal_matrix<double>::iterator2 end2 = ind1.end();
+            for( ind2 = ind1.begin() ; ind2 != end2 ; ++ind2 )
+            {  
+               double cui = *ind2;
+               matrix_row< matrix<double> > Yi( Y, ind1.index1() );
+               double yiP = inner_prod( Yi, P );
+               AP += ( ( cui - 1 ) * yiP ) * Yi;
+            }
+         }
+
+         double alpha = rtrOld / inner_prod( P, AP );
+         Xi += alpha * P;
+         R -= alpha * AP;
+         double rtrNew = inner_prod( R, R );
+         P = R + ( rtrNew/rtrOld ) * P;
+         rtrOld = rtrNew;
+
+         if( !m_running )
+         {
+            return;
+         }
+
+      }
+   }
+}
+
+void AlgIFAlsConjugateGradient::conjugateGradientSlow( matrix<double>& Y,
+                                                       matrix<double>& X,
+                                                       diagonal_matrix<double, row_major>** Cu,
+                                                       boost::numeric::ublas::mapped_vector<double>** Pu,
+                                                       identity_matrix<double>& Iu,
+                                                       size_t numIter )
+{
+   identity_matrix<double> If( m_nfactors );
+   matrix<double> Yt = trans( Y );
+   matrix<double> YtYlambdaI = prod( Yt, Y ) + If*m_lambda;
+
+   size_t numElements = X.size1();
+   for( size_t i = 0 ; i < numElements ; ++i )
+   {
+      boost::numeric::ublas::matrix<double> subprod1 = prod( Yt, *(Cu[i]) );
+      boost::numeric::ublas::vector<double> b = prod( subprod1, *(Pu[i]) );
+
+      boost::numeric::ublas::matrix<double> subprod2 = prod( ( *(Cu[i]) - Iu ), Y );
+      boost::numeric::ublas::matrix<double> A = YtYlambdaI + prod( Yt, subprod2 );
+
+      matrix_row< matrix<double> > Xi( X, i );
+      boost::numeric::ublas::vector<double> R = b - prod( A, Xi );
+      boost::numeric::ublas::vector<double> P = R;
+
+      double rtrOld = inner_prod( R, R );
+
+      // Conjugate gradient body
+      for( size_t j = 0 ; j < numIter ; ++j )
+      {
+         boost::numeric::ublas::vector<double> AP = prod( A, P );
+
+         double alpha = rtrOld / inner_prod( P, AP );
+         Xi += alpha * P;
+         R -= alpha * AP;
+         double rtrNew = inner_prod( R, R );
+         P = R + ( rtrNew/rtrOld ) * P;
+         rtrOld = rtrNew;
+      }
+   }
+}
+
+double AlgIFAlsConjugateGradient::predict( size_t userrow, size_t itemcol )
 {
    double pred = 0;
    matrix_row< matrix<double> > xu( m_Xu, userrow );
@@ -352,10 +330,10 @@ double AlgIFAls::predict( size_t userrow, size_t itemcol )
    return pred;
 }
 
-bool AlgIFAls::recommend( const std::string& userId,
-                          size_t n,
-                          std::vector<std::string>& ranking,
-                          bool includeRated )
+bool AlgIFAlsConjugateGradient::recommend( const std::string& userId,
+                                           size_t n,
+                                           std::vector<std::string>& ranking,
+                                           bool includeRated )
 throw( invalid_argument& )
 {
    if( m_fUserMapper.find( userId ) == m_fUserMapper.end() )
@@ -391,7 +369,7 @@ throw( invalid_argument& )
    return true;
 }
 
-void AlgIFAls::reset( size_t factors, size_t maxiter, float lambda )
+void AlgIFAlsConjugateGradient::reset( size_t factors, size_t alsNumIter, float lambda, size_t cgNumIter )
 {
    m_Xu.clear();
    m_Yi.clear();
@@ -399,6 +377,7 @@ void AlgIFAls::reset( size_t factors, size_t maxiter, float lambda )
    m_nfactors = factors;
    m_alsNumIter = alsNumIter;
    m_lambda = lambda;
+   m_cgNumIter = cgNumIter;
 
    size_t nusers = m_fUserMapper.size();
    size_t nitems = m_fItemMapper.size();
@@ -424,26 +403,6 @@ void AlgIFAls::reset( size_t factors, size_t maxiter, float lambda )
          m_Yi( i, f ) = var_nor();
       }
    }
-}
-
-bool AlgIFAls::invert( const matrix<double>& input, matrix<double>& inverse )
-{
-   typedef permutation_matrix<std::size_t> pmatrix;
-   // create a working copy of the input
-   matrix<double> A( input );
-   // create a permutation matrix for the LU-factorization
-   pmatrix pm( A.size1() );
-   // perform LU-factorization
-   int res = lu_factorize( A, pm );
-   if( res != 0 )
-   {
-      return false;
-   }
-   // create identity matrix of "inverse"
-   inverse.assign( identity_matrix<double>( A.size1() ) );
-   // backsubstitute to get the inverse
-   lu_substitute( A, pm, inverse );
-   return true;
 }
 
 

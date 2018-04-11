@@ -6,6 +6,7 @@ set( SRCFILES PyMostPopular.cpp
               PySlopeOne.cpp
               PyFunkSvd.cpp
               PyIFAls.cpp
+              PyIFAlsConjugateGradient.cpp
               PrlSigHandler.cpp
               pyinterface.cpp )
 

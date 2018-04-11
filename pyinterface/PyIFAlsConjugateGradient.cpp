@@ -1,4 +1,4 @@
-#include "PyIFAls.h"
+#include "PyIFAlsConjugateGradient.h"
 #include "PrlSigHandler.h"
 #include "DataWriter.h"
 #include "DataFrame.h"
@@ -10,15 +10,15 @@
 using namespace std;
 
 static
-PyMethodDef IFAls_methods[] =
+PyMethodDef IFAlsConjugateGradient_methods[] =
 {
-   { "train",     (PyCFunction)IFAls_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
-   { "testrec",   (PyCFunction)IFAls_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "recommend", (PyCFunction)IFAls_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
+   { "train",     (PyCFunction)IFAlsConjugateGradient_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
+   { "testrec",   (PyCFunction)IFAlsConjugateGradient_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
+   { "recommend", (PyCFunction)IFAlsConjugateGradient_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
    { NULL, NULL, 0, NULL }
 };
 
-static PyTypeObject IFAlsType =
+static PyTypeObject IFAlsConjugateGradientType =
 {
 #if PY_MAJOR_VERSION >= 3
    PyVarObject_HEAD_INIT(NULL, 0)
@@ -26,10 +26,10 @@ static PyTypeObject IFAlsType =
    PyObject_HEAD_INIT( NULL )
    0,                                        // ob_size
 #endif
-   "libpyreclab.IFAls",                      // tp_name
-   sizeof(PyIFAls),                          // tp_basicsize
+   "libpyreclab.IFAlsConjugateGradient",                      // tp_name
+   sizeof(PyIFAlsConjugateGradient),                          // tp_basicsize
    0,                                        // tp_itemsize
-   (destructor)IFAls_dealloc,                // tp_dealloc
+   (destructor)IFAlsConjugateGradient_dealloc,                // tp_dealloc
    0,                                        // tp_print
    0,                                        // tp_getattr
    0,                                        // tp_setattr
@@ -45,14 +45,14 @@ static PyTypeObject IFAlsType =
    0,                                        // tp_setattro
    0,                                        // tp_as_buffer
    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-   "IFAls objects",                          // tp_doc
+   "IFAlsConjugateGradient objects",                          // tp_doc
    0,                                        // tp_traverse
    0,                                        // tp_clear
    0,                                        // tp_richcompare
    0,                                        // tp_weaklistoffset
    0,                                        // tp_iter
    0,                                        // tp_iternext
-   IFAls_methods,                            // tp_methods
+   IFAlsConjugateGradient_methods,                            // tp_methods
    0,                                        // tp_members
    0,                                        // tp_getset
    0,                                        // tp_base
@@ -62,16 +62,16 @@ static PyTypeObject IFAlsType =
    0,                                        // tp_dictoffset
    0,                                        // tp_init
    0,                                        // tp_alloc
-   IFAls_new,                                // tp_new
+   IFAlsConjugateGradient_new,                                // tp_new
 };
 
 
-PyTypeObject* IFAls_getTypeObject()
+PyTypeObject* IFAlsConjugateGradient_getTypeObject()
 {
-   return &IFAlsType;
+   return &IFAlsConjugateGradientType;
 }
 
-PyObject* IFAls_new( PyTypeObject* type, PyObject* args, PyObject* kwdict )
+PyObject* IFAlsConjugateGradient_new( PyTypeObject* type, PyObject* args, PyObject* kwdict )
 {
    const char* dsfilename = NULL;
    char dlmchar = ',';
@@ -99,7 +99,7 @@ PyObject* IFAls_new( PyTypeObject* type, PyObject* args, PyObject* kwdict )
       return NULL;
    }
 
-   PyIFAls* self = reinterpret_cast<PyIFAls*>( type->tp_alloc( type, 0 ) );
+   PyIFAlsConjugateGradient* self = reinterpret_cast<PyIFAlsConjugateGradient*>( type->tp_alloc( type, 0 ) );
    //cout << "### ref count after: " << reinterpret_cast<PyObject*>( self )->ob_refcnt << endl;
    if( self != NULL )
    {
@@ -110,7 +110,7 @@ PyObject* IFAls_new( PyTypeObject* type, PyObject* args, PyObject* kwdict )
          return NULL;
       }
 
-      self->m_recAlgorithm = new AlgIFAls( *self->m_trainingReader, usercol, itemcol, obscol );
+      self->m_recAlgorithm = new AlgIFAlsConjugateGradient( *self->m_trainingReader, usercol, itemcol, obscol );
       if( NULL == self->m_recAlgorithm )
       {
          Py_DECREF( self );
@@ -121,7 +121,7 @@ PyObject* IFAls_new( PyTypeObject* type, PyObject* args, PyObject* kwdict )
    return reinterpret_cast<PyObject*>( self );
 }
 
-void IFAls_dealloc( PyIFAls* self )
+void IFAlsConjugateGradient_dealloc( PyIFAlsConjugateGradient* self )
 {
    if( NULL != self->m_recAlgorithm )
    {
@@ -138,18 +138,20 @@ void IFAls_dealloc( PyIFAls* self )
 #endif
 }
 
-PyObject* IFAls_train( PyIFAls* self, PyObject* args, PyObject* kwdict )
+PyObject* IFAlsConjugateGradient_train( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict )
 {
    size_t factors = 50;
    size_t alsNumIter = 5;
    float lambda = 10;
+   size_t cgNumIter = 2;
 
    static char* kwlist[] = { const_cast<char*>( "factors" ),
                              const_cast<char*>( "alsNumIter" ),
                              const_cast<char*>( "lambd" ),
+                             const_cast<char*>( "cgNumIter" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iif", kwlist, &factors, &maxiter, &lambda ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iifi", kwlist, &factors, &alsNumIter, &lambda, &cgNumIter ) )
    {
       return NULL;
    }
@@ -161,7 +163,7 @@ PyObject* IFAls_train( PyIFAls* self, PyObject* args, PyObject* kwdict )
    Py_BEGIN_ALLOW_THREADS
    try
    {
-      cause = dynamic_cast<AlgIFAls*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda );
+      cause = dynamic_cast<AlgIFAlsConjugateGradient*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda, cgNumIter );
    }
    catch( exception& e )
    {
@@ -170,7 +172,7 @@ PyObject* IFAls_train( PyIFAls* self, PyObject* args, PyObject* kwdict )
    Py_END_ALLOW_THREADS
    PrlSigHandler::restoresignal( SIGINT, pOldAction );
 
-   if( AlgIFAls::STOPPED == cause )
+   if( AlgIFAlsConjugateGradient::STOPPED == cause )
    {
       PyGILState_STATE gstate = PyGILState_Ensure();
       PyErr_SetString( PyExc_KeyboardInterrupt, "SIGINT received" );
@@ -189,7 +191,7 @@ PyObject* IFAls_train( PyIFAls* self, PyObject* args, PyObject* kwdict )
    return Py_None;
 }
 
-PyObject* IFAls_recommend( PyIFAls* self, PyObject* args, PyObject* kwdict )
+PyObject* IFAlsConjugateGradient_recommend( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict )
 {
    const char* userId = NULL;
    int topn = 10;
@@ -237,7 +239,7 @@ PyObject* IFAls_recommend( PyIFAls* self, PyObject* args, PyObject* kwdict )
    return pyList;
 }
 
-PyObject* IFAls_testrec( PyIFAls* self, PyObject* args, PyObject* kwdict )
+PyObject* IFAlsConjugateGradient_testrec( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict )
 {
    const char* input_file = NULL;
    const char* output_file = NULL;
