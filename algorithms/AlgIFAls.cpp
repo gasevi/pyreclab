@@ -391,7 +391,7 @@ throw( invalid_argument& )
    return true;
 }
 
-void AlgIFAls::reset( size_t factors, size_t maxiter, float lambda )
+void AlgIFAls::reset( size_t factors, size_t alsNumIter, float lambda )
 {
    m_Xu.clear();
    m_Yi.clear();

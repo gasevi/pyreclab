@@ -149,7 +149,7 @@ PyObject* IFAls_train( PyIFAls* self, PyObject* args, PyObject* kwdict )
                              const_cast<char*>( "lambd" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iif", kwlist, &factors, &maxiter, &lambda ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iif", kwlist, &factors, &alsNumIter, &lambda ) )
    {
       return NULL;
    }
