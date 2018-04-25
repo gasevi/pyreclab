@@ -7,7 +7,7 @@
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
 #include <boost/numeric/ublas/triangular.hpp>
-#include </usr/include/boost/numeric/ublas/banded.hpp>
+#include <boost/numeric/ublas/banded.hpp>
 #include <boost/numeric/ublas/lu.hpp>
 
 #include <cstdlib>
