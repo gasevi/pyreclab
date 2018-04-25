@@ -12,16 +12,16 @@
 <!-- Bold tick : &#10004 -->
 
 | RecSys Algorithm            | Rating Prediction | Item Recommendation | Implicit Feedback |
-|:----------------------------|:-----------------:|--------------------:|------------------:|
-| User Average                | [x]               | [x]                 |                   |
-| Item Average                | [x]               | [x]                 |                   |
-| Slope One                   | [x]               | [x]                 |                   |
-| User Based KNN              | [x]               | [x]                 |                   |
-| Item Based KNN              | [x]               | [x]                 |                   |
-| Funk's SVD                  | [x]               | [x]                 |                   |
-| Most Popular                |                   | [x]                 |                   |
-| ALS                         |                   | [x]                 | [x]               |
-| ALS with Conjugate Gradient |                   | [x]                 | [x]               |
+|:----------------------------|:-----------------:|:-------------------:|:-----------------:|
+| User Average                | x                 | x                   |                   |
+| Item Average                | x                 | x                   |                   |
+| Slope One                   | x                 | x                   |                   |
+| User Based KNN              | x                 | x                   |                   |
+| Item Based KNN              | x                 | x                   |                   |
+| Funk's SVD                  | x                 | x                   |                   |
+| Most Popular                |                   | x                   |                   |
+| ALS                         |                   | x                   | x                 |
+| ALS with Conjugate Gradient |                   | x                   | x                 |
 
 
 <!--
