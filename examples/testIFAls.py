@@ -37,8 +37,8 @@ if __name__ == '__main__':
    print( 'MAP: ' + str( maprec ) )
    print( 'nDCG: ' + str( ndcg ) )
 
-   mapUser10 = svd.MAP( user_id = '10', topn = 10, relevance_threshold = 2, include_rated = False )
-   ndcgUser10 = svd.nDCG( user_id = '10', topn = 10, relevance_threshold = 2, include_rated = False  )
+   mapUser10 = ifals.MAP( user_id = '10', topn = 10, relevance_threshold = 2, include_rated = False )
+   ndcgUser10 = ifals.nDCG( user_id = '10', topn = 10, relevance_threshold = 2, include_rated = False  )
    print( 'user 10 MAP: ' + str( mapUser10 ) )
    print( 'user 10 nDCG: ' + str( ndcgUser10 ) )
 
