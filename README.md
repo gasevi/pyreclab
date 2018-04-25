@@ -13,15 +13,15 @@
 
 | RecSys Algorithm            | Rating Prediction | Item Recommendation | Implicit Feedback |
 |:----------------------------|:-----------------:|--------------------:|------------------:|
-| User Average                | &#10003           | &#10003             |                   |
-| Item Average                | &#10003           | &#10003             |                   |
-| Slope One                   | &#10003           | &#10003             |                   |
-| User Based KNN              | &#10003           | &#10003             |                   |
-| Item Based KNN              | &#10003           | &#10003             |                   |
-| Funk's SVD                  | &#10003           | &#10003             |                   |
-| Most Popular                |                   | &#10003             |                   |
-| ALS                         |                   | &#10003             | &#10003           |
-| ALS with Conjugate Gradient |                   | &#10003             | &#10003           |
+| User Average                | [x]               | [x]                 |                   |
+| Item Average                | [x]               | [x]                 |                   |
+| Slope One                   | [x]               | [x]                 |                   |
+| User Based KNN              | [x]               | [x]                 |                   |
+| Item Based KNN              | [x]               | [x]                 |                   |
+| Funk's SVD                  | [x]               | [x]                 |                   |
+| Most Popular                |                   | [x]                 |                   |
+| ALS                         |                   | [x]                 | [x]               |
+| ALS with Conjugate Gradient |                   | [x]                 | [x]               |
 
 
 <!--
@@ -1059,6 +1059,5 @@ prediction = obj.predict( userId, itemId )
 
 ## <span style="font-size: 4em;">On roadmap</span>
 
- * Add ranking evaluation metrics.
  * Add *Windows* support.
 
