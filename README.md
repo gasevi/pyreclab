@@ -1029,6 +1029,69 @@ prediction = obj.predict( userId, itemId )
 | includeRated | optional  | False         | Include rated items in ranking generation |
 
 
+ * Testing for recommendation
+
+```python
+>>> recommendationList, map, ndcg = obj.testrec( input_file = testset,
+                                                 dlmchar = b'\t',
+                                                 header = False,
+                                                 usercol = 0,
+                                                 itemcol = 1,
+                                                 ratingcol = 2,
+                                                 topn = 10,
+                                                 output_file = 'ranking.json',
+                                                 relevance_threshold = 2,
+                                                 includeRated = False )
+```
+
+| Parameter    | Type      | Default value | Description                                                 |
+|:-------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file   | mandatory | N.A.          | Testset filename                                            |
+| dlmchar      | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header       | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol      | optional  | 0             | User column position in dataset file                        |
+| itemcol      | optional  | 1             | Item column position in dataset file                        |
+| ratingcol    | optional  | 2             | Rating column position in dataset file                      |
+| output_file  | optional  | N.A.          | Output file to write rankings                               |
+| topN         | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
+| includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Mean Average precision
+
+```python
+>>> map = obj.MAP( user_id = '10',
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Normalized Discounted Cumulative Gain
+
+```python
+>>> map = obj.nDCG( user_id = '10',
+                    topn = 10,
+                    relevance_threshold = 0,
+                    include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
 ### <a name="ifalscg"> pyreclab.IFAlsConjugateGradient </a>
 
  * Training
@@ -1055,6 +1118,69 @@ prediction = obj.predict( userId, itemId )
 | userId       | mandatory | N.A.          | User identifier                           |
 | topN         | optional  | 10            | Top N items to recommend                  |
 | includeRated | optional  | False         | Include rated items in ranking generation |
+
+
+ * Testing for recommendation
+
+```python
+>>> recommendationList, map, ndcg = obj.testrec( input_file = testset,
+                                                 dlmchar = b'\t',
+                                                 header = False,
+                                                 usercol = 0,
+                                                 itemcol = 1,
+                                                 ratingcol = 2,
+                                                 topn = 10,
+                                                 output_file = 'ranking.json',
+                                                 relevance_threshold = 2,
+                                                 includeRated = False )
+```
+
+| Parameter    | Type      | Default value | Description                                                 |
+|:-------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file   | mandatory | N.A.          | Testset filename                                            |
+| dlmchar      | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header       | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol      | optional  | 0             | User column position in dataset file                        |
+| itemcol      | optional  | 1             | Item column position in dataset file                        |
+| ratingcol    | optional  | 2             | Rating column position in dataset file                      |
+| output_file  | optional  | N.A.          | Output file to write rankings                               |
+| topN         | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
+| includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Mean Average precision
+
+```python
+>>> map = obj.MAP( user_id = '10',
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Normalized Discounted Cumulative Gain
+
+```python
+>>> map = obj.nDCG( user_id = '10',
+                    topn = 10,
+                    relevance_threshold = 0,
+                    include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
 ## <span style="font-size: 4em;">On roadmap</span>
