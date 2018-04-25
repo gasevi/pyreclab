@@ -290,7 +290,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
  * Mean Average precision
 
 ```python
->>> map = obj.MAP( user_id = '10',
+>>> map = obj.MAP( user_id,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -307,7 +307,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
  * Normalized Discounted Cumulative Gain
 
 ```python
->>> map = obj.nDCG( user_id = '10',
+>>> map = obj.nDCG( user_id,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -406,7 +406,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
  * Mean Average precision
 
 ```python
->>> map = obj.MAP( user_id = '10',
+>>> map = obj.MAP( user_id,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -423,7 +423,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
  * Normalized Discounted Cumulative Gain
 
 ```python
->>> map = obj.nDCG( user_id = '10',
+>>> map = obj.nDCG( user_id,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -522,7 +522,7 @@ prediction = obj.predict( userId, itemId )
  * Mean Average precision
 
 ```python
->>> map = obj.MAP( user_id = '10',
+>>> map = obj.MAP( user_id,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -539,7 +539,7 @@ prediction = obj.predict( userId, itemId )
  * Normalized Discounted Cumulative Gain
 
 ```python
->>> map = obj.nDCG( user_id = '10',
+>>> map = obj.nDCG( user_id,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -643,7 +643,7 @@ prediction = obj.predict( userId, itemId )
  * Mean Average precision
 
 ```python
->>> map = obj.MAP( user_id = '10',
+>>> map = obj.MAP( user_id,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -660,7 +660,7 @@ prediction = obj.predict( userId, itemId )
  * Normalized Discounted Cumulative Gain
 
 ```python
->>> map = obj.nDCG( user_id = '10',
+>>> map = obj.nDCG( user_id,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -764,7 +764,7 @@ prediction = obj.predict( userId, itemId )
  * Mean Average precision
 
 ```python
->>> map = obj.MAP( user_id = '10',
+>>> map = obj.MAP( user_id,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -781,7 +781,7 @@ prediction = obj.predict( userId, itemId )
  * Normalized Discounted Cumulative Gain
 
 ```python
->>> map = obj.nDCG( user_id = '10',
+>>> map = obj.nDCG( user_id,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -887,7 +887,7 @@ prediction = obj.predict( userId, itemId )
  * Mean Average precision
 
 ```python
->>> map = obj.MAP( user_id = '10',
+>>> map = obj.MAP( user_id,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -904,7 +904,7 @@ prediction = obj.predict( userId, itemId )
  * Normalized Discounted Cumulative Gain
 
 ```python
->>> map = obj.nDCG( user_id = '10',
+>>> map = obj.nDCG( user_id,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -971,7 +971,7 @@ prediction = obj.predict( userId, itemId )
  * Mean Average precision
 
 ```python
->>> map = obj.MAP( user_id = '10',
+>>> map = obj.MAP( user_id,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -988,7 +988,7 @@ prediction = obj.predict( userId, itemId )
  * Normalized Discounted Cumulative Gain
 
 ```python
->>> map = obj.nDCG( user_id = '10',
+>>> map = obj.nDCG( user_id,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -1061,7 +1061,7 @@ prediction = obj.predict( userId, itemId )
  * Mean Average precision
 
 ```python
->>> map = obj.MAP( user_id = '10',
+>>> map = obj.MAP( user_id,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -1078,7 +1078,7 @@ prediction = obj.predict( userId, itemId )
  * Normalized Discounted Cumulative Gain
 
 ```python
->>> map = obj.nDCG( user_id = '10',
+>>> map = obj.nDCG( user_id,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -1152,7 +1152,7 @@ prediction = obj.predict( userId, itemId )
  * Mean Average precision
 
 ```python
->>> map = obj.MAP( user_id = '10',
+>>> map = obj.MAP( user_id,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -1169,7 +1169,7 @@ prediction = obj.predict( userId, itemId )
  * Normalized Discounted Cumulative Gain
 
 ```python
->>> map = obj.nDCG( user_id = '10',
+>>> map = obj.nDCG( user_id,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
