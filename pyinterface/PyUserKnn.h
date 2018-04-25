@@ -14,6 +14,7 @@ public:
 
    PyObject_HEAD
    DataReader* m_trainingReader;
+   DataFrame* m_pTestData;
    AlgUserBasedKnn* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
@@ -27,7 +28,8 @@ PyObject* UserKnn_predict( PyUserKnn* self, PyObject* args );
 PyObject* UserKnn_recommend( PyUserKnn* self, PyObject* args, PyObject* kwdict );
 PyObject* UserKnn_test( PyUserKnn* self, PyObject* args, PyObject* kwdict );
 PyObject* UserKnn_testrec( PyUserKnn* self, PyObject* args, PyObject* kwdict );
-
+PyObject* UserKnn_MAP( PyUserKnn* self, PyObject* args, PyObject* kwdict );
+PyObject* UserKnn_nDCG( PyUserKnn* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_USER_KNN_H__
 

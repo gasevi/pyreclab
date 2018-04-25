@@ -2,6 +2,8 @@
 #include "PrlSigHandler.h"
 #include "DataReader.h"
 #include "DataWriter.h"
+#include "MAP.h"
+#include "NDCG.h"
 
 #include <Python.h>
 #include <iostream>
@@ -16,6 +18,8 @@ PyMethodDef MostPopular_methods[] =
    { "train",     (PyCFunction)MostPopular_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
    { "testrec",   (PyCFunction)MostPopular_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "recommend", (PyCFunction)MostPopular_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
+   { "MAP",       (PyCFunction)MostPopular_MAP,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
+   { "nDCG",      (PyCFunction)MostPopular_nDCG,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
    { NULL, NULL, 0, NULL }
 };
 
@@ -131,6 +135,10 @@ void MostPopular_dealloc( PyMostPopular* self )
    {
       delete self->m_trainingReader;
    }
+   if( NULL != self->m_pTestData )
+   {
+      delete self->m_pTestData;
+   }
 #if PY_MAJOR_VERSION >= 3
    Py_TYPE( self )->tp_free( reinterpret_cast<PyObject*>( self ) );
 #else
@@ -178,7 +186,9 @@ PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kw
    int header = 0;
    int usercol = 0;
    int itemcol = 1;
+   int ratingcol = -1;
    int topn = 10;
+   float relevanceThreshold = 0;
    int includeRated = 0;
 
    static char* kwlist[] = { const_cast<char*>( "input_file" ),
@@ -186,12 +196,15 @@ PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kw
                              const_cast<char*>( "dlmchar" ),
                              const_cast<char*>( "header" ),
                              const_cast<char*>( "usercol" ),
+                             const_cast<char*>( "itemcol" ),
+                             const_cast<char*>( "ratingcol" ),
                              const_cast<char*>( "topn" ),
+                             const_cast<char*>( "relevance_threshold" ),
                              const_cast<char*>( "includeRated" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|sciiii", kwlist, &input_file,
-                                     &output_file, &dlmchar, &header, &usercol, &topn, &includeRated ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|sciiiiifi", kwlist, &input_file,
+                                     &output_file, &dlmchar, &header, &usercol, &itemcol, &ratingcol, &topn, &relevanceThreshold, &includeRated ) )
    {
       return NULL;
    }
@@ -215,7 +228,12 @@ PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kw
    }
 
    DataReader testReader( input_file, dlmchar, header );
-   DataFrame testData( testReader, usercol, itemcol );
+   if( NULL != self->m_pTestData )
+   {
+      delete self->m_pTestData;
+      self->m_pTestData = NULL;
+   }
+   self->m_pTestData = new DataFrame( testReader, usercol, itemcol, ratingcol );
 
    PyObject* pyDict = PyDict_New();
    if( NULL == pyDict )
@@ -223,15 +241,18 @@ PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kw
       return NULL;
    }
 
+   MAP meanAP;
+   NDCG nDcg;
+
    DataFrame::iterator ind;
-   DataFrame::iterator end = testData.end();
-   for( ind = testData.begin() ; ind != end ; ++ind )
+   DataFrame::iterator end = self->m_pTestData->end();
+   for( ind = self->m_pTestData->begin() ; ind != end ; ++ind )
    {
       std::string userId = ind->first.first;
       std::string itemId = ind->first.second;
 
-      vector<string> itemList;
-      if( !self->m_recAlgorithm->recommend( userId, topn, itemList, includeRated ) )
+      vector<string> ranking;
+      if( !self->m_recAlgorithm->recommend( userId, topn, ranking, includeRated ) )
       {
          continue;
       }
@@ -243,8 +264,8 @@ PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kw
       }
 
       vector<string>::iterator ind;
-      vector<string>::iterator end = itemList.end();
-      for( ind = itemList.begin() ; ind != end ; ++ind )
+      vector<string>::iterator end = ranking.end();
+      for( ind = ranking.begin() ; ind != end ; ++ind )
       {
 #if PY_MAJOR_VERSION >= 3
          if( -1 == PyList_Append( pyList, PyBytes_FromString( ind->c_str() ) ) )
@@ -258,13 +279,35 @@ PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kw
 
       PyDict_SetItemString( pyDict, userId.c_str(), pyList );
 
+      if( itemcol >= 0 && ratingcol >= 0 )
+      {
+         vector<string> preferences;
+         DataFrame::iterator subind;
+         DataFrame::iterator subend = self->m_pTestData->end();
+         for( subind = self->m_pTestData->begin() ; subind != subend ; ++subind )
+         {
+            if( subind->first.first == userId && subind->second > relevanceThreshold )
+            {
+               preferences.push_back( subind->first.second );
+            }
+         }
+         meanAP.append( ranking, preferences );
+         nDcg.append( ranking, preferences );
+      }
+
+
       if( dataWriter.isOpen() )
       {
-         dataWriter.write( userId, itemList );
+         dataWriter.write( userId, ranking );
       }
    }
 
-   return pyDict;
+   PyObject* pyTupleResult = PyTuple_New( 3 );
+   PyTuple_SET_ITEM( pyTupleResult, 0, pyDict );
+   PyTuple_SET_ITEM( pyTupleResult, 1, PyFloat_FromDouble( meanAP.eval() ) );
+   PyTuple_SET_ITEM( pyTupleResult, 2, PyFloat_FromDouble( nDcg.eval() ) );
+
+   return pyTupleResult;
 }
 
 PyObject* MostPopular_recommend( PyMostPopular* self, PyObject* args, PyObject* kwdict )
@@ -303,6 +346,110 @@ PyObject* MostPopular_recommend( PyMostPopular* self, PyObject* args, PyObject* 
    }
 
    return pyList;
+}
+
+PyObject* MostPopular_MAP( PyMostPopular* self, PyObject* args, PyObject* kwdict )
+{
+   const char* userId = NULL;
+   int topN = 10;
+   float relevanceThreshold = 0;
+   int includeRated = 0;
+
+   static char* kwlist[] = { const_cast<char*>( "user_id" ),
+                             const_cast<char*>( "topn" ),
+                             const_cast<char*>( "relevance_threshold" ),
+                             const_cast<char*>( "include_rated" ),
+                             NULL
+                           };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ifi", kwlist, &userId, &topN, &relevanceThreshold, &includeRated ) )
+   {
+      return NULL;
+   }
+
+   if( NULL == self->m_pTestData )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_RuntimeError, "Test data not found" );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
+   vector<string> ranking;
+   if( !self->m_recAlgorithm->recommend( userId, topN, ranking, includeRated ) )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_RuntimeError, "It was not possible to recommend items" );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
+   vector<string> preferences;
+   DataFrame::iterator ind;
+   DataFrame::iterator end = self->m_pTestData->end();
+   for( ind = self->m_pTestData->begin() ; ind != end ; ++ind )
+   {
+      if( ind->first.first == userId && ind->second > relevanceThreshold )
+      {
+         preferences.push_back( ind->first.second );
+      }
+   }
+   MAP meanAP;
+   meanAP.append( ranking, preferences );
+
+   return Py_BuildValue( "f", meanAP.eval() );
+}
+
+PyObject* MostPopular_nDCG( PyMostPopular* self, PyObject* args, PyObject* kwdict )
+{
+   const char* userId = NULL;
+   int topN = 10;
+   float relevanceThreshold = 0;
+   int includeRated = 0;
+
+   static char* kwlist[] = { const_cast<char*>( "user_id" ),
+                             const_cast<char*>( "topn" ),
+                             const_cast<char*>( "relevance_threshold" ),
+                             const_cast<char*>( "include_rated" ),
+                             NULL
+                           };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ifi", kwlist, &userId, &topN, &relevanceThreshold, &includeRated ) )
+   {
+      return NULL;
+   }
+
+   if( NULL == self->m_pTestData )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_RuntimeError, "Test data not found" );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
+   vector<string> ranking;
+   if( !self->m_recAlgorithm->recommend( userId, topN, ranking, includeRated ) )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_RuntimeError, "It was not possible to recommend items" );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
+   vector<string> preferences;
+   DataFrame::iterator ind;
+   DataFrame::iterator end = self->m_pTestData->end();
+   for( ind = self->m_pTestData->begin() ; ind != end ; ++ind )
+   {
+      if( ind->first.first == userId && ind->second > relevanceThreshold )
+      {
+         preferences.push_back( ind->first.second );
+      }
+   }
+   NDCG nDcg;
+   nDcg.append( ranking, preferences );
+
+   return Py_BuildValue( "f", nDcg.eval() );
 }
 
 

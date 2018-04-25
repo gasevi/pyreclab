@@ -14,6 +14,7 @@ public:
 
    PyObject_HEAD
    DataReader* m_trainingReader;
+   DataFrame* m_pTestData;
    AlgUserAvg* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
@@ -29,6 +30,8 @@ PyObject* UserAvg_predict( PyUserAvg* self, PyObject* args );
 PyObject* UserAvg_recommend( PyUserAvg* self, PyObject* args, PyObject* kwdict );
 PyObject* UserAvg_test( PyUserAvg* self, PyObject* args, PyObject* kwdict );
 PyObject* UserAvg_testrec( PyUserAvg* self, PyObject* args, PyObject* kwdict );
+PyObject* UserAvg_MAP( PyUserAvg* self, PyObject* args, PyObject* kwdict );
+PyObject* UserAvg_nDCG( PyUserAvg* self, PyObject* args, PyObject* kwdict );
 
 
 #endif // __PY_USER_AVG_H__

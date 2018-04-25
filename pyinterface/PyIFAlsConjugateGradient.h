@@ -5,6 +5,7 @@
 
 #include "AlgIFAlsConjugateGradient.h"
 #include "DataReader.h"
+#include "DataFrame.h"
 #include "MAE.h"
 #include "RMSE.h"
 
@@ -14,6 +15,7 @@ public:
 
    PyObject_HEAD
    DataReader* m_trainingReader;
+   DataFrame* m_pTestData;
    AlgIFAlsConjugateGradient* m_recAlgorithm;
    MAE m_mae;
    RMSE m_rmse;
@@ -25,6 +27,8 @@ void IFAlsConjugateGradient_dealloc( PyIFAlsConjugateGradient* self );
 PyObject* IFAlsConjugateGradient_train( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
 PyObject* IFAlsConjugateGradient_recommend( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
 PyObject* IFAlsConjugateGradient_testrec( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
+PyObject* IFAlsConjugateGradient_MAP( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
+PyObject* IFAlsConjugateGradient_nDCG( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_CONJUGATE_GRADIENT_H__
 

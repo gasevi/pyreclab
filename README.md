@@ -8,6 +8,23 @@
 
    At this moment, the following recommendation algorithms are supported:
 
+<!-- Tick      : &#10003 -->
+<!-- Bold tick : &#10004 -->
+
+| RecSys Algorithm            | Rating Prediction | Item Recommendation | Implicit Feedback |
+|:----------------------------|:-----------------:|--------------------:|------------------:|
+| User Average                | &#10003           | &#10003             |                   |
+| Item Average                | &#10003           | &#10003             |                   |
+| Slope One                   | &#10003           | &#10003             |                   |
+| User Based KNN              | &#10003           | &#10003             |                   |
+| Item Based KNN              | &#10003           | &#10003             |                   |
+| Funk's SVD                  | &#10003           | &#10003             |                   |
+| Most Popular                |                   | &#10003             |                   |
+| ALS                         |                   | &#10003             | &#10003           |
+| ALS with Conjugate Gradient |                   | &#10003             | &#10003           |
+
+
+<!--
 **Rating Prediction**
 
   * User Average
@@ -25,7 +42,7 @@
 
   * ALS
   * ALS with Conjugate Gradient method
-
+-->
 
    Although *pyRecLab* can be compiled on most popular operating system, it has been tested on the following distributions.
 
@@ -181,7 +198,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | header    | optional  | False         | Whether dataset filename contains a header line to skip     |
 | usercol   | optional  | 0             | User column position in dataset file                        |
 | itemcol   | optional  | 1             | Item column position in dataset file                        |
-| rating    | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol | optional  | 2             | Rating column position in dataset file                      |
 
 
    Due to the different nature of each algorithm, their train methods can have different parameters. For this reason, they have been described for each class as shown below.
@@ -237,22 +254,23 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol     | optional  | 0             | User column position in dataset file                        |
 | itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol   | optional  | 2             | Rating column position in dataset file                      |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
 
  * Testing for recommendation
 
 ```python
->>> recommendationList = obj.testrec( input_file = testset,
-                                      dlmchar = b'\t',
-                                      header = False,
-                                      usercol = 0,
-                                      itemcol = 1,
-                                      ratingcol = 2,
-                                      topn = 10,
-                                      output_file = 'ranking.json',
-                                      includeRated = False )
+>>> recommendationList, map, ndcg = obj.testrec( input_file = testset,
+                                                 dlmchar = b'\t',
+                                                 header = False,
+                                                 usercol = 0,
+                                                 itemcol = 1,
+                                                 ratingcol = 2,
+                                                 topn = 10,
+                                                 output_file = 'ranking.json',
+                                                 relevance_threshold = 0,
+                                                 includeRated = False )
 ```
 
 | Parameter    | Type      | Default value | Description                                                 |
@@ -262,10 +280,45 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | header       | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol      | optional  | 0             | User column position in dataset file                        |
 | itemcol      | optional  | 1             | Item column position in dataset file                        |
-| rating       | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Mean Average precision
+
+```python
+>>> map = obj.MAP( user_id = '10',
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Normalized Discounted Cumulative Gain
+
+```python
+>>> map = obj.nDCG( user_id = '10',
+                    topn = 10,
+                    relevance_threshold = 0,
+                    include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="itemavg"> pyreclab.ItemAvg </a>
@@ -318,21 +371,22 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol     | optional  | 0             | User column position in dataset file                        |
 | itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol   | optional  | 2             | Rating column position in dataset file                      |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
  * Testing for recommendation
 
 ```python
->>> recommendationList = obj.testrec( input_file = testset,
-                                      dlmchar = b'\t',
-                                      header = False,
-                                      usercol = 0,
-                                      itemcol = 1,
-                                      ratingcol = 2,
-                                      topn = 10,
-                                      output_file = 'ranking.json',
-                                      includeRated = False )
+>>> recommendationList, map, ndcg = obj.testrec( input_file = testset,
+                                                 dlmchar = b'\t',
+                                                 header = False,
+                                                 usercol = 0,
+                                                 itemcol = 1,
+                                                 ratingcol = 2,
+                                                 topn = 10,
+                                                 output_file = 'ranking.json',
+                                                 relevance_threshold = 2,
+                                                 includeRated = False )
 ```
 
 | Parameter    | Type      | Default value | Description                                                 |
@@ -342,10 +396,45 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | header       | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol      | optional  | 0             | User column position in dataset file                        |
 | itemcol      | optional  | 1             | Item column position in dataset file                        |
-| rating       | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Mean Average precision
+
+```python
+>>> map = obj.MAP( user_id = '10',
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Normalized Discounted Cumulative Gain
+
+```python
+>>> map = obj.nDCG( user_id = '10',
+                    topn = 10,
+                    relevance_threshold = 0,
+                    include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="slopeone"> pyreclab.SlopeOne </a>
@@ -398,21 +487,22 @@ prediction = obj.predict( userId, itemId )
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol     | optional  | 0             | User column position in dataset file                        |
 | itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol   | optional  | 2             | Rating column position in dataset file                      |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
  * Testing for recommendation
 
 ```python
->>> recommendationList = obj.testrec( input_file = testset,
-                                      dlmchar = b'\t',
-                                      header = False,
-                                      usercol = 0,
-                                      itemcol = 1,
-                                      ratingcol = 2,
-                                      topn = 10,
-                                      output_file = 'ranking.json',
-                                      includeRated = False )
+>>> recommendationList, map, ndcg = obj.testrec( input_file = testset,
+                                                 dlmchar = b'\t',
+                                                 header = False,
+                                                 usercol = 0,
+                                                 itemcol = 1,
+                                                 ratingcol = 2,
+                                                 topn = 10,
+                                                 output_file = 'ranking.json',
+                                                 relevance_threshold = 2,
+                                                 includeRated = False )
 ```
 
 | Parameter    | Type      | Default value | Description                                                 |
@@ -422,10 +512,45 @@ prediction = obj.predict( userId, itemId )
 | header       | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol      | optional  | 0             | User column position in dataset file                        |
 | itemcol      | optional  | 1             | Item column position in dataset file                        |
-| rating       | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Mean Average precision
+
+```python
+>>> map = obj.MAP( user_id = '10',
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Normalized Discounted Cumulative Gain
+
+```python
+>>> map = obj.nDCG( user_id = '10',
+                    topn = 10,
+                    relevance_threshold = 0,
+                    include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="userknn"> pyreclab.UserKnn </a>
@@ -483,21 +608,22 @@ prediction = obj.predict( userId, itemId )
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol     | optional  | 0             | User column position in dataset file                        |
 | itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol   | optional  | 2             | Rating column position in dataset file                      |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
  * Testing for recommendation
 
 ```python
->>> recommendationList = obj.testrec( input_file = testset,
-                                      dlmchar = b'\t',
-                                      header = False,
-                                      usercol = 0,
-                                      itemcol = 1,
-                                      ratingcol = 2,
-                                      topn = 10,
-                                      output_file = 'ranking.json',
-                                      includeRated = False )
+>>> recommendationList, map, ndcg = obj.testrec( input_file = testset,
+                                                 dlmchar = b'\t',
+                                                 header = False,
+                                                 usercol = 0,
+                                                 itemcol = 1,
+                                                 ratingcol = 2,
+                                                 topn = 10,
+                                                 output_file = 'ranking.json',
+                                                 relevance_threshold = 2,
+                                                 includeRated = False )
 ```
 
 | Parameter    | Type      | Default value | Description                                                 |
@@ -507,10 +633,45 @@ prediction = obj.predict( userId, itemId )
 | header       | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol      | optional  | 0             | User column position in dataset file                        |
 | itemcol      | optional  | 1             | Item column position in dataset file                        |
-| rating       | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Mean Average precision
+
+```python
+>>> map = obj.MAP( user_id = '10',
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Normalized Discounted Cumulative Gain
+
+```python
+>>> map = obj.nDCG( user_id = '10',
+                    topn = 10,
+                    relevance_threshold = 0,
+                    include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="itemknn"> pyreclab.ItemKnn </a>
@@ -568,21 +729,22 @@ prediction = obj.predict( userId, itemId )
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol     | optional  | 0             | User column position in dataset file                        |
 | itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol   | optional  | 2             | Rating column position in dataset file                      |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
  * Testing for recommendation
 
 ```python
->>> recommendationList = obj.testrec( input_file = testset,
-                                      dlmchar = b'\t',
-                                      header = False,
-                                      usercol = 0,
-                                      itemcol = 1,
-                                      ratingcol = 2,
-                                      topn = 10,
-                                      output_file = 'ranking.json',
-                                      includeRated = False )
+>>> recommendationList, map, ndcg = obj.testrec( input_file = testset,
+                                                 dlmchar = b'\t',
+                                                 header = False,
+                                                 usercol = 0,
+                                                 itemcol = 1,
+                                                 ratingcol = 2,
+                                                 topn = 10,
+                                                 output_file = 'ranking.json',
+                                                 relevance_threshold = 2,
+                                                 includeRated = False )
 ```
 
 | Parameter    | Type      | Default value | Description                                                 |
@@ -592,10 +754,45 @@ prediction = obj.predict( userId, itemId )
 | header       | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol      | optional  | 0             | User column position in dataset file                        |
 | itemcol      | optional  | 1             | Item column position in dataset file                        |
-| rating       | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Mean Average precision
+
+```python
+>>> map = obj.MAP( user_id = '10',
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Normalized Discounted Cumulative Gain
+
+```python
+>>> map = obj.nDCG( user_id = '10',
+                    topn = 10,
+                    relevance_threshold = 0,
+                    include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="svd"> pyreclab.SVD </a>
@@ -655,21 +852,22 @@ prediction = obj.predict( userId, itemId )
 | header      | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol     | optional  | 0             | User column position in dataset file                        |
 | itemcol     | optional  | 1             | Item column position in dataset file                        |
-| rating      | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol   | optional  | 2             | Rating column position in dataset file                      |
 | output_file | optional  | N.A.          | Output file to write predictions                            |
 
  * Testing for recommendation
 
 ```python
->>> recommendationList = obj.testrec( input_file = testset,
-                                      dlmchar = b'\t',
-                                      header = False,
-                                      usercol = 0,
-                                      itemcol = 1,
-                                      ratingcol = 2,
-                                      topn = 10,
-                                      output_file = 'ranking.json',
-                                      includeRated = False )
+>>> recommendationList, map, ndcg = obj.testrec( input_file = testset,
+                                                 dlmchar = b'\t',
+                                                 header = False,
+                                                 usercol = 0,
+                                                 itemcol = 1,
+                                                 ratingcol = 2,
+                                                 topn = 10,
+                                                 output_file = 'ranking.json',
+                                                 relevance_threshold = 2,
+                                                 includeRated = False )
 ```
 
 | Parameter    | Type      | Default value | Description                                                 |
@@ -679,10 +877,45 @@ prediction = obj.predict( userId, itemId )
 | header       | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol      | optional  | 0             | User column position in dataset file                        |
 | itemcol      | optional  | 1             | Item column position in dataset file                        |
-| rating       | optional  | 2             | Rating column position in dataset file                      |
+| ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Mean Average precision
+
+```python
+>>> map = obj.MAP( user_id = '10',
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Normalized Discounted Cumulative Gain
+
+```python
+>>> map = obj.nDCG( user_id = '10',
+                    topn = 10,
+                    relevance_threshold = 0,
+                    include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="mostpopular"> pyreclab.MostPopular </a>
@@ -709,13 +942,16 @@ prediction = obj.predict( userId, itemId )
  * Testing for recommendation
 
 ```python
->>> recommendationList = obj.testrec( input_file = testset,
-                                      dlmchar = b'\t',
-                                      header = False,
-                                      usercol = 0,
-                                      output_file = 'ranking.json',
-                                      topN = 10,
-                                      includeRated = False )
+>>> recommendationList, map, ndcg = obj.testrec( input_file = testset,
+                                                 dlmchar = b'\t',
+                                                 header = False,
+                                                 usercol = 0,
+                                                 itemcol = 1,
+                                                 ratingcol = 2,
+                                                 topn = 10,
+                                                 output_file = 'ranking.json',
+                                                 relevance_threshold = 2,
+                                                 includeRated = False )
 ```
 
 | Parameter    | Type      | Default value | Description                                                 |
@@ -724,9 +960,46 @@ prediction = obj.predict( userId, itemId )
 | dlmchar      | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header       | optional  | False         | Dataset filename contains first line header to skip         |
 | usercol      | optional  | 0             | User column position in dataset file                        |
+| itemcol      | optional  | 1             | Item column position in dataset file                        |
+| ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | output_file  | optional  | N.A.          | Output file to write rankings                               |
 | topN         | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Mean Average precision
+
+```python
+>>> map = obj.MAP( user_id = '10',
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Normalized Discounted Cumulative Gain
+
+```python
+>>> map = obj.nDCG( user_id = '10',
+                    topn = 10,
+                    relevance_threshold = 0,
+                    include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| topn                | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
 ### <a name="ifals"> pyreclab.IFAls </a>
