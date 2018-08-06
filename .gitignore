@@ -4,7 +4,7 @@ cmake_install.cmake
 Makefile
 build/
 dist/
-pypackage/
+pypackage/setup.py
 pyreclab.egg-info/
 pyreclab/
 install_manifest.txt

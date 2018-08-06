@@ -3,7 +3,7 @@ import pyreclab
 
 if __name__ == '__main__':
 
-   ifals = pyreclab.IFAls( dataset = 'lastfm-dataset.txt',
+   ifals = pyreclab.IFAls( dataset = 'dataset/u1.base',
                            dlmchar = b'\t',
                            header = False,
                            usercol = 0,
@@ -16,8 +16,8 @@ if __name__ == '__main__':
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 
-   ranking = ifals.recommend( 'user_000436', 5, includeRated = False )
-   print( 'recommendation for user user_000436: ' + str( ranking ) )
+   ranking = ifals.recommend( '457', 5, includeRated = False )
+   print( 'recommendation for user 457: ' + str( ranking ) )
 
    print( '-> recommendation test' )
    start = time.clock()

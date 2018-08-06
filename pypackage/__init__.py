@@ -1,4 +1,4 @@
-from pyreclab.libpyreclab import MostPopular, UserAvg, ItemAvg, SlopeOne, UserKnn, ItemKnn, SVD
+from pyreclab.libpyreclab import MostPopular, UserAvg, ItemAvg, SlopeOne, UserKnn, ItemKnn, SVD, IFAls, IFAlsConjugateGradient
 
 __all__ = [ 'MostPopular',
             'UserAvg',
@@ -6,5 +6,7 @@ __all__ = [ 'MostPopular',
             'SlopeOne',
             'UserKnn',
             'ItemKnn',
-            'SVD' ]
+            'SVD',
+            'IFAls',
+            'IFAlsConjugateGradient' ]
 
