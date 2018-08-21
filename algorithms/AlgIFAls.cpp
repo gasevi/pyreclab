@@ -36,7 +36,8 @@ AlgIFAls::AlgIFAls( DataReader& dreader,
    map< pair<size_t, size_t>, double > inputData;
    while( !dreader.eof() )
    {
-      std::vector<std::string> line = dreader.readline();
+      std::vector<string> line;
+      dreader.readline( line );
       if( line.empty() )
       {
          break;
@@ -79,7 +80,10 @@ AlgIFAls::AlgIFAls( DataReader& dreader,
 
       if( inputData.find( std::pair<size_t,size_t>( row, col ) ) != inputData.end() )
       {
-         std::cout << "warning: <user:" << userId << " ,item:" << itemId << "> pair duplicated" << std::endl;
+         cout << "warning: <user: " << userId
+              << " ,item: " << itemId
+              << "> pair duplicated in line " << dreader.currentline()
+              << endl;
          continue;
       }
       inputData[pair<size_t,size_t>( row, col )] = rui;

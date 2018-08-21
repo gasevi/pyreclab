@@ -11,9 +11,13 @@ public:
 
    DataReader( std::string filename, char dlm = ',', bool header = false );
 
-   std::vector<std::string> readline();
+   void readline( std::vector<std::string>& lineFields );
 
    bool eof();
+
+   const char* filename();
+
+   int currentline();
 
 private:
 
@@ -25,6 +29,8 @@ private:
    char m_dlm;
 
    bool m_header;
+
+   int m_lineNumber;
 
    std::ifstream m_infile;
 

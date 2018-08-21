@@ -15,7 +15,8 @@ DataFrame::DataFrame( DataReader& dreader, int userpos, int itempos, int ratingp
 {
    while( !dreader.eof() )
    {
-      vector<string> line = dreader.readline();
+      vector<string> line;
+      dreader.readline( line );
       if( line.empty() )
       {
          break;
@@ -40,7 +41,10 @@ DataFrame::DataFrame( DataReader& dreader, int userpos, int itempos, int ratingp
       //cout << "user [" << userId << "] item [" << itemId << "] rating: [" << rating << "]" << endl;
       if( m_userItemPairs.find( pair<string,string>( userId, itemId ) ) != m_userItemPairs.end() )
       {
-         cout << "warning: <user:" << userId << " ,item:" << itemId << "> pair duplicated" << endl;
+         cout << "Warning: <user: " << userId
+              << " ,item: " << itemId
+              << "> pair duplicated on line " << dreader.currentline()
+              << endl;
          continue;
       }
       m_userItemPairs[pair<string,string>( userId, itemId )] = rating;

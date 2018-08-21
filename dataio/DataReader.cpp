@@ -10,18 +10,20 @@ DataReader::DataReader( string filename, char dlm, bool header )
 : m_filename( filename ),
   m_dlm( dlm ),
   m_header( header ),
+  m_lineNumber( 0 ),
   m_infile( m_filename.c_str() )
 {
 }
 
-vector<string> DataReader::readline()
+void DataReader::readline( vector<string>& lineFields )
 {
-   vector<string> lineFields;
    if( m_infile.is_open() )
    {
       string s;
       while( getline( m_infile, s ) )
       {
+         m_lineNumber++;
+
          s = strip( s );
          if( s.empty() )
          {
@@ -56,12 +58,21 @@ vector<string> DataReader::readline()
    {
       cerr << "File [" << m_filename << "] couldn't be opened" << endl;
    }
-   return lineFields;
 }
 
 bool DataReader::eof()
 {
    return m_infile.eof();
+}
+
+const char* DataReader::filename()
+{
+   return m_filename.c_str();
+}
+
+int DataReader::currentline()
+{
+   return m_lineNumber;
 }
 
 string DataReader::strip( string& str )

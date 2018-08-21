@@ -66,6 +66,9 @@ public:
 
 private:
 
+   static
+   const int kNumFieldsPerRow = 3;
+
    std::map<std::string, size_t> m_fwUserMapper;
 
    std::map<size_t, std::string> m_bwUserMapper;
@@ -105,11 +108,22 @@ RatingMatrix<smatrix_t>::RatingMatrix( DataReader& dreader,
    std::map< std::pair<size_t,size_t>, double > inputData;
    while( !dreader.eof() )
    {
-      std::vector<std::string> line = dreader.readline();
+      std::vector<std::string> line;
+      dreader.readline( line );
       if( line.empty() )
       {
          break;
       }
+
+      if( line.size() < kNumFieldsPerRow )
+      {
+         std::cerr << "Warning: line " << dreader.currentline()
+                   << " of file " << dreader.filename()
+                   << " does not have enough fields. Discarded"
+                   << std::endl;
+         continue;
+      }
+
       std::string userId = line[userpos];
       std::string itemId = line[itempos];
       std::stringstream ss( line[ratingpos] );
@@ -146,7 +160,10 @@ RatingMatrix<smatrix_t>::RatingMatrix( DataReader& dreader,
 
       if( inputData.find( std::pair<size_t,size_t>( row, col ) ) != inputData.end() )
       {
-         std::cout << "warning: <user:" << userId << " ,item:" << itemId << "> pair duplicated" << std::endl;
+         std::cout << "warning: <user: " << userId
+                   << " ,item: " << itemId
+                   << "> pair duplicated on line " << dreader.currentline()
+                   << std::endl;
          continue;
       }
       inputData[std::pair<size_t,size_t>( row, col )] = rating;
