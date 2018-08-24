@@ -9,6 +9,8 @@ class NDCG
 {
 public:
 
+   NDCG();
+
    void append( std::vector<std::string>& retrieved, std::vector<std::string>& relevant );
 
    void clear();

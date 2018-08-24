@@ -4,6 +4,11 @@
 
 using namespace std;
 
+MAE::MAE()
+: m_absErrorAccum( 0 )
+{
+}
+
 void MAE::append( double rating, double prediction )
 {
    m_rateData.push_back( pair<double, double>( rating, prediction ) );

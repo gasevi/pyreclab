@@ -8,6 +8,8 @@ class RMSE
 {
 public:
 
+   RMSE();
+
    void append( double rating, double prediction );
 
    void clear();

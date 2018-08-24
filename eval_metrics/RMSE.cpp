@@ -5,6 +5,11 @@
 
 using namespace std;
 
+RMSE::RMSE()
+: m_sqErrorAccum( 0 )
+{
+}
+
 void RMSE::append( double rating, double prediction )
 {
    m_rateData.push_back( pair<double, double>( rating, prediction ) );

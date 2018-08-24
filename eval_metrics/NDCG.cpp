@@ -6,6 +6,12 @@
 
 using namespace std;
 
+NDCG::NDCG()
+: m_numQueries( 0 ),
+  m_cumNDCG( 0 )
+{
+}
+
 void NDCG::append( std::vector<std::string>& retrieved, std::vector<std::string>& relevant )
 {
    float i = 1;

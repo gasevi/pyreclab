@@ -8,6 +8,8 @@ class MAE
 {
 public:
 
+   MAE();
+
    void append( double rating, double prediction );
 
    void clear();
