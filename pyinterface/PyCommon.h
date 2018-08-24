@@ -62,7 +62,12 @@ PyObject* PyMAP( T* self, PyObject* args, PyObject* kwdict )
       for( int i = 0 ; i < numLines ; ++i )
       {
          PyObject* strObj = PyList_GetItem( retrieved, i );
+#if PY_MAJOR_VERSION >= 3
+         ranking.push_back( string( PyBytes_AS_STRING( strObj ) ) );
+#else
          ranking.push_back( string( PyString_AsString( strObj ) ) );
+#endif
+         Py_DECREF( strObj );
       }
       topN = ranking.size();
    }
@@ -126,7 +131,12 @@ PyObject* PynDCG( T* self, PyObject* args, PyObject* kwdict )
       for( int i = 0 ; i < numLines ; ++i )
       {
          PyObject* strObj = PyList_GetItem( retrieved, i );
+#if PY_MAJOR_VERSION >= 3
+         ranking.push_back( string( PyBytes_AS_STRING( strObj ) ) );
+#else
          ranking.push_back( string( PyString_AsString( strObj ) ) );
+#endif
+         Py_DECREF( strObj );
       }
       topN = ranking.size();
    }
