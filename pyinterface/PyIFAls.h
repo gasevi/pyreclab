@@ -27,8 +27,6 @@ void IFAls_dealloc( PyIFAls* self );
 PyObject* IFAls_train( PyIFAls* self, PyObject* args, PyObject* kwdict );
 PyObject* IFAls_recommend( PyIFAls* self, PyObject* args, PyObject* kwdict );
 PyObject* IFAls_testrec( PyIFAls* self, PyObject* args, PyObject* kwdict );
-PyObject* IFAls_MAP( PyIFAls* self, PyObject* args, PyObject* kwdict );
-PyObject* IFAls_nDCG( PyIFAls* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_IF_ALS_H__
 

@@ -30,9 +30,6 @@ PyObject* ItemAvg_predict( PyItemAvg* self, PyObject* args );
 PyObject* ItemAvg_recommend( PyItemAvg* self, PyObject* args, PyObject* kwdict );
 PyObject* ItemAvg_test( PyItemAvg* self, PyObject* args, PyObject* kwdict );
 PyObject* ItemAvg_testrec( PyItemAvg* self, PyObject* args, PyObject* kwdict );
-PyObject* ItemAvg_MAP( PyItemAvg* self, PyObject* args, PyObject* kwdict );
-PyObject* ItemAvg_nDCG( PyItemAvg* self, PyObject* args, PyObject* kwdict );
-
 
 #endif // __PY_ITEM_AVG_H__
 

@@ -30,9 +30,6 @@ PyObject* SlopeOne_predict( PySlopeOne* self, PyObject* args );
 PyObject* SlopeOne_recommend( PySlopeOne* self, PyObject* args, PyObject* kwdict );
 PyObject* SlopeOne_test( PySlopeOne* self, PyObject* args, PyObject* kwdict );
 PyObject* SlopeOne_testrec( PySlopeOne* self, PyObject* args, PyObject* kwdict );
-PyObject* SlopeOne_MAP( PySlopeOne* self, PyObject* args, PyObject* kwdict );
-PyObject* SlopeOne_nDCG( PySlopeOne* self, PyObject* args, PyObject* kwdict );
-
 
 #endif // __PY_SLOPE_ONE_H__
 

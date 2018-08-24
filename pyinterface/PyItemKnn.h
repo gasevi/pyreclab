@@ -28,8 +28,6 @@ PyObject* ItemKnn_predict( PyItemKnn* self, PyObject* args );
 PyObject* ItemKnn_recommend( PyItemKnn* self, PyObject* args, PyObject* kwdict );
 PyObject* ItemKnn_test( PyItemKnn* self, PyObject* args, PyObject* kwdict );
 PyObject* ItemKnn_testrec( PyItemKnn* self, PyObject* args, PyObject* kwdict );
-PyObject* ItemKnn_MAP( PyItemKnn* self, PyObject* args, PyObject* kwdict );
-PyObject* ItemKnn_nDCG( PyItemKnn* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_ITEM_KNN_H__
 

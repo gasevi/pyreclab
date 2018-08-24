@@ -27,8 +27,6 @@ void IFAlsConjugateGradient_dealloc( PyIFAlsConjugateGradient* self );
 PyObject* IFAlsConjugateGradient_train( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
 PyObject* IFAlsConjugateGradient_recommend( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
 PyObject* IFAlsConjugateGradient_testrec( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
-PyObject* IFAlsConjugateGradient_MAP( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
-PyObject* IFAlsConjugateGradient_nDCG( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_CONJUGATE_GRADIENT_H__
 

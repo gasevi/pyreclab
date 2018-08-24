@@ -1,4 +1,5 @@
 #include "PyUserAvg.h"
+#include "PyCommon.h"
 #include "PrlSigHandler.h"
 #include "DataWriter.h"
 #include "MAP.h"
@@ -21,8 +22,8 @@ PyMethodDef UserAvg_methods[] =
    { "testrec",   (PyCFunction)UserAvg_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)UserAvg_predict,   METH_VARARGS,               "predict user's rating for an item" },
    { "recommend", (PyCFunction)UserAvg_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { "MAP",       (PyCFunction)UserAvg_MAP,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
-   { "nDCG",      (PyCFunction)UserAvg_nDCG,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "MAP",       (PyCFunction)PyMAP<PyUserAvg>,  METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
+   { "nDCG",      (PyCFunction)PynDCG<PyUserAvg>, METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
    { NULL, NULL, 0, NULL }
 };
 
@@ -459,110 +460,6 @@ PyObject* UserAvg_testrec( PyUserAvg* self, PyObject* args, PyObject* kwdict )
    PyTuple_SET_ITEM( pyTupleResult, 2, PyFloat_FromDouble( nDcg.eval() ) );
 
    return pyTupleResult;
-}
-
-PyObject* UserAvg_MAP( PyUserAvg* self, PyObject* args, PyObject* kwdict )
-{
-   const char* userId = NULL;
-   int topN = 10;
-   float relevanceThreshold = 0;
-   int includeRated = 0;
-
-   static char* kwlist[] = { const_cast<char*>( "user_id" ),
-                             const_cast<char*>( "topn" ),
-                             const_cast<char*>( "relevance_threshold" ),
-                             const_cast<char*>( "include_rated" ),
-                             NULL
-                           };
-
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ifi", kwlist, &userId, &topN, &relevanceThreshold, &includeRated ) )
-   {
-      return NULL;
-   }
-
-   if( NULL == self->m_pTestData )
-   {
-      PyGILState_STATE gstate = PyGILState_Ensure();
-      PyErr_SetString( PyExc_RuntimeError, "Test data not found" );
-      PyGILState_Release( gstate );
-      return NULL;
-   }
-
-   vector<string> ranking;
-   if( !self->m_recAlgorithm->recommend( userId, topN, ranking, includeRated ) )
-   {
-      PyGILState_STATE gstate = PyGILState_Ensure();
-      PyErr_SetString( PyExc_RuntimeError, "It was not possible to recommend items" );
-      PyGILState_Release( gstate );
-      return NULL;
-   }
-
-   vector<string> preferences;
-   DataFrame::iterator ind;
-   DataFrame::iterator end = self->m_pTestData->end();
-   for( ind = self->m_pTestData->begin() ; ind != end ; ++ind )
-   {
-      if( ind->first.first == userId && ind->second > relevanceThreshold )
-      {
-         preferences.push_back( ind->first.second );
-      }
-   }
-   MAP meanAP;
-   meanAP.append( ranking, preferences );
-
-   return Py_BuildValue( "f", meanAP.eval() );
-}
-
-PyObject* UserAvg_nDCG( PyUserAvg* self, PyObject* args, PyObject* kwdict )
-{
-   const char* userId = NULL;
-   int topN = 10;
-   float relevanceThreshold = 0;
-   int includeRated = 0;
-
-   static char* kwlist[] = { const_cast<char*>( "user_id" ),
-                             const_cast<char*>( "topn" ),
-                             const_cast<char*>( "relevance_threshold" ),
-                             const_cast<char*>( "include_rated" ),
-                             NULL
-                           };
-
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ifi", kwlist, &userId, &topN, &relevanceThreshold, &includeRated ) )
-   {
-      return NULL;
-   }
-
-   if( NULL == self->m_pTestData )
-   {
-      PyGILState_STATE gstate = PyGILState_Ensure();
-      PyErr_SetString( PyExc_RuntimeError, "Test data not found" );
-      PyGILState_Release( gstate );
-      return NULL;
-   }
-
-   vector<string> ranking;
-   if( !self->m_recAlgorithm->recommend( userId, topN, ranking, includeRated ) )
-   {
-      PyGILState_STATE gstate = PyGILState_Ensure();
-      PyErr_SetString( PyExc_RuntimeError, "It was not possible to recommend items" );
-      PyGILState_Release( gstate );
-      return NULL;
-   }
-
-   vector<string> preferences;
-   DataFrame::iterator ind;
-   DataFrame::iterator end = self->m_pTestData->end();
-   for( ind = self->m_pTestData->begin() ; ind != end ; ++ind )
-   {
-      if( ind->first.first == userId && ind->second > relevanceThreshold )
-      {
-         preferences.push_back( ind->first.second );
-      }
-   }
-   NDCG nDcg;
-   nDcg.append( ranking, preferences );
-
-   return Py_BuildValue( "f", nDcg.eval() );
 }
 
 

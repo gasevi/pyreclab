@@ -48,6 +48,7 @@ DataFrame::DataFrame( DataReader& dreader, int userpos, int itempos, int ratingp
          continue;
       }
       m_userItemPairs[pair<string,string>( userId, itemId )] = rating;
+      m_userConsumption[userId].push_back( pair<string, double>( itemId, rating ) );
    }
 }
 
@@ -59,6 +60,24 @@ size_t DataFrame::rows()
 size_t DataFrame::columns()
 {
    return 3;
+}
+
+vector<string> DataFrame::filter( std::string userId, double ratingThr )
+{
+   vector<string> data;
+   if( m_userConsumption.find( userId ) != m_userConsumption.end() )
+   {
+      vector< pair<string, double> >::iterator ind;
+      vector< pair<string, double> >::iterator end = m_userConsumption[userId].end();
+      for( ind = m_userConsumption[userId].begin() ; ind != end ; ++ind )
+      {
+         if( ind->second >= ratingThr )
+         {
+            data.push_back( ind->first );
+         }
+      }
+   }
+   return data;
 }
 
 DataFrame::iterator DataFrame::begin()

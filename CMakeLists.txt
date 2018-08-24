@@ -8,7 +8,7 @@ project( pyreclab )
 
 set( MAJOR_VERSION "0" )
 set( MINOR_VERSION "1" )
-set( RELEASE_VERSION "11" )
+set( RELEASE_VERSION "12" )
 set( PACKAGE_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${RELEASE_VERSION}" )
 
 # Set CMake macros

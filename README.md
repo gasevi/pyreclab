@@ -291,6 +291,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 
 ```python
 >>> map = obj.MAP( user_id,
+                   retrieved,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -299,7 +300,8 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -308,6 +310,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 
 ```python
 >>> map = obj.nDCG( user_id,
+                    retrieved,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -316,7 +319,8 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -407,6 +411,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 
 ```python
 >>> map = obj.MAP( user_id,
+                   retrieved,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -415,7 +420,8 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -424,6 +430,7 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 
 ```python
 >>> map = obj.nDCG( user_id,
+                    retrieved,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -432,7 +439,8 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -523,6 +531,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.MAP( user_id,
+                   retrieved,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -531,7 +540,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -540,6 +550,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.nDCG( user_id,
+                    retrieved,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -548,7 +559,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -644,6 +656,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.MAP( user_id,
+                   retrieved,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -652,7 +665,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -661,6 +675,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.nDCG( user_id,
+                    retrieved,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -669,7 +684,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -765,6 +781,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.MAP( user_id,
+                   retrieved,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -773,7 +790,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -782,6 +800,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.nDCG( user_id,
+                    retrieved,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -790,7 +809,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -888,6 +908,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.MAP( user_id,
+                   retrieved,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -896,7 +917,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -905,6 +927,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.nDCG( user_id,
+                    retrieved,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -913,7 +936,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -972,6 +996,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.MAP( user_id,
+                   retrieved,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -980,7 +1005,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -989,6 +1015,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.nDCG( user_id,
+                    retrieved,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -997,7 +1024,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -1062,6 +1090,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.MAP( user_id,
+                   retrieved,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -1070,7 +1099,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -1079,6 +1109,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.nDCG( user_id,
+                    retrieved,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -1087,7 +1118,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -1153,6 +1185,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.MAP( user_id,
+                   retrieved,
                    topn = 10,
                    relevance_threshold = 0,
                    include_rated = False )
@@ -1161,7 +1194,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
@@ -1170,6 +1204,7 @@ prediction = obj.predict( userId, itemId )
 
 ```python
 >>> map = obj.nDCG( user_id,
+                    retrieved,
                     topn = 10,
                     relevance_threshold = 0,
                     include_rated = False )
@@ -1178,7 +1213,8 @@ prediction = obj.predict( userId, itemId )
 | Parameter           | Type      | Default value | Description                                                 |
 |:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
 | user_id             | mandatory | N.A.          | User identifier                                             |
-| topn                | optional  | 10            | Top N items to recommend                                    |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 

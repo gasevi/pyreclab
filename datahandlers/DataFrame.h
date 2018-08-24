@@ -22,6 +22,8 @@ public:
 
    size_t rows();
 
+   std::vector<std::string> filter( std::string userId, double ratingThr = 0 );
+
    iterator begin();
 
    iterator end();
@@ -31,6 +33,8 @@ public:
 private:
 
    std::map< std::pair<std::string,std::string>, double > m_userItemPairs;
+
+   std::map< std::string, std::vector< std::pair<std::string, double> > > m_userConsumption;
 
 };
 

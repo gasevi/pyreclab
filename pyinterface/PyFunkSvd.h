@@ -28,8 +28,6 @@ PyObject* FunkSvd_predict( PyFunkSvd* self, PyObject* args );
 PyObject* FunkSvd_recommend( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
 PyObject* FunkSvd_test( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
 PyObject* FunkSvd_testrec( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
-PyObject* FunkSvd_MAP( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
-PyObject* FunkSvd_nDCG( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_FUNK_SVD_H__
 

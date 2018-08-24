@@ -26,9 +26,6 @@ void MostPopular_dealloc( PyMostPopular* self );
 PyObject* MostPopular_train( PyMostPopular* self, PyObject* args, PyObject* kwdict );
 PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kwdict );
 PyObject* MostPopular_recommend( PyMostPopular* self, PyObject* args, PyObject* kwdict );
-PyObject* MostPopular_MAP( PyMostPopular* self, PyObject* args, PyObject* kwdict );
-PyObject* MostPopular_nDCG( PyMostPopular* self, PyObject* args, PyObject* kwdict );
-
 
 #endif // __PY_MOST_POPULAR_H__
 
