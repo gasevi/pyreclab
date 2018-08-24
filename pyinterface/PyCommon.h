@@ -67,7 +67,6 @@ PyObject* PyMAP( T* self, PyObject* args, PyObject* kwdict )
 #else
          ranking.push_back( string( PyString_AsString( strObj ) ) );
 #endif
-         Py_DECREF( strObj );
       }
       topN = ranking.size();
    }
@@ -136,7 +135,6 @@ PyObject* PynDCG( T* self, PyObject* args, PyObject* kwdict )
 #else
          ranking.push_back( string( PyString_AsString( strObj ) ) );
 #endif
-         Py_DECREF( strObj );
       }
       topN = ranking.size();
    }
