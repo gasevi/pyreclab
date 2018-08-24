@@ -269,7 +269,7 @@ PyObject* MostPopular_testrec( PyMostPopular* self, PyObject* args, PyObject* kw
       for( ind = ranking.begin() ; ind != end ; ++ind )
       {
 #if PY_MAJOR_VERSION >= 3
-         if( -1 == PyList_Append( pyList, PyBytes_FromString( ind->c_str() ) ) )
+         if( -1 == PyList_Append( pyList, PyUnicode_FromString( ind->c_str() ) ) )
 #else
          if( -1 == PyList_Append( pyList, PyString_FromString( ind->c_str() ) ) )
 #endif

@@ -352,8 +352,8 @@ PyObject* UserKnn_test( PyUserKnn* self, PyObject* args, PyObject* kwdict )
       }
 
 #if PY_MAJOR_VERSION >= 3
-      PyTuple_SET_ITEM( pyTuple, 0, PyBytes_FromString( userId.c_str() ) );
-      PyTuple_SET_ITEM( pyTuple, 1, PyBytes_FromString( itemId.c_str() ) );
+      PyTuple_SET_ITEM( pyTuple, 0, PyUnicode_FromString( userId.c_str() ) );
+      PyTuple_SET_ITEM( pyTuple, 1, PyUnicode_FromString( itemId.c_str() ) );
 #else
       PyTuple_SET_ITEM( pyTuple, 0, PyString_FromString( userId.c_str() ) );
       PyTuple_SET_ITEM( pyTuple, 1, PyString_FromString( itemId.c_str() ) );
@@ -476,7 +476,7 @@ PyObject* UserKnn_testrec( PyUserKnn* self, PyObject* args, PyObject* kwdict )
       for( rankind = ranking.begin() ; rankind != rankend ; ++rankind )
       {
 #if PY_MAJOR_VERSION >= 3
-         if( -1 == PyList_Append( pyList, PyBytes_FromString( rankind->c_str() ) ) )
+         if( -1 == PyList_Append( pyList, PyUnicode_FromString( rankind->c_str() ) ) )
 #else
          if( -1 == PyList_Append( pyList, PyString_FromString( rankind->c_str() ) ) )
 #endif

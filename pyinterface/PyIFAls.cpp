@@ -331,7 +331,7 @@ PyObject* IFAls_testrec( PyIFAls* self, PyObject* args, PyObject* kwdict )
       for( rankind = ranking.begin() ; rankind != rankend ; ++rankind )
       {
 #if PY_MAJOR_VERSION >= 3
-         if( -1 == PyList_Append( pyList, PyBytes_FromString( rankind->c_str() ) ) )
+         if( -1 == PyList_Append( pyList, PyUnicode_FromString( rankind->c_str() ) ) )
 #else
          if( -1 == PyList_Append( pyList, PyString_FromString( rankind->c_str() ) ) )
 #endif
