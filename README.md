@@ -77,13 +77,13 @@ If you use this library, please cite:
 ### Python 2
 
 ```sh
-sudo pip install pyreclab
+pip install pyreclab
 ```
 
 ### Python 3
 
 ```sh
-sudo pip3 install pyreclab
+pip3 install pyreclab
 ```
 
 Note: Users of Python 2.7 on Mac OS X please make sure that the pip version used is the one that comes with the operating system ( Python 2.7.10 ).
@@ -175,21 +175,21 @@ $ sudo make install
 >>> import pyreclab
 ```
 
-   Afer that, to create an instance of any of these clases, you must provide a dataset file with the training information, which must contain the fields *user_id*, *item_id* and *rating*.
+   Due to the different nature of each algorithm, their implementations can have some variations on its parameters. For this reason, each class is described in detail in the following sections.
 
-   The following example shows the generic format for creating one of these instances.
+
+### <a name="useravg"> pyreclab.UserAvg </a>
+
+ * Instance creation
 
 ```python
->>> obj = pyreclab.RecAlg( dataset = filename,
-                           dlmchar = b'\t',
-                           header = False,
-                           usercol = 0,
-                           itemcol = 1,
-                           ratingcol = 2 )
+>>> obj = pyreclab.UserAvg( dataset = filename,
+                            dlmchar = b'\t',
+                            header = False,
+                            usercol = 0,
+                            itemcol = 1,
+                            ratingcol = 2 )
 ```
-
-Where *RecAlg* represents the recommendation algorithm chosen from the previous list, and its parameters are presented in the next table.
-
 
 | Parameter | Type      | Default value | Description                                                 |
 |:----------|:---------:|:-------------:|:------------------------------------------------------------|
@@ -199,12 +199,6 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 | usercol   | optional  | 0             | User column position in dataset file                        |
 | itemcol   | optional  | 1             | Item column position in dataset file                        |
 | ratingcol | optional  | 2             | Rating column position in dataset file                      |
-
-
-   Due to the different nature of each algorithm, their train methods can have different parameters. For this reason, they have been described for each class as shown below.
-
-
-### <a name="useravg"> pyreclab.UserAvg </a>
 
  * Training
 
@@ -327,6 +321,26 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 
 ### <a name="itemavg"> pyreclab.ItemAvg </a>
 
+ * Instance creation
+
+```python
+>>> obj = pyreclab.ItemAvg( dataset = filename,
+                            dlmchar = b'\t',
+                            header = False,
+                            usercol = 0,
+                            itemcol = 1,
+                            ratingcol = 2 )
+```
+
+| Parameter | Type      | Default value | Description                                                 |
+|:----------|:---------:|:-------------:|:------------------------------------------------------------|
+| dataset   | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
+| dlmchar   | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header    | optional  | False         | Whether dataset filename contains a header line to skip     |
+| usercol   | optional  | 0             | User column position in dataset file                        |
+| itemcol   | optional  | 1             | Item column position in dataset file                        |
+| ratingcol | optional  | 2             | Rating column position in dataset file                      |
+
  * Training
 
 ```python
@@ -447,6 +461,26 @@ Where *RecAlg* represents the recommendation algorithm chosen from the previous 
 
 ### <a name="slopeone"> pyreclab.SlopeOne </a>
 
+ * Instance creation
+
+```python
+>>> obj = pyreclab.SlopeOne( dataset = filename,
+                             dlmchar = b'\t',
+                             header = False,
+                             usercol = 0,
+                             itemcol = 1,
+                             ratingcol = 2 )
+```
+
+| Parameter | Type      | Default value | Description                                                 |
+|:----------|:---------:|:-------------:|:------------------------------------------------------------|
+| dataset   | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
+| dlmchar   | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header    | optional  | False         | Whether dataset filename contains a header line to skip     |
+| usercol   | optional  | 0             | User column position in dataset file                        |
+| itemcol   | optional  | 1             | Item column position in dataset file                        |
+| ratingcol | optional  | 2             | Rating column position in dataset file                      |
+
  * Training
 
 ```python
@@ -566,6 +600,26 @@ prediction = obj.predict( userId, itemId )
 
 
 ### <a name="userknn"> pyreclab.UserKnn </a>
+
+ * Instance creation
+
+```python
+>>> obj = pyreclab.UserKnn( dataset = filename,
+                            dlmchar = b'\t',
+                            header = False,
+                            usercol = 0,
+                            itemcol = 1,
+                            ratingcol = 2 )
+```
+
+| Parameter | Type      | Default value | Description                                                 |
+|:----------|:---------:|:-------------:|:------------------------------------------------------------|
+| dataset   | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
+| dlmchar   | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header    | optional  | False         | Whether dataset filename contains a header line to skip     |
+| usercol   | optional  | 0             | User column position in dataset file                        |
+| itemcol   | optional  | 1             | Item column position in dataset file                        |
+| ratingcol | optional  | 2             | Rating column position in dataset file                      |
 
  * Training
 
@@ -692,6 +746,26 @@ prediction = obj.predict( userId, itemId )
 
 ### <a name="itemknn"> pyreclab.ItemKnn </a>
 
+ * Instance creation
+
+```python
+>>> obj = pyreclab.ItemKnn( dataset = filename,
+                            dlmchar = b'\t',
+                            header = False,
+                            usercol = 0,
+                            itemcol = 1,
+                            ratingcol = 2 )
+```
+
+| Parameter | Type      | Default value | Description                                                 |
+|:----------|:---------:|:-------------:|:------------------------------------------------------------|
+| dataset   | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
+| dlmchar   | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header    | optional  | False         | Whether dataset filename contains a header line to skip     |
+| usercol   | optional  | 0             | User column position in dataset file                        |
+| itemcol   | optional  | 1             | Item column position in dataset file                        |
+| ratingcol | optional  | 2             | Rating column position in dataset file                      |
+
  * Training
 
 ```python
@@ -816,6 +890,26 @@ prediction = obj.predict( userId, itemId )
 
 
 ### <a name="svd"> pyreclab.SVD </a>
+
+ * Instance creation
+
+```python
+>>> obj = pyreclab.SVD( dataset = filename,
+                        dlmchar = b'\t',
+                        header = False,
+                        usercol = 0,
+                        itemcol = 1,
+                        ratingcol = 2 )
+```
+
+| Parameter | Type      | Default value | Description                                                 |
+|:----------|:---------:|:-------------:|:------------------------------------------------------------|
+| dataset   | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
+| dlmchar   | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header    | optional  | False         | Whether dataset filename contains a header line to skip     |
+| usercol   | optional  | 0             | User column position in dataset file                        |
+| itemcol   | optional  | 1             | Item column position in dataset file                        |
+| ratingcol | optional  | 2             | Rating column position in dataset file                      |
 
  * Training
 
@@ -944,6 +1038,26 @@ prediction = obj.predict( userId, itemId )
 
 ### <a name="mostpopular"> pyreclab.MostPopular </a>
 
+ * Instance creation
+
+```python
+>>> obj = pyreclab.MostPopular( dataset = filename,
+                                dlmchar = b'\t',
+                                header = False,
+                                usercol = 0,
+                                itemcol = 1,
+                                ratingcol = 2 )
+```
+
+| Parameter | Type      | Default value | Description                                                 |
+|:----------|:---------:|:-------------:|:------------------------------------------------------------|
+| dataset   | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
+| dlmchar   | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header    | optional  | False         | Whether dataset filename contains a header line to skip     |
+| usercol   | optional  | 0             | User column position in dataset file                        |
+| itemcol   | optional  | 1             | Item column position in dataset file                        |
+| ratingcol | optional  | 2             | Rating column position in dataset file                      |
+
  * Training
 
 ```python
@@ -1031,6 +1145,26 @@ prediction = obj.predict( userId, itemId )
 
 
 ### <a name="ifals"> pyreclab.IFAls </a>
+
+ * Instance creation
+
+```python
+>>> obj = pyreclab.IFAls( dataset = filename,
+                          dlmchar = b'\t',
+                          header = False,
+                          usercol = 0,
+                          itemcol = 1,
+                          observationcol = 2 )
+```
+
+| Parameter      | Type      | Default value | Description                                                 |
+|:---------------|:---------:|:-------------:|:------------------------------------------------------------|
+| dataset        | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
+| dlmchar        | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header         | optional  | False         | Whether dataset filename contains a header line to skip     |
+| usercol        | optional  | 0             | User column position in dataset file                        |
+| itemcol        | optional  | 1             | Item column position in dataset file                        |
+| observationcol | optional  | 2             | Observation column position in dataset file                      |
 
  * Training
 
@@ -1125,6 +1259,26 @@ prediction = obj.predict( userId, itemId )
 
 
 ### <a name="ifalscg"> pyreclab.IFAlsConjugateGradient </a>
+
+ * Instance creation
+
+```python
+>>> obj = pyreclab.IFAlsConjugateGradient( dataset = filename,
+                                           dlmchar = b'\t',
+                                           header = False,
+                                           usercol = 0,
+                                           itemcol = 1,
+                                           observationcol = 2 )
+```
+
+| Parameter      | Type      | Default value | Description                                                 |
+|:---------------|:---------:|:-------------:|:------------------------------------------------------------|
+| dataset        | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
+| dlmchar        | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header         | optional  | False         | Whether dataset filename contains a header line to skip     |
+| usercol        | optional  | 0             | User column position in dataset file                        |
+| itemcol        | optional  | 1             | Item column position in dataset file                        |
+| observationcol | optional  | 2             | Observation column position in dataset file                      |
 
  * Training
 
@@ -1222,4 +1376,5 @@ prediction = obj.predict( userId, itemId )
 ## <span style="font-size: 4em;">On roadmap</span>
 
  * Add *Windows* support.
+ * Multi-threading.
 
