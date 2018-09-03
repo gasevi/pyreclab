@@ -32,7 +32,7 @@ void MAP::clear()
 
 double MAP::eval()
 {
-   return std::accumulate( m_avgPrecision.begin(), m_avgPrecision.end(), 0.0 ) / m_avgPrecision.size();
+   return m_avgPrecision.size() > 0 ? std::accumulate( m_avgPrecision.begin(), m_avgPrecision.end(), 0.0 ) / m_avgPrecision.size() : 0;
 }
 
 

@@ -54,7 +54,7 @@ void NDCG::clear()
 
 double NDCG::eval()
 {
-   return m_cumNDCG / m_numQueries;
+   return m_numQueries > 0 ? m_cumNDCG / m_numQueries : 0;
 }
 
 
