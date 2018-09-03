@@ -60,7 +60,7 @@ PyMODINIT_FUNC PyInit_libpyreclab()
 extern "C" void initlibpyreclab()
 #endif
 {
-   if( PyType_Ready( MostPopular_getTypeObject() ) < 0 )
+   if( PyType_Ready( MostPopularGetType() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -69,7 +69,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( ItemAvg_getTypeObject() ) < 0 )
+   if( PyType_Ready( ItemAvgGetType() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -78,7 +78,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( UserAvg_getTypeObject() ) < 0 )
+   if( PyType_Ready( UserAvgGetType() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -87,7 +87,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( UserKnn_getTypeObject() ) < 0 )
+   if( PyType_Ready( UserKnnGetType() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -96,7 +96,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( ItemKnn_getTypeObject() ) < 0 )
+   if( PyType_Ready( ItemKnnGetType() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -105,7 +105,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( SlopeOne_getTypeObject() ) < 0 )
+   if( PyType_Ready( SlopeOneGetType() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -114,7 +114,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( FunkSvd_getTypeObject() ) < 0 )
+   if( PyType_Ready( FunkSvdGetType() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -123,7 +123,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( IFAls_getTypeObject() ) < 0 )
+   if( PyType_Ready( IFAlsGetType() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -132,7 +132,7 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   if( PyType_Ready( IFAlsConjugateGradient_getTypeObject() ) < 0 )
+   if( PyType_Ready( IFAlsConjugateGradientGetType() ) < 0 )
    {
 #if PY_MAJOR_VERSION >= 3
       return NULL;
@@ -155,24 +155,24 @@ extern "C" void initlibpyreclab()
 #endif
    }
 
-   Py_INCREF( MostPopular_getTypeObject() );
-   PyModule_AddObject( module, "MostPopular", (PyObject*)MostPopular_getTypeObject() );
-   Py_INCREF( UserAvg_getTypeObject() );
-   PyModule_AddObject( module, "UserAvg", (PyObject*)UserAvg_getTypeObject() );
-   Py_INCREF( ItemAvg_getTypeObject() );
-   PyModule_AddObject( module, "ItemAvg", (PyObject*)ItemAvg_getTypeObject() );
-   Py_INCREF( UserKnn_getTypeObject() );
-   PyModule_AddObject( module, "UserKnn", (PyObject*)UserKnn_getTypeObject() );
-   Py_INCREF( ItemKnn_getTypeObject() );
-   PyModule_AddObject( module, "ItemKnn", (PyObject*)ItemKnn_getTypeObject() );
-   Py_INCREF( SlopeOne_getTypeObject() );
-   PyModule_AddObject( module, "SlopeOne", (PyObject*)SlopeOne_getTypeObject() );
-   Py_INCREF( FunkSvd_getTypeObject() );
-   PyModule_AddObject( module, "SVD", (PyObject*)FunkSvd_getTypeObject() );
-   Py_INCREF( IFAls_getTypeObject() );
-   PyModule_AddObject( module, "IFAls", (PyObject*)IFAls_getTypeObject() );
-   Py_INCREF( IFAlsConjugateGradient_getTypeObject() );
-   PyModule_AddObject( module, "IFAlsConjugateGradient", (PyObject*)IFAlsConjugateGradient_getTypeObject() );
+   Py_INCREF( MostPopularGetType() );
+   PyModule_AddObject( module, "MostPopular", (PyObject*)MostPopularGetType() );
+   Py_INCREF( UserAvgGetType() );
+   PyModule_AddObject( module, "UserAvg", (PyObject*)UserAvgGetType() );
+   Py_INCREF( ItemAvgGetType() );
+   PyModule_AddObject( module, "ItemAvg", (PyObject*)ItemAvgGetType() );
+   Py_INCREF( UserKnnGetType() );
+   PyModule_AddObject( module, "UserKnn", (PyObject*)UserKnnGetType() );
+   Py_INCREF( ItemKnnGetType() );
+   PyModule_AddObject( module, "ItemKnn", (PyObject*)ItemKnnGetType() );
+   Py_INCREF( SlopeOneGetType() );
+   PyModule_AddObject( module, "SlopeOne", (PyObject*)SlopeOneGetType() );
+   Py_INCREF( FunkSvdGetType() );
+   PyModule_AddObject( module, "SVD", (PyObject*)FunkSvdGetType() );
+   Py_INCREF( IFAlsGetType() );
+   PyModule_AddObject( module, "IFAls", (PyObject*)IFAlsGetType() );
+   Py_INCREF( IFAlsConjugateGradientGetType() );
+   PyModule_AddObject( module, "IFAlsConjugateGradient", (PyObject*)IFAlsConjugateGradientGetType() );
 
 #if PY_MAJOR_VERSION >= 3
     return module;

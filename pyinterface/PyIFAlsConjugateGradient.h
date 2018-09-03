@@ -21,12 +21,9 @@ public:
    RMSE m_rmse;
 };
 
-PyTypeObject* IFAlsConjugateGradient_getTypeObject();
-PyObject* IFAlsConjugateGradient_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
-void IFAlsConjugateGradient_dealloc( PyIFAlsConjugateGradient* self );
-PyObject* IFAlsConjugateGradient_train( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
-PyObject* IFAlsConjugateGradient_recommend( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
-PyObject* IFAlsConjugateGradient_testrec( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
+PyTypeObject* IFAlsConjugateGradientGetType();
+PyObject* IFAlsConjugateGradientNew( PyTypeObject* type, PyObject* args, PyObject* kwdict );
+PyObject* IFAlsConjugateGradientTrain( PyIFAlsConjugateGradient* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_CONJUGATE_GRADIENT_H__
 

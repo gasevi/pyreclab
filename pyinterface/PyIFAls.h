@@ -21,12 +21,9 @@ public:
    RMSE m_rmse;
 };
 
-PyTypeObject* IFAls_getTypeObject();
-PyObject* IFAls_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
-void IFAls_dealloc( PyIFAls* self );
-PyObject* IFAls_train( PyIFAls* self, PyObject* args, PyObject* kwdict );
-PyObject* IFAls_recommend( PyIFAls* self, PyObject* args, PyObject* kwdict );
-PyObject* IFAls_testrec( PyIFAls* self, PyObject* args, PyObject* kwdict );
+PyTypeObject* IFAlsGetType();
+PyObject* IFAlsNew( PyTypeObject* type, PyObject* args, PyObject* kwdict );
+PyObject* IFAlsTrain( PyIFAls* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_IF_ALS_H__
 

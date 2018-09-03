@@ -15,11 +15,11 @@ using namespace std;
 static
 PyMethodDef IFAls_methods[] =
 {
-   { "train",     (PyCFunction)IFAls_train,     METH_VARARGS|METH_KEYWORDS, "train model" },
-   { "testrec",   (PyCFunction)IFAls_testrec,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
-   { "recommend", (PyCFunction)IFAls_recommend, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { "MAP",       (PyCFunction)PyMAP<PyIFAls>,  METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
-   { "nDCG",      (PyCFunction)PynDCG<PyIFAls>, METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "train",     (PyCFunction)IFAlsTrain,           METH_VARARGS|METH_KEYWORDS, "train model" },
+   { "testrec",   (PyCFunction)PyTestrec<PyIFAls>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
+   { "recommend", (PyCFunction)PyRecommend<PyIFAls>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
+   { "MAP",       (PyCFunction)PyMAP<PyIFAls>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
+   { "nDCG",      (PyCFunction)PynDCG<PyIFAls>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
    { NULL, NULL, 0, NULL }
 };
 
@@ -34,7 +34,7 @@ static PyTypeObject IFAlsType =
    "libpyreclab.IFAls",                      // tp_name
    sizeof(PyIFAls),                          // tp_basicsize
    0,                                        // tp_itemsize
-   (destructor)IFAls_dealloc,                // tp_dealloc
+   (destructor)PyDealloc<PyIFAls>,           // tp_dealloc
    0,                                        // tp_print
    0,                                        // tp_getattr
    0,                                        // tp_setattr
@@ -67,87 +67,16 @@ static PyTypeObject IFAlsType =
    0,                                        // tp_dictoffset
    0,                                        // tp_init
    0,                                        // tp_alloc
-   IFAls_new,                                // tp_new
+   PyNewIF<PyIFAls, AlgIFAls>,               // tp_new
 };
 
 
-PyTypeObject* IFAls_getTypeObject()
+PyTypeObject* IFAlsGetType()
 {
    return &IFAlsType;
 }
 
-PyObject* IFAls_new( PyTypeObject* type, PyObject* args, PyObject* kwdict )
-{
-   const char* dsfilename = NULL;
-   char dlmchar = ',';
-   int header = 0;
-   int usercol = 0;
-   int itemcol = 1;
-   int obscol = 2;
-
-   static char* kwlist[] = { const_cast<char*>( "dataset" ),
-                             const_cast<char*>( "dlmchar" ),
-                             const_cast<char*>( "header" ),
-                             const_cast<char*>( "usercol" ),
-                             const_cast<char*>( "itemcol" ),
-                             const_cast<char*>( "observationcol" ),
-                             NULL };
-
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ciiii", kwlist, &dsfilename,
-                                     &dlmchar, &header, &usercol, &itemcol, &obscol ) )
-   {
-      return NULL;
-   }
-
-   if( NULL == dsfilename )
-   {
-      return NULL;
-   }
-
-   PyIFAls* self = reinterpret_cast<PyIFAls*>( type->tp_alloc( type, 0 ) );
-   //cout << "### ref count after: " << reinterpret_cast<PyObject*>( self )->ob_refcnt << endl;
-   if( self != NULL )
-   {
-      self->m_trainingReader = new DataReader( dsfilename, dlmchar, header );
-      if( NULL == self->m_trainingReader )
-      {
-         Py_DECREF( self );
-         return NULL;
-      }
-
-      self->m_recAlgorithm = new AlgIFAls( *self->m_trainingReader, usercol, itemcol, obscol );
-      if( NULL == self->m_recAlgorithm )
-      {
-         Py_DECREF( self );
-         return NULL;
-      }
-   }
-
-   return reinterpret_cast<PyObject*>( self );
-}
-
-void IFAls_dealloc( PyIFAls* self )
-{
-   if( NULL != self->m_recAlgorithm )
-   {
-      delete self->m_recAlgorithm;
-   }
-   if( NULL != self->m_trainingReader )
-   {
-      delete self->m_trainingReader;
-   }
-   if( NULL != self->m_pTestData )
-   {
-      delete self->m_pTestData;
-   }
-#if PY_MAJOR_VERSION >= 3
-   Py_TYPE( self )->tp_free( reinterpret_cast<PyObject*>( self ) );
-#else
-   self->ob_type->tp_free( reinterpret_cast<PyObject*>( self ) );
-#endif
-}
-
-PyObject* IFAls_train( PyIFAls* self, PyObject* args, PyObject* kwdict )
+PyObject* IFAlsTrain( PyIFAls* self, PyObject* args, PyObject* kwdict )
 {
    size_t factors = 50;
    size_t alsNumIter = 5;
@@ -196,184 +125,6 @@ PyObject* IFAls_train( PyIFAls* self, PyObject* args, PyObject* kwdict )
 
    Py_INCREF( Py_None );
    return Py_None;
-}
-
-PyObject* IFAls_recommend( PyIFAls* self, PyObject* args, PyObject* kwdict )
-{
-   const char* userId = NULL;
-   int topn = 10;
-   int includeRated = 0;
-
-   static char* kwlist[] = { const_cast<char*>( "user" ),
-                             const_cast<char*>( "topn" ),
-                             const_cast<char*>( "includeRated" ),
-                             NULL };
-
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ii", kwlist, &userId, &topn, &includeRated ) )
-   {
-      return NULL;
-   }
-
-   vector<string> itemList;
-   try
-   {
-      self->m_recAlgorithm->recommend( userId, topn, itemList, includeRated );
-   }
-   catch( exception& e )
-   {
-      PyGILState_STATE gstate = PyGILState_Ensure();
-      PyErr_SetString( PyExc_ValueError, e.what() );
-      PyGILState_Release( gstate );
-      return NULL;
-   }
-
-   PyObject* pyList = PyList_New( 0 );
-   if( NULL == pyList )
-   {
-      return NULL;
-   }
-
-   vector<string>::iterator ind;
-   vector<string>::iterator end = itemList.end();
-   for( ind = itemList.begin() ; ind != end ; ++ind )
-   {
-      if( -1 == PyList_Append( pyList, Py_BuildValue( "s", ind->c_str() ) ) )
-      {
-         return NULL;
-      }
-   }
-
-   return pyList;
-}
-
-PyObject* IFAls_testrec( PyIFAls* self, PyObject* args, PyObject* kwdict )
-{
-   const char* input_file = NULL;
-   const char* output_file = NULL;
-   char dlmchar = ',';
-   int header = 0;
-   int usercol = 0;
-   int itemcol = 1;
-   int ratingcol = -1;
-   int topn = 10;
-   float relevanceThreshold = 0;
-   int includeRated = 0;
-
-   static char* kwlist[] = { const_cast<char*>( "input_file" ),
-                             const_cast<char*>( "output_file" ),
-                             const_cast<char*>( "dlmchar" ),
-                             const_cast<char*>( "header" ),
-                             const_cast<char*>( "usercol" ),
-                             const_cast<char*>( "itemcol" ),
-                             const_cast<char*>( "ratingcol" ),
-                             const_cast<char*>( "topn" ),
-                             const_cast<char*>( "relevance_threshold" ),
-                             const_cast<char*>( "includeRated" ),
-                             NULL };
-
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|sciiiiifi", kwlist, &input_file,
-                                     &output_file, &dlmchar, &header, &usercol, &itemcol, &ratingcol, &topn, &relevanceThreshold, &includeRated ) )
-   {
-      return NULL;
-   }
-
-   if( NULL == input_file )
-   {
-      return NULL;
-   }
-
-   DataWriter dataWriter;
-   if( NULL != output_file )
-   {
-      string strfilename = output_file;
-      dataWriter.open( strfilename );
-   }
-
-   DataReader testReader( input_file, dlmchar, header );
-   if( NULL != self->m_pTestData )
-   {
-      delete self->m_pTestData;
-      self->m_pTestData = NULL;
-   }
-   self->m_pTestData = new DataFrame( testReader, usercol, itemcol, ratingcol );
-
-   PyObject* pyDict = PyDict_New();
-   if( NULL == pyDict )
-   {
-      return NULL;
-   }
-
-   MAP meanAP;
-   NDCG nDcg;
-
-   map<string, int> userFilter;
-   DataFrame::iterator ind;
-   DataFrame::iterator end = self->m_pTestData->end();
-   for( ind = self->m_pTestData->begin() ; ind != end ; ++ind )
-   {
-      // Recommned item list once per user
-      std::string userId = ind->first.first;
-      if( userFilter.find( userId ) != userFilter.end() )
-      {
-         continue;
-      }
-      userFilter[userId] = 0;
-
-      vector<string> ranking;
-      if( !self->m_recAlgorithm->recommend( userId, topn, ranking, includeRated ) )
-      {
-         continue;
-      }
-
-      PyObject* pyList = PyList_New( 0 );
-      vector<string>::iterator rankind;
-      vector<string>::iterator rankend = ranking.end();
-      for( rankind = ranking.begin() ; rankind != rankend ; ++rankind )
-      {
-#if PY_MAJOR_VERSION >= 3
-         if( -1 == PyList_Append( pyList, PyUnicode_FromString( rankind->c_str() ) ) )
-#else
-         if( -1 == PyList_Append( pyList, PyString_FromString( rankind->c_str() ) ) )
-#endif
-         {
-            return NULL;
-         }
-      }
-
-      if( PyDict_SetItemString( pyDict, userId.c_str(), pyList ) < 0 )
-      {
-         Py_DECREF( pyList );
-         return NULL;
-      }
-
-      if( itemcol >= 0 && ratingcol >= 0 )
-      {
-         vector<string> preferences;
-         DataFrame::iterator subind;
-         DataFrame::iterator subend = self->m_pTestData->end();
-         for( subind = self->m_pTestData->begin() ; subind != subend ; ++subind )
-         {
-            if( subind->first.first == userId && subind->second > relevanceThreshold )
-            {
-               preferences.push_back( subind->first.second );
-            }
-         }
-         meanAP.append( ranking, preferences );
-         nDcg.append( ranking, preferences );
-      }
-
-      if( dataWriter.isOpen() )
-      {
-         dataWriter.write( userId, ranking );
-      }  
-   }
-
-   PyObject* pyTupleResult = PyTuple_New( 3 );
-   PyTuple_SET_ITEM( pyTupleResult, 0, pyDict );
-   PyTuple_SET_ITEM( pyTupleResult, 1, PyFloat_FromDouble( meanAP.eval() ) );
-   PyTuple_SET_ITEM( pyTupleResult, 2, PyFloat_FromDouble( nDcg.eval() ) );
-
-   return pyTupleResult;
 }
 
 

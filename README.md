@@ -277,7 +277,7 @@ $ sudo make install
 | ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
-| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -296,7 +296,7 @@ $ sudo make install
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -315,7 +315,7 @@ $ sudo make install
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -417,7 +417,7 @@ $ sudo make install
 | ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
-| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -436,7 +436,7 @@ $ sudo make install
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -455,7 +455,7 @@ $ sudo make install
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -557,7 +557,7 @@ prediction = obj.predict( userId, itemId )
 | ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
-| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -576,7 +576,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -595,7 +595,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -702,7 +702,7 @@ prediction = obj.predict( userId, itemId )
 | ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
-| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -721,7 +721,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -740,7 +740,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -847,7 +847,7 @@ prediction = obj.predict( userId, itemId )
 | ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
-| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -866,7 +866,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -885,7 +885,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -994,7 +994,7 @@ prediction = obj.predict( userId, itemId )
 | ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | topn         | optional  | 10            | Top N items to recommend                                    |
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
-| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -1013,7 +1013,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -1032,7 +1032,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -1102,7 +1102,7 @@ prediction = obj.predict( userId, itemId )
 | ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | output_file  | optional  | N.A.          | Output file to write rankings                               |
 | topN         | optional  | 10            | Top N items to recommend                                    |
-| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -1121,7 +1121,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -1140,7 +1140,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -1216,7 +1216,7 @@ prediction = obj.predict( userId, itemId )
 | ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | output_file  | optional  | N.A.          | Output file to write rankings                               |
 | topN         | optional  | 10            | Top N items to recommend                                    |
-| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -1235,7 +1235,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -1254,7 +1254,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -1331,7 +1331,7 @@ prediction = obj.predict( userId, itemId )
 | ratingcol    | optional  | 2             | Rating column position in dataset file                      |
 | output_file  | optional  | N.A.          | Output file to write rankings                               |
 | topN         | optional  | 10            | Top N items to recommend                                    |
-| relevance_threshold | optional  | 0          | Lower threshold to consider an item as a relevant item    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -1350,7 +1350,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
@@ -1369,7 +1369,7 @@ prediction = obj.predict( userId, itemId )
 | user_id             | mandatory | N.A.          | User identifier                                             |
 | retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
-| relevance_threshold | optional  | 0             | Lower threshold to consider an item as a relevant item      |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 

@@ -20,14 +20,8 @@ public:
    RMSE m_rmse;
 };
 
-PyTypeObject* ItemKnn_getTypeObject();
-PyObject* ItemKnn_new( PyTypeObject* type, PyObject* args, PyObject* kwdict );
-void ItemKnn_dealloc( PyItemKnn* self );
+PyTypeObject* ItemKnnGetType();
 PyObject* ItemKnn_train( PyItemKnn* self, PyObject* args, PyObject* kwdict );
-PyObject* ItemKnn_predict( PyItemKnn* self, PyObject* args );
-PyObject* ItemKnn_recommend( PyItemKnn* self, PyObject* args, PyObject* kwdict );
-PyObject* ItemKnn_test( PyItemKnn* self, PyObject* args, PyObject* kwdict );
-PyObject* ItemKnn_testrec( PyItemKnn* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_ITEM_KNN_H__
 
