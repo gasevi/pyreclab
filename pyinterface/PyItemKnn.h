@@ -16,8 +16,6 @@ public:
    DataReader* m_trainingReader;
    DataFrame* m_pTestData;
    AlgItemBasedKnn* m_recAlgorithm;
-   MAE m_mae;
-   RMSE m_rmse;
 };
 
 PyTypeObject* ItemKnnGetType();

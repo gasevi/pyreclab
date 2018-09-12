@@ -264,8 +264,8 @@ PyObject* PyTest( TPyInstance* self, PyObject* args, PyObject* kwdict )
       return NULL;
    }
 
-   self->m_mae.clear();
-   self->m_rmse.clear();
+   MAE mae;
+   RMSE rmse;
 
    DataFrame::iterator ind;
    DataFrame::iterator end = testData.end();
@@ -306,8 +306,8 @@ PyObject* PyTest( TPyInstance* self, PyObject* args, PyObject* kwdict )
       if( ratingcol >= 0 )
       {
          double rating = ind->second;
-         self->m_mae.append( rating, prediction );
-         self->m_rmse.append( rating, prediction );
+         mae.append( rating, prediction );
+         rmse.append( rating, prediction );
       }
 
       if( dataWriter.isOpen() )
@@ -324,8 +324,8 @@ PyObject* PyTest( TPyInstance* self, PyObject* args, PyObject* kwdict )
 
    PyObject* pyTupleResult = PyTuple_New( 3 );
    PyTuple_SET_ITEM( pyTupleResult, 0, pyList );
-   PyTuple_SET_ITEM( pyTupleResult, 1, PyFloat_FromDouble( self->m_mae.eval() ) );
-   PyTuple_SET_ITEM( pyTupleResult, 2, PyFloat_FromDouble( self->m_rmse.eval() ) );
+   PyTuple_SET_ITEM( pyTupleResult, 1, PyFloat_FromDouble( mae.eval() ) );
+   PyTuple_SET_ITEM( pyTupleResult, 2, PyFloat_FromDouble( rmse.eval() ) );
 
    return pyTupleResult;
 }
