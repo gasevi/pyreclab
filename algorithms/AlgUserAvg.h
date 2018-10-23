@@ -2,6 +2,7 @@
 #define __ALG_USER_AVERAGE_H__
 
 #include "RecSysAlgorithm.h"
+#include "FlowControl.h"
 
 #include <string>
 #include <map>
@@ -19,7 +20,7 @@ public:
 
    ~AlgUserAvg();
 
-   int train();
+   int train( FlowControl& fcontrol );
 
    double predict( std::string& userId, std::string& itemId );
 

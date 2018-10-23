@@ -29,13 +29,13 @@ AlgItemBasedKnn::~AlgItemBasedKnn()
    }
 }
 
-int AlgItemBasedKnn::train()
+int AlgItemBasedKnn::train( FlowControl& fcontrol )
 {  
    string strSimType = "pearson";
-   return train( 10, strSimType );
+   return train( 10, strSimType, fcontrol );
 }
 
-int AlgItemBasedKnn::train( size_t k, string& similarity )
+int AlgItemBasedKnn::train( size_t k, string& similarity, FlowControl& fcontrol )
 {
    m_knn = k;
    size_t nitems = m_ratingMatrix.items();
@@ -60,7 +60,7 @@ int AlgItemBasedKnn::train( size_t k, string& similarity )
          double sim = simfunc.calculate( coli, colj );
          m_pSimMatrix->set( i, j, sim );
 
-         if( !m_running )
+         if( fcontrol.interrupt() )
          {
             return STOPPED;
          }

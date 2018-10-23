@@ -175,13 +175,13 @@ AlgIFAlsConjugateGradient::~AlgIFAlsConjugateGradient()
    }
 }
 
-int AlgIFAlsConjugateGradient::train( size_t factors, size_t alsNumIter, float lambda, size_t cgNumIter )
+int AlgIFAlsConjugateGradient::train( size_t factors, size_t alsNumIter, float lambda, size_t cgNumIter, FlowControl& fcontrol )
 {
    reset( factors, alsNumIter, lambda, cgNumIter );
-   return train();
+   return train( fcontrol );
 }
 
-int AlgIFAlsConjugateGradient::train()
+int AlgIFAlsConjugateGradient::train( FlowControl& fcontrol )
 throw( runtime_error& )
 {
    size_t nusers = m_fUserMapper.size();
@@ -193,14 +193,14 @@ throw( runtime_error& )
    {
       // User stage
       conjugateGradient( m_Yi, m_Xu, m_pMatCu, m_cgNumIter );
-      if( !m_running )
+      if( fcontrol.interrupt() )
       {
          return STOPPED;
       }
 
       // Item stage
       conjugateGradient( m_Xu, m_Yi, m_pMatCi, m_cgNumIter );
-      if( !m_running )
+      if( fcontrol.interrupt() )
       {
          return STOPPED;
       }

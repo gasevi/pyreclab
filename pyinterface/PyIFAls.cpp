@@ -1,6 +1,6 @@
 #include "PyIFAls.h"
 #include "PyCommon.h"
-#include "PrlSigHandler.h"
+#include "SigHandler.h"
 #include "DataWriter.h"
 #include "DataFrame.h"
 #include "MAP.h"
@@ -92,21 +92,17 @@ PyObject* IFAlsTrain( PyIFAls* self, PyObject* args, PyObject* kwdict )
       return NULL;
    }
 
-   PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::IF_ALS );
-   struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );
+   SigHandler sigHandler( SIGINT );
    int cause = -1;
    string eMsg;
-   Py_BEGIN_ALLOW_THREADS
    try
    {
-      cause = dynamic_cast<AlgIFAls*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda );
+      cause = dynamic_cast<AlgIFAls*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda, sigHandler );
    }
    catch( exception& e )
    {
       eMsg = e.what();
    }
-   Py_END_ALLOW_THREADS
-   PrlSigHandler::restoresignal( SIGINT, pOldAction );
 
    if( AlgIFAls::STOPPED == cause )
    {

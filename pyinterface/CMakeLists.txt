@@ -8,6 +8,7 @@ set( SRCFILES PyMostPopular.cpp
               PyIFAls.cpp
               PyIFAlsConjugateGradient.cpp
               PrlSigHandler.cpp
+              SigHandler.cpp
               pyinterface.cpp )
 
 add_library( pyinterface OBJECT ${SRCFILES} )

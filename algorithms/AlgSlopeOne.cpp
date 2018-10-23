@@ -26,7 +26,7 @@ AlgSlopeOne::~AlgSlopeOne()
    }
 }
 
-int AlgSlopeOne::train()
+int AlgSlopeOne::train( FlowControl& fcontrol )
 {
    size_t nusers = m_ratingMatrix.users();
    size_t nitems = m_ratingMatrix.items();
@@ -53,7 +53,7 @@ int AlgSlopeOne::train()
                m_pCardMatrix->add( i, j, 1 );
             }
 
-            if( !m_running )
+            if( fcontrol.interrupt() )
             {
                return STOPPED;
             }
@@ -73,7 +73,7 @@ int AlgSlopeOne::train()
             m_pDevMatrix->set( i, j, sum / card );
          }
 
-         if( !m_running )
+         if( fcontrol.interrupt() )
          {
             return STOPPED;
          }

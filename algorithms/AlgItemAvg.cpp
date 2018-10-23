@@ -20,7 +20,7 @@ AlgItemAvg::~AlgItemAvg()
    }
 }
 
-int AlgItemAvg::train()
+int AlgItemAvg::train( FlowControl& fcontrol )
 {
    for( size_t col = 0 ; col < m_ratingMatrix.items() ; ++col )
    {
@@ -31,7 +31,7 @@ int AlgItemAvg::train()
          m_meanRatingByItemCol[col] = sumbycol/countbycol;
       }
 
-      if( !m_running )
+      if( fcontrol.interrupt() )
       {
          return STOPPED;
       }

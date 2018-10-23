@@ -1,6 +1,6 @@
 #include "PyIFAlsConjugateGradient.h"
 #include "PyCommon.h"
-#include "PrlSigHandler.h"
+#include "SigHandler.h"
 #include "DataWriter.h"
 #include "DataFrame.h"
 #include "MAP.h"
@@ -94,21 +94,17 @@ PyObject* IFAlsConjugateGradientTrain( PyIFAlsConjugateGradient* self, PyObject*
       return NULL;
    }
 
-   PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::IF_ALS );
-   struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );
+   SigHandler sigHandler( SIGINT );
    int cause = -1;
    string eMsg;
-   Py_BEGIN_ALLOW_THREADS
    try
    {
-      cause = dynamic_cast<AlgIFAlsConjugateGradient*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda, cgNumIter );
+      cause = dynamic_cast<AlgIFAlsConjugateGradient*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda, cgNumIter, sigHandler );
    }
    catch( exception& e )
    {
       eMsg = e.what();
    }
-   Py_END_ALLOW_THREADS
-   PrlSigHandler::restoresignal( SIGINT, pOldAction );
 
    if( AlgIFAlsConjugateGradient::STOPPED == cause )
    {

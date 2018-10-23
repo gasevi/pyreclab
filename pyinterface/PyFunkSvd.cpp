@@ -1,6 +1,6 @@
 #include "PyFunkSvd.h"
 #include "PyCommon.h"
-#include "PrlSigHandler.h"
+#include "SigHandler.h"
 #include "DataWriter.h"
 #include "MAP.h"
 #include "NDCG.h"
@@ -94,13 +94,9 @@ PyObject* FunkSvdTrain( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
       return NULL;
    }
 
-   PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::FUNK_SVD );
-   struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );
+   SigHandler sigHandler( SIGINT );
    int cause = 0;
-   Py_BEGIN_ALLOW_THREADS
-   cause = dynamic_cast<AlgFunkSvd*>( self->m_recAlgorithm )->train( factors, maxiter, lr, lambda );
-   Py_END_ALLOW_THREADS
-   PrlSigHandler::restoresignal( SIGINT, pOldAction );
+   cause = dynamic_cast<AlgFunkSvd*>( self->m_recAlgorithm )->train( factors, maxiter, lr, lambda, sigHandler );
 
    if( AlgFunkSvd::STOPPED == cause )
    {

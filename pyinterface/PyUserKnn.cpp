@@ -1,6 +1,6 @@
 #include "PyUserKnn.h"
 #include "PyCommon.h"
-#include "PrlSigHandler.h"
+#include "SigHandler.h"
 #include "DataWriter.h"
 #include "MAP.h"
 #include "NDCG.h"
@@ -102,21 +102,17 @@ PyObject* UserKnnTrain( PyUserKnn* self, PyObject* args, PyObject* kwdict )
       return NULL;
    }
 
-   PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::USER_KNN );
-   struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );
+   SigHandler sigHandler( SIGINT );
    int cause = -1;
    string eMsg;
-   Py_BEGIN_ALLOW_THREADS
    try
    {
-      cause = dynamic_cast<AlgUserBasedKnn*>( self->m_recAlgorithm )->train( k, strSimType );
+      cause = dynamic_cast<AlgUserBasedKnn*>( self->m_recAlgorithm )->train( k, strSimType, sigHandler );
    }
    catch( const char* e )
    {
       eMsg = e;
    }
-   Py_END_ALLOW_THREADS
-   PrlSigHandler::restoresignal( SIGINT, pOldAction );
 
    if( AlgUserBasedKnn::STOPPED == cause )
    {

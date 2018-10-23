@@ -175,13 +175,13 @@ AlgIFAls::~AlgIFAls()
    }
 }
 
-int AlgIFAls::train( size_t factors, size_t alsNumIter, float lambda )
+int AlgIFAls::train( size_t factors, size_t alsNumIter, float lambda, FlowControl& fcontrol )
 {
    reset( factors, alsNumIter, lambda );
-   return train();
+   return train( fcontrol );
 }
 
-int AlgIFAls::train()
+int AlgIFAls::train( FlowControl& fcontrol )
 throw( runtime_error& )
 {
    size_t nusers = m_fUserMapper.size();
@@ -252,7 +252,7 @@ throw( runtime_error& )
          matrix_row< matrix<double> > xu( m_Xu, u );
          xu = prod( subterm, CuPu );
 
-         if( !m_running )
+         if( fcontrol.interrupt() )
          {
             return STOPPED;
          }
@@ -325,7 +325,7 @@ throw( runtime_error& )
          matrix_row< matrix<double> > yi( m_Yi, i );
          yi = prod( subterm, CiPi );
 
-         if( !m_running )
+         if( fcontrol.interrupt() )
          {
             return STOPPED;
          }

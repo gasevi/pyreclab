@@ -2,6 +2,7 @@
 #define __ALG_FUNK_SVD_H__
 
 #include "RecSysAlgorithm.h"
+#include "FlowControl.h"
 
 #include <string>
 #include <stdexcept>
@@ -19,9 +20,9 @@ public:
 
    ~AlgFunkSvd();
 
-   int train();
+   int train( FlowControl& fcontrol );
 
-   int train( size_t factors, size_t maxiter, float lrate, float lambda );
+   int train( size_t factors, size_t maxiter, float lrate, float lambda, FlowControl& fcontrol );
 
    double predict( std::string& userId, std::string& itemId )
    throw( std::invalid_argument );

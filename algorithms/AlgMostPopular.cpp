@@ -12,7 +12,7 @@ AlgMostPopular::AlgMostPopular( DataReader& dreader,
 {
 }
 
-int AlgMostPopular::train()
+int AlgMostPopular::train( FlowControl& fcontrol )
 {
    for( size_t i = 0 ; i < m_ratingMatrix.items() ; ++i )
    {
@@ -20,7 +20,7 @@ int AlgMostPopular::train()
       pair<double, size_t> e = pair<double, size_t>( score, i );
       m_itemList.push_back( e );
 
-      if( !m_running )
+      if( fcontrol.interrupt() )
       {
          sort( m_itemList.rbegin(), m_itemList.rend() );
          return STOPPED;

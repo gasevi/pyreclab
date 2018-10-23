@@ -29,13 +29,13 @@ AlgUserBasedKnn::~AlgUserBasedKnn()
    }
 }
 
-int AlgUserBasedKnn::train()
+int AlgUserBasedKnn::train( FlowControl& fcontrol )
 {
    string strSimType = "pearson";
-   return train( 10, strSimType );
+   return train( 10, strSimType, fcontrol );
 }
 
-int AlgUserBasedKnn::train( size_t k, string& similarity )
+int AlgUserBasedKnn::train( size_t k, string& similarity, FlowControl& fcontrol )
 {
    m_knn = k;
    size_t nusers = m_ratingMatrix.users();
@@ -60,7 +60,7 @@ int AlgUserBasedKnn::train( size_t k, string& similarity )
          double sim = simfunc.calculate( rowi, rowj );
          m_pSimMatrix->set( i, j, sim );
 
-         if( !m_running )
+         if( fcontrol.interrupt() )
          {
             return STOPPED;
          }

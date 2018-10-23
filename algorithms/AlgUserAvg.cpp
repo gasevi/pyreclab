@@ -20,7 +20,7 @@ AlgUserAvg::~AlgUserAvg()
    }
 }
 
-int AlgUserAvg::train()
+int AlgUserAvg::train( FlowControl& fcontrol )
 {
    for( size_t row = 0 ; row < m_ratingMatrix.users() ; ++row )
    {
@@ -31,7 +31,7 @@ int AlgUserAvg::train()
          m_meanRatingByUserRow[row] = sumbyrow/countbyrow;
       }
 
-      if( !m_running )
+      if( fcontrol.interrupt() )
       {
          return STOPPED;
       }

@@ -1,6 +1,6 @@
 #include "PyMostPopular.h"
 #include "PyCommon.h"
-#include "PrlSigHandler.h"
+#include "SigHandler.h"
 #include "DataReader.h"
 #include "DataWriter.h"
 #include "MAP.h"
@@ -89,13 +89,9 @@ PyObject* MostPopularTrain( PyMostPopular* self, PyObject* args, PyObject* kwdic
       return NULL;
    }
 
-   PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::MOST_POPULAR );
-   struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );
+   SigHandler sigHandler( SIGINT );
    int cause = 0;
-   Py_BEGIN_ALLOW_THREADS
-   cause = dynamic_cast<AlgMostPopular*>( self->m_recAlgorithm )->train();
-   Py_END_ALLOW_THREADS
-   PrlSigHandler::restoresignal( SIGINT, pOldAction );
+   cause = dynamic_cast<AlgMostPopular*>( self->m_recAlgorithm )->train( sigHandler );
 
    if( AlgMostPopular::STOPPED == cause )
    {

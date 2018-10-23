@@ -2,6 +2,7 @@
 #define __ALG_SLOPE_ONE_H__
 
 #include "RecSysAlgorithm.h"
+#include "FlowControl.h"
 
 #include <string>
 #include <stdexcept>
@@ -21,7 +22,7 @@ public:
 
    ~AlgSlopeOne();
 
-   int train();
+   int train( FlowControl& fcontrol );
 
    double predict( std::string& userId, std::string& itemId )
    throw( std::invalid_argument );

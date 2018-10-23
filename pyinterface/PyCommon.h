@@ -10,6 +10,7 @@
 #include "DataWriter.h"
 #include "MAP.h"
 #include "NDCG.h"
+#include "SigHandler.h"
 
 
 template<class TPyInstance, class TAlgorithm>
@@ -267,6 +268,9 @@ PyObject* PyTest( TPyInstance* self, PyObject* args, PyObject* kwdict )
    MAE mae;
    RMSE rmse;
 
+   int cause = 0;
+   SigHandler sigHandler( SIGINT );
+
    DataFrame::iterator ind;
    DataFrame::iterator end = testData.end();
    for( ind = testData.begin() ; ind != end ; ++ind )
@@ -320,6 +324,20 @@ PyObject* PyTest( TPyInstance* self, PyObject* args, PyObject* kwdict )
          vline.push_back( ss.str() );
          dataWriter.write( vline );
       }
+
+      if( sigHandler.interrupt() )
+      {
+         cause = 10;
+         break;
+      }
+   }
+
+   if( cause == 10 )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_KeyboardInterrupt, "SIGINT received" );
+      PyGILState_Release( gstate );
+      return NULL;
    }
 
    PyObject* pyTupleResult = PyTuple_New( 3 );
@@ -391,6 +409,9 @@ PyObject* PyTestrec( TPyInstance* self, PyObject* args, PyObject* kwdict )
    MAP meanAP;
    NDCG nDcg;
 
+   int cause = 0;
+   SigHandler sigHandler( SIGINT );
+
    std::map<std::string, int> userFilter;
    DataFrame::iterator ind;
    DataFrame::iterator end = self->m_pTestData->end();
@@ -447,6 +468,20 @@ PyObject* PyTestrec( TPyInstance* self, PyObject* args, PyObject* kwdict )
       {
          dataWriter.write( userId, ranking );
       }
+
+      if( sigHandler.interrupt() )
+      {
+         cause = 10;
+         break;
+      }
+   }
+
+   if( cause == 10 )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_KeyboardInterrupt, "SIGINT received" );
+      PyGILState_Release( gstate );
+      return NULL;
    }
 
    PyObject* pyTupleResult = PyTuple_New( 3 );

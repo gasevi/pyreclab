@@ -60,13 +60,13 @@ AlgFunkSvd::~AlgFunkSvd()
    }
 }
 
-int AlgFunkSvd::train( size_t factors, size_t maxiter, float lrate, float lambda )
+int AlgFunkSvd::train( size_t factors, size_t maxiter, float lrate, float lambda, FlowControl& fcontrol )
 {
    reset( factors, maxiter, lrate, lambda );
-   return train();
+   return train( fcontrol );
 }
 
-int AlgFunkSvd::train()
+int AlgFunkSvd::train( FlowControl& fcontrol )
 {
    for( size_t it = 0 ; it < m_maxIter ; ++it )
    {
@@ -115,7 +115,7 @@ int AlgFunkSvd::train()
                // user and item vectors regularization: lambda * ( ||pu||^2 + ||qi||^2 )
                loss += m_lambda * puf * puf + m_lambda * qif * qif;
 
-               if( !m_running )
+               if( fcontrol.interrupt() )
                {
                   return STOPPED;
                }

@@ -1,6 +1,6 @@
 #include "PyUserAvg.h"
 #include "PyCommon.h"
-#include "PrlSigHandler.h"
+#include "SigHandler.h"
 #include "DataWriter.h"
 #include "MAP.h"
 #include "NDCG.h"
@@ -80,13 +80,9 @@ PyTypeObject* UserAvgGetType()
 
 PyObject* UserAvgTrain( PyUserAvg* self, PyObject* args, PyObject* kwdict )
 {
-   PrlSigHandler::registerObj( reinterpret_cast<PyObject*>( self ), PrlSigHandler::USER_AVG );
-   struct sigaction* pOldAction = PrlSigHandler::handlesignal( SIGINT );
+   SigHandler sigHandler( SIGINT );
    int cause = 0;
-   Py_BEGIN_ALLOW_THREADS
-   cause = dynamic_cast<AlgUserAvg*>( self->m_recAlgorithm )->train();
-   Py_END_ALLOW_THREADS
-   PrlSigHandler::restoresignal( SIGINT, pOldAction );
+   cause = dynamic_cast<AlgUserAvg*>( self->m_recAlgorithm )->train( sigHandler );
 
    if( AlgUserAvg::STOPPED == cause )
    {

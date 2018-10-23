@@ -40,9 +40,6 @@ public:
    }
 
    virtual
-   int train() = 0;
-
-   virtual
    double predict( std::string& userId, std::string& itemId );
 
    virtual

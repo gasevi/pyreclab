@@ -2,6 +2,7 @@
 #define __ALG_IF_ALS_CONJUGATE_GRADIENT_H__
 
 #include "DataReader.h"
+#include "FlowControl.h"
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/matrix_sparse.hpp>
@@ -28,10 +29,10 @@ public:
 
    ~AlgIFAlsConjugateGradient();
 
-   int train()
+   int train( FlowControl& fcontrol )
    throw( std::runtime_error& );
 
-   int train( size_t factors, size_t maxiter, float lambda, size_t cgNumIter );
+   int train( size_t factors, size_t maxiter, float lambda, size_t cgNumIter, FlowControl& fcontrol );
 
    double predict( size_t userrow, size_t itemcol );
 

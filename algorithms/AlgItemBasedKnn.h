@@ -3,6 +3,7 @@
 
 #include "RecSysAlgorithm.h"
 #include "SymmMatrix.h"
+#include "FlowControl.h"
 
 #include <string>
 #include <stdexcept>
@@ -20,9 +21,9 @@ public:
 
    ~AlgItemBasedKnn();
 
-   int train();
+   int train( FlowControl& fcontrol );
 
-   int train( size_t k, std::string& similarity );
+   int train( size_t k, std::string& similarity, FlowControl& fcontrol );
 
    void test( DataFrame& dataFrame );
 
