@@ -18,10 +18,11 @@ void MAP::append( std::vector<std::string>& retrieved, std::vector<std::string>&
       if( find( relevant.begin(), relevant.end(), *ind ) != relevant.end() )
       {
          ++tp;
-         avgPrecision = tp / k;
+         avgPrecision += tp / k;
       }
       ++k;
    }
+   avgPrecision = tp > 0 ? avgPrecision / tp : 0;
    m_avgPrecision.push_back( avgPrecision );
 }
 
