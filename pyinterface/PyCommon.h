@@ -426,8 +426,16 @@ PyObject* PyTestrec( TPyInstance* self, PyObject* args, PyObject* kwdict )
       userFilter[userId] = 0;
 
       std::vector<std::string> ranking;
-      if( !self->m_recAlgorithm->recommend( userId, topn, ranking, includeRated ) )
+      try
       {
+         if( !self->m_recAlgorithm->recommend( userId, topn, ranking, includeRated ) )
+         {
+            continue;
+         }
+      }
+      catch( std::invalid_argument& eMsg )
+      {
+         std::cerr << "Warning: " << eMsg.what() << std::endl;
          continue;
       }
 
@@ -531,10 +539,20 @@ PyObject* PyMAP( TPyInstance* self, PyObject* args, PyObject* kwdict )
    std::vector<std::string> ranking;
    if( numLines <= 0 )
    {
-      if( !self->m_recAlgorithm->recommend( userId, topN, ranking, includeRated ) )
+      try
+      {
+         if( !self->m_recAlgorithm->recommend( userId, topN, ranking, includeRated ) )
+         {
+            PyGILState_STATE gstate = PyGILState_Ensure();
+            PyErr_SetString( PyExc_RuntimeError, "It was not possible to recommend items" );
+            PyGILState_Release( gstate );
+            return NULL;
+         }
+      }
+      catch( std::invalid_argument& eMsg )
       {
          PyGILState_STATE gstate = PyGILState_Ensure();
-         PyErr_SetString( PyExc_RuntimeError, "It was not possible to recommend items" );
+         PyErr_SetString( PyExc_RuntimeError, eMsg.what() );
          PyGILState_Release( gstate );
          return NULL;
       }
@@ -599,13 +617,23 @@ PyObject* PynDCG( TPyInstance* self, PyObject* args, PyObject* kwdict )
    std::vector<std::string> ranking;
    if( numLines <= 0 )
    {
-      if( !self->m_recAlgorithm->recommend( userId, topN, ranking, includeRated ) )
+      try
+      {
+         if( !self->m_recAlgorithm->recommend( userId, topN, ranking, includeRated ) )
+         {
+            PyGILState_STATE gstate = PyGILState_Ensure();
+            PyErr_SetString( PyExc_RuntimeError, "It was not possible to recommend items" );
+            PyGILState_Release( gstate );
+            return NULL;
+         }
+      }
+      catch( std::invalid_argument& eMsg )
       {
          PyGILState_STATE gstate = PyGILState_Ensure();
-         PyErr_SetString( PyExc_RuntimeError, "It was not possible to recommend items" );
+         PyErr_SetString( PyExc_RuntimeError, eMsg.what() );
          PyGILState_Release( gstate );
          return NULL;
-      }  
+      }
    }
    else
    {
