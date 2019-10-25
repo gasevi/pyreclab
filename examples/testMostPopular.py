@@ -26,6 +26,8 @@ if __name__ == '__main__':
                                                dlmchar = b'\t',
                                                header = False,
                                                usercol = 0,
+                                               itemcol = 1,
+                                               ratingcol = 2,
                                                topn = 10,
                                                output_file = 'ranking.json',
                                                includeRated = False )
