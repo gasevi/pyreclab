@@ -14,6 +14,15 @@
 #include <string>
 #include <sstream>
 
+#define _STRINGIFY(s) #s
+#define STRINGIFY(s) _STRINGIFY(s)
+#define _CONCAT_MACRO(cat_arg1, cat_arg2) cat_arg1 ## cat_arg2
+#define CONCAT_MACRO(cat_arg1, cat_arg2) _CONCAT_MACRO(cat_arg1, cat_arg2)
+
+#ifndef PYRECLAB_LIBNAME
+#define PYRECLAB_LIBNAME libpyreclab
+#endif
+
 using namespace std;
 
 #if PY_MAJOR_VERSION >= 3
@@ -24,19 +33,19 @@ struct module_state
 #define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
 #endif
 
-static PyMethodDef libpyreclabMethods[] =
+static PyMethodDef CONCAT_MACRO(PYRECLAB_LIBNAME, Methods)[] =
 {
    { NULL, NULL }
 };
 
 #if PY_MAJOR_VERSION >= 3
-static int libpyreclab_traverse(PyObject *m, visitproc visit, void *arg)
+static int CONCAT_MACRO(PYRECLAB_LIBNAME, _traverse)(PyObject *m, visitproc visit, void *arg)
 {
    Py_VISIT( GETSTATE( m )->error );
    return 0;
 }
 
-static int libpyreclab_clear( PyObject *m )
+static int CONCAT_MACRO(PYRECLAB_LIBNAME, _clear)( PyObject *m )
 {
    Py_CLEAR( GETSTATE( m )->error );
    return 0;
@@ -45,19 +54,19 @@ static int libpyreclab_clear( PyObject *m )
 static struct PyModuleDef moduledef =
 {
    PyModuleDef_HEAD_INIT,
-   "libpyreclab",
+   STRINGIFY(PYRECLAB_LIBNAME),
    NULL,
    sizeof( struct module_state ),
-   libpyreclabMethods,
+   CONCAT_MACRO(PYRECLAB_LIBNAME, Methods),
    NULL,
-   libpyreclab_traverse,
-   libpyreclab_clear,
+   CONCAT_MACRO(PYRECLAB_LIBNAME, _traverse),
+   CONCAT_MACRO(PYRECLAB_LIBNAME, _clear),
    NULL
 };
 
-PyMODINIT_FUNC PyInit_libpyreclab()
+PyMODINIT_FUNC CONCAT_MACRO(PyInit_, PYRECLAB_LIBNAME)()
 #else
-extern "C" void initlibpyreclab()
+extern "C" void CONCAT_MACRO(init, PYRECLAB_LIBNAME)()
 #endif
 {
    if( PyType_Ready( MostPopularGetType() ) < 0 )
@@ -144,7 +153,7 @@ extern "C" void initlibpyreclab()
 #if PY_MAJOR_VERSION >= 3
    PyObject* module = PyModule_Create( &moduledef );
 #else
-   PyObject* module = Py_InitModule( "libpyreclab", libpyreclabMethods );
+   PyObject* module = Py_InitModule( STRINGIFY(PYRECLAB_LIBNAME), CONCAT_MACRO(PYRECLAB_LIBNAME, Methods) );
 #endif
    if( NULL == module )
    {

@@ -8,11 +8,11 @@ project( pyreclab )
 
 set( MAJOR_VERSION "0" )
 set( MINOR_VERSION "1" )
-set( RELEASE_VERSION "12" )
+set( RELEASE_VERSION "13" )
 set( PACKAGE_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${RELEASE_VERSION}" )
 
 # Set CMake macros
-SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
                        ${PROJECT_SOURCE_DIR}/cmake_scripts )
 
 #
@@ -20,16 +20,15 @@ SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
 #
 
 set( PRLOPT_BUILD_WHEEL OFF CACHE BOOL "Build wheel package" )
-# Python version
 set( CMAKE_PYTHON_VERSION 2.7 CACHE STRING "Python version" )
 
-if( ${CMAKE_PYTHON_VERSION} VERSION_LESS "3.3" ) # Before Python 3.3, there were two ABI-incompatible ways of building CPython
-   set( CMAKE_PYTHON_UCS4 ON CACHE BOOL "Enable unicode ucs4" )
-else( ${CMAKE_PYTHON_VERSION} VERSION_LESS "3.3" )
-   unset( CMAKE_PYTHON_UCS4 CACHE )
-endif( ${CMAKE_PYTHON_VERSION} VERSION_LESS "3.3" )
-
-find_package( PythonLibs "${CMAKE_PYTHON_VERSION}" REQUIRED )
+if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
+  if( ${CMAKE_PYTHON_VERSION} VERSION_LESS "3.3" ) # Before Python 3.3, there were two ABI-incompatible ways of building CPython
+    set( CMAKE_PYTHON_UCS4 ON CACHE BOOL "Enable unicode ucs4" )
+  else( ${CMAKE_PYTHON_VERSION} VERSION_LESS "3.3" )
+    unset( CMAKE_PYTHON_UCS4 CACHE )
+  endif( ${CMAKE_PYTHON_VERSION} VERSION_LESS "3.3" )
+endif( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
 
 # Compiler definitions
 add_definitions( -DNDEBUG )
@@ -38,15 +37,12 @@ add_compile_options( -fPIC )
 add_compile_options( -O3 )
 add_compile_options( -Wall )
 
-# header directories
-include_directories( ${PROJECT_SOURCE_DIR} )
-include_directories( dataio )
-include_directories( datahandlers )
-include_directories( algorithms )
-include_directories( eval_metrics )
+find_package( PythonLibs "${CMAKE_PYTHON_VERSION}"
+              REQUIRED )
 
-# External paths
-include_directories( ${PYTHON_INCLUDE_DIR} )
+#
+# Library building
+#
 
 add_subdirectory( dataio temp/dataio )
 add_subdirectory( datahandlers temp/datahandlers )
@@ -55,7 +51,7 @@ add_subdirectory( pyinterface temp/pyinterface )
 add_subdirectory( eval_metrics temp/eval_metrics )
 
 if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
-   set( CMAKE_MACOSX_RPATH 0 )
+  set( CMAKE_MACOSX_RPATH 0 )
 endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
 
 add_library( pyreclab SHARED
@@ -65,21 +61,55 @@ add_library( pyreclab SHARED
                       $<TARGET_OBJECTS:eval_metrics>
                       $<TARGET_OBJECTS:pyinterface> )
 
-if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
-   target_link_libraries( pyreclab ${PYTHON_LIBRARY} )
-endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
+target_link_libraries( pyreclab ${PYTHON_LIBRARY} )
 
 set_target_properties( pyreclab PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/pyreclab"
                                            SUFFIX .so
                                            SOVERSION "${MAJOR_VERSION}"
                                            VERSION "${PACKAGE_VERSION}" )
 
+if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_PYTHON_VERSION} VERSION_EQUAL "2.7" )
+
+  find_package( Python27MacOSXNativeLibs "${CMAKE_PYTHON_VERSION}"
+                REQUIRED )
+
+  set( LIBNAME_SUFFIX "_native_py" )
+  add_subdirectory( pyinterface temp/pyinterface${LIBNAME_SUFFIX} )
+
+  add_library( pyreclab${LIBNAME_SUFFIX} SHARED
+                                         $<TARGET_OBJECTS:dataio>
+                                         $<TARGET_OBJECTS:datahandlers>
+                                         $<TARGET_OBJECTS:algorithms>
+                                         $<TARGET_OBJECTS:eval_metrics>
+                                         $<TARGET_OBJECTS:pyinterface${LIBNAME_SUFFIX}> )
+
+  target_link_libraries( pyreclab${LIBNAME_SUFFIX} ${PYTHON_NATIVE_LIBRARY} )
+
+  set_target_properties( pyreclab${LIBNAME_SUFFIX} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/pyreclab"
+                                                   SUFFIX .so
+                                                   SOVERSION "${MAJOR_VERSION}"
+                                                   VERSION "${PACKAGE_VERSION}" )
+
+endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_PYTHON_VERSION} VERSION_EQUAL "2.7" )
+
+#
+# Python packaging
+#
+
 if( PYTHON )
+
+   set( CMAKE_LIBRARY_LIST "'libpyreclab.so'" )
+   if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_PYTHON_VERSION} VERSION_EQUAL "2.7" )
+      set( CMAKE_LIBRARY_LIST "${CMAKE_LIBRARY_LIST}, 'libpyreclab${LIBNAME_SUFFIX}.so'" )
+      set( PACKAGING_DEPS "pyreclab" "pyreclab_native_py" )
+   else( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_PYTHON_VERSION} VERSION_EQUAL "2.7" )
+      set( PACKAGING_DEPS "pyreclab" )
+   endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_PYTHON_VERSION} VERSION_EQUAL "2.7" )
 
    set( SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/pypackage/setup.py.in" )
    set( SETUP_PY    "${CMAKE_CURRENT_BINARY_DIR}/pypackage/setup.py" )
    set( OUTPUT      "${CMAKE_CURRENT_BINARY_DIR}/build/timestamp" )
-   set( DEPS        "pyreclab" )
+   set( DEPS        "${PACKAGING_DEPS}" )
 
    configure_file( ${SETUP_PY_IN} ${SETUP_PY} )
 
@@ -94,7 +124,8 @@ if( PYTHON )
                              COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
                              DEPENDS ${DEPS} )
 
-         add_custom_target( target ALL DEPENDS ${OUTPUT} )
+         add_custom_target( pypackage ALL
+                                      DEPENDS ${OUTPUT} )
       endif( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
 
       if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
@@ -108,11 +139,11 @@ if( PYTHON )
                              COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
                              DEPENDS ${DEPS} )
 
-         add_custom_target( target ALL DEPENDS ${OUTPUT} )
+         add_custom_target( pypackage ALL
+                                      DEPENDS ${OUTPUT} )
       endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
 
    endif( ${PRLOPT_BUILD_WHEEL})
 
 endif( PYTHON )
-
 

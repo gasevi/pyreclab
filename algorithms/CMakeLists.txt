@@ -10,3 +10,6 @@ set( SRCFILES AlgUserAvg.cpp
 
 add_library( algorithms OBJECT ${SRCFILES} )
 
+target_include_directories( algorithms PUBLIC ${PROJECT_SOURCE_DIR}/datahandlers )
+target_include_directories( algorithms PUBLIC ${PROJECT_SOURCE_DIR}/dataio )
+

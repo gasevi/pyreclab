@@ -5,3 +5,5 @@ set( SRCFILES MaxHeap.cpp
 
 add_library( datahandlers OBJECT ${SRCFILES} )
 
+target_include_directories( datahandlers PUBLIC ${PROJECT_SOURCE_DIR}/dataio )
+
