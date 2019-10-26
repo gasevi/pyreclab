@@ -78,7 +78,6 @@ elseif( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
   set( ${PACKAGE_NAME}_LIBRARY_PATHS ${${PACKAGE_NAME}_LIBRARY_PATHS} /usr/local/lib )
 endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
 
-message( ${${PACKAGE_NAME}_LIBRARY_PATHS} )
 set( ${PACKAGE_NAME}_LIBRARY ${PACKAGE_NAME}_LIBRARY-NOTFOUND ) # Force serarching each time
 find_library( ${PACKAGE_NAME}_LIBRARY NAMES python${CMAKE_PYTHON_VERSION}
                                       PATHS ${${PACKAGE_NAME}_LIBRARY_PATHS}
