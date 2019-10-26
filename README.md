@@ -86,8 +86,6 @@ pip install pyreclab
 pip3 install pyreclab
 ```
 
-Note: Users of Python 2.7 on Mac OS X please make sure that the pip version used is the one that comes with the operating system ( Python 2.7.10 ).
-
 
 ## <span style="font-size: 4em;">Build and Install</span>
 
