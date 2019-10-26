@@ -61,13 +61,16 @@ add_library( pyreclab SHARED
                       $<TARGET_OBJECTS:eval_metrics>
                       $<TARGET_OBJECTS:pyinterface> )
 
-target_link_libraries( pyreclab ${PYTHON_LIBRARY} )
+if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
+  target_link_libraries( pyreclab ${PYTHON_LIBRARY} )
+endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
 
 set_target_properties( pyreclab PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/pyreclab"
                                            SUFFIX .so
                                            SOVERSION "${MAJOR_VERSION}"
                                            VERSION "${PACKAGE_VERSION}" )
 
+# Library compilation for native version of Python 2.7
 if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_PYTHON_VERSION} VERSION_EQUAL "2.7" )
 
   find_package( Python27MacOSXNativeLibs "${CMAKE_PYTHON_VERSION}"
