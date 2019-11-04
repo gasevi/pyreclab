@@ -8,6 +8,8 @@
 
 #include "DataReader.h"
 #include "DataWriter.h"
+#include "MAE.h"
+#include "RMSE.h"
 #include "MAP.h"
 #include "NDCG.h"
 #include "SigHandler.h"

@@ -6,7 +6,8 @@ set( SRCFILES AlgUserAvg.cpp
               AlgFunkSvd.cpp
               AlgIFAls.cpp
               AlgIFAlsConjugateGradient.cpp
-              AlgMostPopular.cpp )
+              AlgMostPopular.cpp
+              AlgBprMf.cpp )
 
 add_library( algorithms OBJECT ${SRCFILES} )
 

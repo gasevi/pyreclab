@@ -8,6 +8,7 @@
 #include "PyFunkSvd.h"
 #include "PyIFAls.h"
 #include "PyIFAlsConjugateGradient.h"
+#include "PyBprMf.h"
 
 #include <iostream>
 #include <signal.h>
@@ -150,6 +151,15 @@ extern "C" void CONCAT_MACRO(init, PYRECLAB_LIBNAME)()
 #endif
    }
 
+   if( PyType_Ready( BprMfGetType() ) < 0 )
+   {
+#if PY_MAJOR_VERSION >= 3
+      return NULL;
+#else
+      return;
+#endif
+   }
+
 #if PY_MAJOR_VERSION >= 3
    PyObject* module = PyModule_Create( &moduledef );
 #else
@@ -182,6 +192,8 @@ extern "C" void CONCAT_MACRO(init, PYRECLAB_LIBNAME)()
    PyModule_AddObject( module, "IFAls", (PyObject*)IFAlsGetType() );
    Py_INCREF( IFAlsConjugateGradientGetType() );
    PyModule_AddObject( module, "IFAlsConjugateGradient", (PyObject*)IFAlsConjugateGradientGetType() );
+   Py_INCREF( BprMfGetType() );
+   PyModule_AddObject( module, "BprMf", (PyObject*)BprMfGetType() );
 
 #if PY_MAJOR_VERSION >= 3
     return module;
