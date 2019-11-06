@@ -17,6 +17,7 @@ public:
 };
 
 PyTypeObject* BprMfGetType();
+PyObject* BprMfNew( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 PyObject* BprMfTrain( PyBprMf* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_BPR_MF_H__

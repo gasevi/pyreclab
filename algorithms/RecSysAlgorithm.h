@@ -40,6 +40,9 @@ public:
    }
 
    virtual
+   void reset();
+
+   virtual
    double predict( std::string& userId, std::string& itemId );
 
    virtual
@@ -66,6 +69,11 @@ protected:
 
 };
 
+
+template <class smatrix_t>
+void RecSysAlgorithm<smatrix_t>::reset()
+{
+}
 
 template <class smatrix_t>
 double RecSysAlgorithm<smatrix_t>::predict( std::string& userId, std::string& itemId )

@@ -14,6 +14,7 @@ static
 PyMethodDef BprMf_methods[] =
 {
    { "train",     (PyCFunction)BprMfTrain,           METH_VARARGS|METH_KEYWORDS, "train model" },
+   { "reset",     (PyCFunction)PyReset<PyBprMf>,     METH_NOARGS,                "reset model parameters" },
    { "testrec",   (PyCFunction)PyTestrec<PyBprMf>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "recommend", (PyCFunction)PyRecommend<PyBprMf>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
    { "MAP",       (PyCFunction)PyMAP<PyBprMf>,       METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
@@ -65,7 +66,7 @@ static PyTypeObject BprMfType =
    0,                                        // tp_dictoffset
    0,                                        // tp_init
    0,                                        // tp_alloc
-   PyNew<PyBprMf, AlgBprMf>,                 // tp_new
+   BprMfNew,                                 // tp_new
 };
 
 
@@ -74,31 +75,80 @@ PyTypeObject* BprMfGetType()
    return &BprMfType;
 }
 
+PyObject* BprMfNew( PyTypeObject* type, PyObject* args, PyObject* kwdict )
+{
+   int factors = 20;
+   const char* dsfilename = NULL;
+   char dlmchar = ',';
+   int header = 0;
+   int usercol = 0;
+   int itemcol = 1;
+   int ratingcol = 2;
+
+   static char* kwlist[] = { const_cast<char*>( "factors" ),
+                             const_cast<char*>( "dataset" ),
+                             const_cast<char*>( "dlmchar" ),
+                             const_cast<char*>( "header" ),
+                             const_cast<char*>( "usercol" ),
+                             const_cast<char*>( "itemcol" ),
+                             const_cast<char*>( "ratingcol" ),
+                             NULL };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "is|ciiii", kwlist, &factors, &dsfilename,
+                                     &dlmchar, &header, &usercol, &itemcol, &ratingcol ) )
+   {
+      return NULL;
+   }
+
+   if( NULL == dsfilename )
+   {
+      return NULL;
+   }
+
+   PyBprMf* self = reinterpret_cast<PyBprMf*>( type->tp_alloc( type, 0 ) );
+   if( self != NULL )
+   {
+      self->m_trainingReader = new DataReader( dsfilename, dlmchar, header );
+      if( NULL == self->m_trainingReader )
+      {
+         Py_DECREF( self );
+         return NULL;
+      }
+
+      self->m_recAlgorithm = new AlgBprMf( factors, *self->m_trainingReader, usercol, itemcol, ratingcol );
+      if( NULL == self->m_recAlgorithm )
+      {
+         Py_DECREF( self );
+         return NULL;
+      }
+   }
+
+   return reinterpret_cast<PyObject*>( self );
+}
+
 PyObject* BprMfTrain( PyBprMf* self, PyObject* args, PyObject* kwdict )
 {
-   size_t factors = 50;
    size_t maxiter = 100;
    float lr = 0.1;
    float lambdaW = 0.01;
    float lambdaHp = 0.01;
    float lambdaHm = 0.01;
 
-   static char* kwlist[] = { const_cast<char*>( "factors" ),
-                             const_cast<char*>( "maxiter" ),
+   static char* kwlist[] = { const_cast<char*>( "maxiter" ),
                              const_cast<char*>( "lr" ),
                              const_cast<char*>( "lambda_w" ),
                              const_cast<char*>( "lambda_hp" ),
                              const_cast<char*>( "lambda_hm" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iiffff", kwlist, &factors, &maxiter, &lr, &lambdaW, &lambdaHp, &lambdaHm ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iffff", kwlist, &maxiter, &lr, &lambdaW, &lambdaHp, &lambdaHm ) )
    {
       return NULL;
    }
 
    SigHandler sigHandler( SIGINT );
    int cause = 0;
-   cause = dynamic_cast<AlgBprMf*>( self->m_recAlgorithm )->train( factors, maxiter, lr, lambdaW, lambdaHp, lambdaHm, sigHandler );
+   cause = dynamic_cast<AlgBprMf*>( self->m_recAlgorithm )->train( maxiter, lr, lambdaW, lambdaHp, lambdaHm, sigHandler );
 
    if( AlgBprMf::STOPPED == cause )
    {

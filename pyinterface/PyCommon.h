@@ -138,6 +138,24 @@ void PyDealloc( TPyInstance* self )
 }
 
 template<class TPyInstance>
+PyObject* PyReset( TPyInstance* self, PyObject* args )
+{
+   try
+   {
+      self->m_recAlgorithm->reset();
+   }
+   catch( std::invalid_argument& eMsg )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_ValueError, eMsg.what() );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
+   Py_RETURN_NONE;
+}
+
+template<class TPyInstance>
 PyObject* PyPredict( TPyInstance* self, PyObject* args )
 {
    const char* userId = NULL;

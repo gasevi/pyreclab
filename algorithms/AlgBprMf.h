@@ -14,7 +14,8 @@ class AlgBprMf
 {
 public:
 
-   AlgBprMf( DataReader& dreader,
+   AlgBprMf( size_t factors,
+             DataReader& dreader,
              int userpos = 0,
              int itempos = 1,
              int ratingpos = 2 );
@@ -23,13 +24,14 @@ public:
 
    int train( FlowControl& fcontrol );
 
-   int train( size_t factors,
-              size_t maxiter,
+   int train( size_t maxiter,
               float lrate,
               float lambdaW,
               float lambdaHp,
               float lambdaHm,
               FlowControl& fcontrol );
+
+   void reset();
 
    double predict( size_t userrow, size_t itemcol );
 
@@ -38,8 +40,6 @@ private:
    double score( size_t userrow, size_t itemcoli, size_t itemcolj );
 
    void sample( int& u, int& i, int& j );
-
-   void reset( size_t factors, size_t maxiter, float lrate, float lambdaW, float lambdaHp, float lambdaHm);
 
    double innerProduct( double v1[], double v2[], size_t size );
 
