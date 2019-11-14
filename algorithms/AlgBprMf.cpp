@@ -191,7 +191,7 @@ double AlgBprMf::score( size_t userrow, size_t itemcoli, size_t itemcolj )
    size_t nitems = m_ratingMatrix.items();
    if( ( userrow < nusers ) && ( itemcoli < nitems ) && ( itemcolj < nitems ) )
    {
-      double pred = 0;
+      pred = 0;
       double* pu = m_userP[userrow];
       double* qi = m_itemQ[itemcoli];
       double* qj = m_itemQ[itemcolj];
