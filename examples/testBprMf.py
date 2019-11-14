@@ -3,7 +3,8 @@ import pyreclab
 
 if __name__ == '__main__':
 
-   bprmf = pyreclab.BprMf( dataset = 'dataset/u1.base',
+   bprmf = pyreclab.BprMf( factors = 20,
+                           dataset = 'dataset/u1.base',
                            dlmchar = b'\t',
                            header = False,
                            usercol = 0,
@@ -12,7 +13,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   bprmf.train( factors = 20, maxiter = 5000000, lr = 0.1, lambda_w = 0.01, lambda_hp = 0.01, lambda_hm = 0.01 )
+   bprmf.train( maxiter = 5000000, lr = 0.1, lambda_w = 0.01, lambda_hp = 0.01, lambda_hm = 0.01 )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 
