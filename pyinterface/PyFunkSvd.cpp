@@ -13,13 +13,13 @@ using namespace std;
 static
 PyMethodDef FunkSvd_methods[] =
 {
-   { "train",     (PyCFunction)FunkSvdTrain,          METH_VARARGS|METH_KEYWORDS, "train model" },
+   { "train",     (PyCFunction)FunkSvdTrain,           METH_VARARGS|METH_KEYWORDS, "train model" },
    { "test",      (PyCFunction)PyTest<PyFunkSvd>,      METH_VARARGS|METH_KEYWORDS, "test prediction model" },
    { "testrec",   (PyCFunction)PyTestrec<PyFunkSvd>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)PyPredict<PyFunkSvd>,   METH_VARARGS,               "predict user's rating for an item" },
    { "recommend", (PyCFunction)PyRecommend<PyFunkSvd>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { "MAP",       (PyCFunction)PyMAP<PyFunkSvd>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
-   { "nDCG",      (PyCFunction)PynDCG<PyFunkSvd>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "MAP",       (PyCFunction)PynDCG<PyFunkSvd>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "nDCG",      (PyCFunction)PyMAP<PyFunkSvd>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
    { NULL, NULL, 0, NULL }
 };
 

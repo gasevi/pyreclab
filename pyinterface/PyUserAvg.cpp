@@ -20,8 +20,8 @@ PyMethodDef UserAvg_methods[] =
    { "testrec",   (PyCFunction)PyTestrec<PyUserAvg>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)PyPredict<PyUserAvg>,   METH_VARARGS,               "predict user's rating for an item" },
    { "recommend", (PyCFunction)PyRecommend<PyUserAvg>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { "MAP",       (PyCFunction)PyMAP<PyUserAvg>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
-   { "nDCG",      (PyCFunction)PynDCG<PyUserAvg>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "MAP",       (PyCFunction)PynDCG<PyUserAvg>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "nDCG",      (PyCFunction)PyMAP<PyUserAvg>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
    { NULL, NULL, 0, NULL }
 };
 

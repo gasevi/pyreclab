@@ -18,8 +18,8 @@ PyMethodDef IFAlsConjugateGradient_methods[] =
    { "train",     (PyCFunction)IFAlsConjugateGradientTrain,           METH_VARARGS|METH_KEYWORDS, "train model" },
    { "testrec",   (PyCFunction)PyTestrec<PyIFAlsConjugateGradient>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "recommend", (PyCFunction)PyRecommend<PyIFAlsConjugateGradient>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { "MAP",       (PyCFunction)PyMAP<PyIFAlsConjugateGradient>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
-   { "nDCG",      (PyCFunction)PynDCG<PyIFAlsConjugateGradient>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "MAP",       (PyCFunction)PynDCG<PyIFAlsConjugateGradient>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "nDCG",      (PyCFunction)PyMAP<PyIFAlsConjugateGradient>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
    { NULL, NULL, 0, NULL }
 };
 

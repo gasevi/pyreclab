@@ -13,13 +13,13 @@ using namespace std;
 static
 PyMethodDef UserKnn_methods[] =
 {
-   { "train",     (PyCFunction)UserKnnTrain,          METH_VARARGS|METH_KEYWORDS, "train model" },
+   { "train",     (PyCFunction)UserKnnTrain,           METH_VARARGS|METH_KEYWORDS, "train model" },
    { "test",      (PyCFunction)PyTest<PyUserKnn>,      METH_VARARGS|METH_KEYWORDS, "test prediction model" },
    { "testrec",   (PyCFunction)PyTestrec<PyUserKnn>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)PyPredict<PyUserKnn>,   METH_VARARGS,               "predict user's rating for an item" },
    { "recommend", (PyCFunction)PyRecommend<PyUserKnn>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { "MAP",       (PyCFunction)PyMAP<PyUserKnn>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
-   { "nDCG",      (PyCFunction)PynDCG<PyUserKnn>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "MAP",       (PyCFunction)PynDCG<PyUserKnn>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "nDCG",      (PyCFunction)PyMAP<PyUserKnn>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
    { NULL, NULL, 0, NULL }
 };
 

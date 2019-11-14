@@ -18,8 +18,8 @@ PyMethodDef SlopeOne_methods[] =
    { "testrec",   (PyCFunction)PyTestrec<PySlopeOne>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)PyPredict<PySlopeOne>,   METH_VARARGS,               "predict user's rating for an item" },
    { "recommend", (PyCFunction)PyRecommend<PySlopeOne>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
-   { "MAP",       (PyCFunction)PyMAP<PySlopeOne>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
-   { "nDCG",      (PyCFunction)PynDCG<PySlopeOne>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "MAP",       (PyCFunction)PynDCG<PySlopeOne>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
+   { "nDCG",      (PyCFunction)PyMAP<PySlopeOne>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
    { NULL, NULL, 0, NULL }
 };
 
