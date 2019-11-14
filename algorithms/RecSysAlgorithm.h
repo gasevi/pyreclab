@@ -54,6 +54,9 @@ public:
                    std::vector<std::string>& ranking,
                    bool includeRated = false );
 
+   virtual
+   double loss();
+
    void stop()
    {
       m_running = false;
@@ -122,6 +125,12 @@ bool RecSysAlgorithm<smatrix_t>::recommend( const std::string& userId,
    //std::cout << std::endl;
 
    return true;
+}
+
+template <class smatrix_t>
+double RecSysAlgorithm<smatrix_t>::loss()
+{
+   return 0;
 }
 
 #endif // __RECSYS_ALGORITHM_H__

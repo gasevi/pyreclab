@@ -229,6 +229,41 @@ void AlgBprMf::reset()
    }
 }
 
+double AlgBprMf::loss()
+{
+   double loss = 0;
+   size_t nusers = m_ratingMatrix.users();
+   size_t nitems = m_ratingMatrix.items();
+   double lambdaH = ( m_lambdaHp + m_lambdaHm )/2;
+
+   for( size_t it = 0 ; it < 1000 ; ++it )
+   {
+      // Draw (u,i,j) from Ds
+      int u = 0;
+      int i = 0;
+      int j = 0;
+      sample( u, i, j );
+      // Update rule
+      double xuij = score( u, i, j );
+      double sigmoid = 1 / ( 1 + exp( -xuij ) );
+      loss += log( sigmoid );
+   }
+
+   for( size_t f = 0 ; f < m_nfactors ; ++f )
+   {
+      for( size_t u = 0 ; u < nusers ; ++u )
+      {
+         loss += m_lambdaW * m_userP[u][f];
+      }
+      for( size_t i = 0 ; i < nitems ; ++i )
+      {
+         loss += lambdaH * m_itemQ[i][f];
+      }
+   }
+
+   return loss;
+}
+
 double AlgBprMf::innerProduct( double v1[], double v2[], size_t size )
 {
    double sum = 0;

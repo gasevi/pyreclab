@@ -15,6 +15,7 @@ PyMethodDef BprMf_methods[] =
 {
    { "train",     (PyCFunction)BprMfTrain,           METH_VARARGS|METH_KEYWORDS, "train model" },
    { "reset",     (PyCFunction)PyReset<PyBprMf>,     METH_NOARGS,                "reset model parameters" },
+   { "loss",      (PyCFunction)PyLoss<PyBprMf>,      METH_NOARGS,                "returns loss value" },
    { "testrec",   (PyCFunction)PyTestrec<PyBprMf>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "recommend", (PyCFunction)PyRecommend<PyBprMf>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
    { "MAP",       (PyCFunction)PyMAP<PyBprMf>,       METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },

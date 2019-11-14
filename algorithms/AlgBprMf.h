@@ -35,6 +35,8 @@ public:
 
    double predict( size_t userrow, size_t itemcol );
 
+   double loss();
+
 private:
 
    double score( size_t userrow, size_t itemcoli, size_t itemcolj );

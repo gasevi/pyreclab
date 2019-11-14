@@ -234,6 +234,25 @@ PyObject* PyRecommend( TPyInstance* self, PyObject* args, PyObject* kwdict )
 }
 
 template<class TPyInstance>
+PyObject* PyLoss( TPyInstance* self, PyObject* args )
+{
+   float loss = 0;
+   try
+   {
+      loss = self->m_recAlgorithm->loss();
+   }
+   catch( std::invalid_argument& eMsg )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_ValueError, eMsg.what() );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
+   return Py_BuildValue( "f", loss );
+}
+
+template<class TPyInstance>
 PyObject* PyTest( TPyInstance* self, PyObject* args, PyObject* kwdict )
 {
    const char* input_file = NULL;
