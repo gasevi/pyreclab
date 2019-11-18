@@ -1167,7 +1167,7 @@ prediction = obj.predict( userId, itemId )
  * Training
 
 ```python
->>> obj.train( factors, maxiter, lamb )
+>>> obj.train( factors, maxiter, lambd )
 ```
 
 | Parameter   | Type      | Default value | Description                                                 |
