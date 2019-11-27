@@ -2,11 +2,9 @@
 #include "Similarity.h"
 #include "MaxHeap.h"
 
-#include <boost/random.hpp>
-#include <boost/random/normal_distribution.hpp>
+#include <random>
 
 using namespace std;
-using namespace boost;
 
 
 AlgFunkSvd::AlgFunkSvd( DataReader& dreader,
@@ -23,8 +21,89 @@ AlgFunkSvd::AlgFunkSvd( DataReader& dreader,
   m_lambda( 0.1 ),
   m_learningRate( 0.01 ),
   m_decay( -1 ),
-  m_prevLoss( 0 )
+  m_prevLoss( 0 ),
+  m_currLoss( 0 )
 {
+   size_t nusers = m_ratingMatrix.users();
+   size_t nitems = m_ratingMatrix.items();
+
+   random_device rd;
+   mt19937 randGen( rd() );
+   normal_distribution<> normal_dist( 0, 0.1 );
+
+   m_userBias = new double[nusers];
+   m_userP = new double*[nusers];
+   for( size_t i = 0 ; i < nusers ; ++i )
+   {
+      m_userBias[i] = normal_dist( randGen );
+      m_userP[i] = new double[m_nfactors];
+      for( size_t f = 0 ; f < m_nfactors ; ++f )
+      {
+         m_userP[i][f] = normal_dist( randGen );
+      }
+   }
+
+   m_itemBias = new double[nitems];
+   m_itemQ = new double*[nitems];
+   for( size_t i = 0 ; i < nitems ; ++i )
+   {
+      m_itemBias[i] = normal_dist( randGen );
+      m_itemQ[i] = new double[m_nfactors];
+      for( size_t f = 0 ; f < m_nfactors ; ++f )
+      {
+         m_itemQ[i][f] = normal_dist( randGen );
+      }
+   }
+}
+
+AlgFunkSvd::AlgFunkSvd( size_t factors,
+                        DataReader& dreader,
+                        int userpos,
+                        int itempos,
+                        int ratingpos )
+: RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >( dreader, userpos, itempos, ratingpos ),
+  m_nfactors( factors ),
+  m_userP( NULL ),
+  m_itemQ( NULL ),
+  m_userBias( NULL ),
+  m_itemBias( NULL ),
+  m_maxIter( 100 ),
+  m_lambda( 0.1 ),
+  m_learningRate( 0.01 ),
+  m_decay( -1 ),
+  m_prevLoss( 0 ),
+  m_currLoss( 0 )
+{
+   size_t nusers = m_ratingMatrix.users();
+   size_t nitems = m_ratingMatrix.items();
+
+   random_device rd;
+   mt19937 randGen( rd() );
+   normal_distribution<> normal_dist( 0, 0.1 );
+
+   m_userBias = new double[nusers];
+   m_userP = new double*[nusers];
+   for( size_t i = 0 ; i < nusers ; ++i )
+   {
+      m_userBias[i] = normal_dist( randGen );
+      m_userP[i] = new double[m_nfactors];
+      for( size_t f = 0 ; f < m_nfactors ; ++f )
+      {
+         m_userP[i][f] = normal_dist( randGen );
+      }
+   }
+
+   m_itemBias = new double[nitems];
+   m_itemQ = new double*[nitems];
+   for( size_t i = 0 ; i < nitems ; ++i )
+   {
+      m_itemBias[i] = normal_dist( randGen );
+      m_itemQ[i] = new double[m_nfactors];
+      for( size_t f = 0 ; f < m_nfactors ; ++f )
+      {
+         m_itemQ[i][f] = normal_dist( randGen );
+      }
+   }
 }
 
 AlgFunkSvd::~AlgFunkSvd()
@@ -66,11 +145,18 @@ int AlgFunkSvd::train( size_t factors, size_t maxiter, float lrate, float lambda
    return train( fcontrol );
 }
 
+int AlgFunkSvd::train( size_t maxiter, float lrate, float lambda, FlowControl& fcontrol )
+{
+   m_maxIter = maxiter;
+   m_learningRate = lrate;
+   m_lambda = lambda;
+   return train( fcontrol );
+}
+
 int AlgFunkSvd::train( FlowControl& fcontrol )
 {
    for( size_t it = 0 ; it < m_maxIter ; ++it )
    {
-      double loss = 0;
       size_t nusers = m_ratingMatrix.users();
       for( size_t u = 0 ; u < nusers ; ++u )
       {
@@ -85,14 +171,14 @@ int AlgFunkSvd::train( FlowControl& fcontrol )
             double eui = *ind - pred;
 
             // squared error: ( rui - ( mu + bu + bi + pu*qi ) )^2
-            loss += eui * eui;
+            m_currLoss += eui * eui;
 
             double bu = m_userBias[u];
             double bi = m_itemBias[i];
 
             // bias regularization: lambda * ( bu^2 + bi^2 )
-            loss += m_lambda * bu * bu;
-            loss += m_lambda * bi * bi;
+            m_currLoss += m_lambda * bu * bu;
+            m_currLoss += m_lambda * bi * bi;
 
             // update biases
             double buNext = eui - m_lambda * bu;
@@ -113,7 +199,7 @@ int AlgFunkSvd::train( FlowControl& fcontrol )
                m_itemQ[i][f] += m_learningRate * delta_i;
 
                // user and item vectors regularization: lambda * ( ||pu||^2 + ||qi||^2 )
-               loss += m_lambda * puf * puf + m_lambda * qif * qif;
+               m_currLoss += m_lambda * puf * puf + m_lambda * qif * qif;
 
                if( fcontrol.interrupt() )
                {
@@ -122,10 +208,10 @@ int AlgFunkSvd::train( FlowControl& fcontrol )
             }
          }
       }
-      loss /= 2;
-      //cout << "iter: " << it << "loss: " << loss << endl;
+      m_currLoss /= 2;
+      //cout << "iter: " << it << "m_currLoss: " << m_currLoss << endl;
 
-      if( converged( loss ) )
+      if( converged( m_currLoss ) )
       {
          break;
       }
@@ -133,6 +219,41 @@ int AlgFunkSvd::train( FlowControl& fcontrol )
    }
 
    return FINISHED;
+}
+
+void AlgFunkSvd::reset()
+{
+   size_t nusers = m_ratingMatrix.users();
+   size_t nitems = m_ratingMatrix.items();
+
+   random_device rd;
+   mt19937 randGen( rd() );
+   normal_distribution<> normal_dist( 0, 0.1 );
+
+   for( size_t i = 0 ; i < nusers ; ++i )
+   {
+      m_userBias[i] = normal_dist( randGen );
+      for( size_t f = 0 ; f < m_nfactors ; ++f )
+      {
+         m_userP[i][f] = normal_dist( randGen );
+      }
+   }
+
+   for( size_t i = 0 ; i < nitems ; ++i )
+   {
+      m_itemBias[i] = normal_dist( randGen );
+      for( size_t f = 0 ; f < m_nfactors ; ++f )
+      {
+         m_itemQ[i][f] = normal_dist( randGen );
+      }
+   }
+
+   m_currLoss = 0;
+}
+
+double AlgFunkSvd::loss()
+{
+   return m_currLoss;
 }
 
 double AlgFunkSvd::predict( string& userId, string& itemId )
@@ -209,19 +330,19 @@ void AlgFunkSvd::reset( size_t factors, size_t maxiter, float lrate, float lambd
    size_t nusers = m_ratingMatrix.users();
    size_t nitems = m_ratingMatrix.items();
 
-   mt19937 rng;
-   normal_distribution<> nd( 0, 0.1 );
-   variate_generator< boost::mt19937&, boost::normal_distribution<> > var_nor( rng, nd );
+   random_device rd;
+   mt19937 randGen( rd() );
+   normal_distribution<> normal_dist( 0, 0.1 );
 
    m_userBias = new double[nusers];
    m_userP = new double*[nusers];
    for( size_t i = 0 ; i < nusers ; ++i )
    {
-      m_userBias[i] = var_nor();
+      m_userBias[i] = normal_dist( randGen );
       m_userP[i] = new double[m_nfactors];
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_userP[i][f] = var_nor();
+         m_userP[i][f] = normal_dist( randGen );
       }
    }
 
@@ -229,11 +350,11 @@ void AlgFunkSvd::reset( size_t factors, size_t maxiter, float lrate, float lambd
    m_itemQ = new double*[nitems];
    for( size_t i = 0 ; i < nitems ; ++i )
    {
-      m_itemBias[i] = var_nor();
+      m_itemBias[i] = normal_dist( randGen );
       m_itemQ[i] = new double[m_nfactors];
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_itemQ[i][f] = var_nor();
+         m_itemQ[i][f] = normal_dist( randGen );
       }
    }
 }

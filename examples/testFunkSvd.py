@@ -3,7 +3,8 @@ import pyreclab
 
 if __name__ == '__main__':
 
-   svd = pyreclab.SVD( dataset = 'dataset/u1.base',
+   svd = pyreclab.SVD( factors = 1000,
+                       dataset = 'dataset/u1.base',
                        dlmchar = b'\t',
                        header = False,
                        usercol = 0,
@@ -12,7 +13,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   svd.train( factors = 1000, maxiter = 100, lr = 0.01, lamb = 0.1 )
+   svd.train( maxiter = 100, lr = 0.01, lamb = 0.1 )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 

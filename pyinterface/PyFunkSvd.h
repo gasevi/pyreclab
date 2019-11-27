@@ -19,6 +19,7 @@ public:
 };
 
 PyTypeObject* FunkSvdGetType();
+PyObject* FunkSvdNew( PyTypeObject* type, PyObject* args, PyObject* kwdict );
 PyObject* FunkSvdTrain( PyFunkSvd* self, PyObject* args, PyObject* kwdict );
 
 #endif // __PY_FUNK_SVD_H__

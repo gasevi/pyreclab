@@ -18,11 +18,21 @@ public:
                int itempos = 1,
                int ratingpos = 2 );
 
+   AlgFunkSvd( size_t factors,
+               DataReader& dreader,
+               int userpos = 0,
+               int itempos = 1,
+               int ratingpos = 2 );
+
    ~AlgFunkSvd();
 
-   int train( FlowControl& fcontrol );
-
    int train( size_t factors, size_t maxiter, float lrate, float lambda, FlowControl& fcontrol );
+
+   int train( size_t maxiter, float lrate, float lambda, FlowControl& fcontrol );
+
+   void reset();
+
+   double loss();
 
    double predict( std::string& userId, std::string& itemId )
    throw( std::invalid_argument );
@@ -30,6 +40,8 @@ public:
    double predict( size_t userrow, size_t itemcol );
 
 private:
+
+   int train( FlowControl& fcontrol );
 
    void reset( size_t factors, size_t maxiter, float lrate, float lambda );
 
@@ -58,6 +70,8 @@ private:
    double m_decay;
 
    double m_prevLoss;
+
+   double m_currLoss;
 
 };
 

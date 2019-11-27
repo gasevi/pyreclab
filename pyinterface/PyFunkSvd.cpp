@@ -14,6 +14,8 @@ static
 PyMethodDef FunkSvd_methods[] =
 {
    { "train",     (PyCFunction)FunkSvdTrain,           METH_VARARGS|METH_KEYWORDS, "train model" },
+   { "reset",     (PyCFunction)PyReset<PyFunkSvd>,     METH_NOARGS,                "reset model parameters" },
+   { "loss",      (PyCFunction)PyLoss<PyFunkSvd>,      METH_NOARGS,                "returns current loss value" },
    { "test",      (PyCFunction)PyTest<PyFunkSvd>,      METH_VARARGS|METH_KEYWORDS, "test prediction model" },
    { "testrec",   (PyCFunction)PyTestrec<PyFunkSvd>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)PyPredict<PyFunkSvd>,   METH_VARARGS,               "predict user's rating for an item" },
@@ -67,7 +69,7 @@ static PyTypeObject FunkSvdType =
    0,                                        // tp_dictoffset
    0,                                        // tp_init
    0,                                        // tp_alloc
-   PyNew<PyFunkSvd, AlgFunkSvd>,             // tp_new
+   FunkSvdNew,                               // tp_new
 };
 
 
@@ -76,9 +78,68 @@ PyTypeObject* FunkSvdGetType()
    return &FunkSvdType;
 }
 
+PyObject* FunkSvdNew( PyTypeObject* type, PyObject* args, PyObject* kwdict )
+{
+   int factors = -60223;
+   const char* dsfilename = NULL;
+   char dlmchar = ',';
+   int header = 0;
+   int usercol = 0;
+   int itemcol = 1;
+   int ratingcol = 2;
+
+   static char* kwlist[] = { const_cast<char*>( "dataset" ),
+                             const_cast<char*>( "dlmchar" ),
+                             const_cast<char*>( "header" ),
+                             const_cast<char*>( "usercol" ),
+                             const_cast<char*>( "itemcol" ),
+                             const_cast<char*>( "ratingcol" ),
+                             const_cast<char*>( "factors" ),
+                             NULL };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ciiiii", kwlist, &dsfilename,
+                                     &dlmchar, &header, &usercol, &itemcol, &ratingcol, &factors ) )
+   {
+      return NULL;
+   }
+
+   if( NULL == dsfilename )
+   {
+      return NULL;
+   }
+
+   PyFunkSvd* self = reinterpret_cast<PyFunkSvd*>( type->tp_alloc( type, 0 ) );
+   if( self != NULL )
+   {
+      self->m_trainingReader = new DataReader( dsfilename, dlmchar, header );
+      if( NULL == self->m_trainingReader )
+      {
+         Py_DECREF( self );
+         return NULL;
+      }
+
+      if( factors < 0 )
+      {
+         cout << "Warning: Constructor signature used is deprecated. From now on, it should include 'factors' parameter. See documentation for more information." << endl;
+         self->m_recAlgorithm = new AlgFunkSvd( *self->m_trainingReader, usercol, itemcol, ratingcol );
+      }
+      else
+      {
+         self->m_recAlgorithm = new AlgFunkSvd( factors, *self->m_trainingReader, usercol, itemcol, ratingcol );
+      }
+      if( NULL == self->m_recAlgorithm )
+      {
+         Py_DECREF( self );
+         return NULL;
+      }
+   }
+
+   return reinterpret_cast<PyObject*>( self );
+}
+
 PyObject* FunkSvdTrain( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
 {
-   size_t factors = 200;
+   int factors = -60223;
    size_t maxiter = 100;
    float lr = 0.01;
    float lambda = 0.1;
@@ -96,7 +157,15 @@ PyObject* FunkSvdTrain( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
 
    SigHandler sigHandler( SIGINT );
    int cause = 0;
-   cause = dynamic_cast<AlgFunkSvd*>( self->m_recAlgorithm )->train( factors, maxiter, lr, lambda, sigHandler );
+   if( factors < 0 )
+   {
+      cause = dynamic_cast<AlgFunkSvd*>( self->m_recAlgorithm )->train( maxiter, lr, lambda, sigHandler );
+   }
+   else
+   {
+      cout << "Warning: Train signature used is deprecated. From now on, 'factors' parameter should be provided in model's constructor. See documentation for more information." << endl;
+      cause = dynamic_cast<AlgFunkSvd*>( self->m_recAlgorithm )->train( factors, maxiter, lr, lambda, sigHandler );
+   }
 
    if( AlgFunkSvd::STOPPED == cause )
    {
