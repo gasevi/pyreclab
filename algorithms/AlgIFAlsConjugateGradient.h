@@ -27,12 +27,19 @@ public:
                               int itempos = 1,
                               int obspos = 2 );
 
+   AlgIFAlsConjugateGradient( size_t factors,
+                              DataReader& dreader,
+                              int userpos = 0,
+                              int itempos = 1,
+                              int obspos = 2 );
+
    ~AlgIFAlsConjugateGradient();
 
-   int train( FlowControl& fcontrol )
-   throw( std::runtime_error& );
-
    int train( size_t factors, size_t maxiter, float lambda, size_t cgNumIter, FlowControl& fcontrol );
+
+   int train( size_t maxiter, float lambda, size_t cgNumIter, FlowControl& fcontrol );
+
+   void reset();
 
    double predict( size_t userrow, size_t itemcol );
 
@@ -48,6 +55,9 @@ public:
    }
 
 private:
+
+   int train( FlowControl& fcontrol )
+   throw( std::runtime_error& );
 
    void conjugateGradient( boost::numeric::ublas::matrix<double>& Y,
                            boost::numeric::ublas::matrix<double>& X,

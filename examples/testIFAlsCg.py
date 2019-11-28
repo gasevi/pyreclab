@@ -3,7 +3,8 @@ import pyreclab
 
 if __name__ == '__main__':
 
-   ifalscg = pyreclab.IFAlsConjugateGradient( dataset = 'dataset/u1.base',
+   ifalscg = pyreclab.IFAlsConjugateGradient( factors = 50,
+                                              dataset = 'dataset/u1.base',
                                               dlmchar = b'\t',
                                               header = False,
                                               usercol = 0,
@@ -12,7 +13,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   ifalscg.train( factors = 50, alsNumIter = 5, lambd = 10, cgNumIter = 2 )
+   ifalscg.train( alsNumIter = 5, lambd = 10, cgNumIter = 2 )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 
