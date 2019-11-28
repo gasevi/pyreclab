@@ -3,7 +3,8 @@ import pyreclab
 
 if __name__ == '__main__':
 
-   ifals = pyreclab.IFAls( dataset = 'dataset/u1.base',
+   ifals = pyreclab.IFAls( factors = 50,
+                           dataset = 'dataset/u1.base',
                            dlmchar = b'\t',
                            header = False,
                            usercol = 0,
@@ -12,7 +13,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   ifals.train( factors = 50, alsNumIter = 5, lambd = 10 )
+   ifals.train( alsNumIter = 5, lambd = 10 )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 

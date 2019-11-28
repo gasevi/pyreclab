@@ -4,8 +4,6 @@
 #include "RecSysAlgorithm.h"
 
 #include <boost/numeric/ublas/matrix_proxy.hpp>
-#include <boost/random.hpp>
-#include <boost/random/normal_distribution.hpp>
 #include <boost/numeric/ublas/triangular.hpp>
 #include <boost/numeric/ublas/banded.hpp>
 #include <boost/numeric/ublas/vector_proxy.hpp> // Necessary to avoid error with lu.hpp
@@ -13,9 +11,9 @@
 
 #include <cstdlib>
 #include <sys/time.h>
+#include <random>
 
 using namespace std;
-using namespace boost;
 using namespace boost::numeric::ublas;
 
 
@@ -129,6 +127,123 @@ AlgIFAls::AlgIFAls( DataReader& dreader,
    }
 }
 
+AlgIFAls::AlgIFAls( size_t factors,
+                    DataReader& dreader,
+                    int userpos,
+                    int itempos,
+                    int obspos )
+: m_running( true ),
+  m_nfactors( factors ),
+  m_alsNumIter( 5 ),
+  m_alpha( 40 ),
+  m_lambda( 10 ),
+  m_pVecPu( NULL ),
+  m_pVecPi( NULL ),
+  m_pMatCu( NULL ),
+  m_pMatCi( NULL )
+{
+   map< pair<size_t, size_t>, double > inputData;
+   while( !dreader.eof() )
+   {
+      std::vector<string> line;
+      dreader.readline( line );
+      if( line.empty() )
+      {
+         break;
+      }
+      std::string userId = line[userpos];
+      std::string itemId = line[itempos];
+
+      double rui = 0;
+      std::stringstream ss;
+      ss << line[obspos];
+      ss >> rui;
+
+      //std::cout << "user [" << userId << "] item [" << itemId << "] rating: [" << rating << "]" << std::endl;
+      size_t row, col;
+      std::map<std::string,size_t>::iterator ind;
+
+      ind = m_fUserMapper.find( userId );
+      if( ind == m_fUserMapper.end() )
+      {
+         row = m_fUserMapper.size();
+         m_fUserMapper[userId] = row;
+         m_bUserMapper[row] = userId;
+      }
+      else
+      {
+         row = ind->second;
+      }
+
+      ind = m_fItemMapper.find( itemId );
+      if( ind == m_fItemMapper.end() )
+      {
+         col = m_fItemMapper.size();
+         m_fItemMapper[itemId] = col;
+         m_bItemMapper[col] = itemId;
+      }
+      else
+      {
+         col = ind->second;
+      }
+
+      if( inputData.find( std::pair<size_t,size_t>( row, col ) ) != inputData.end() )
+      {
+         cout << "warning: <user: " << userId
+              << " ,item: " << itemId
+              << "> pair duplicated in line " << dreader.currentline()
+              << endl;
+         continue;
+      }
+      inputData[pair<size_t,size_t>( row, col )] = rui;
+   }
+
+   m_pVecPu = new mapped_vector<double>*[m_fUserMapper.size()];
+   for( size_t u = 0 ; u < m_fUserMapper.size() ; u++ )
+   {
+      m_pVecPu[u] = new mapped_vector<double>( m_fItemMapper.size() );
+   }
+
+   m_pMatCu = new diagonal_matrix<double>*[m_fUserMapper.size()];
+   for( size_t u = 0 ; u < m_fUserMapper.size() ; u++ )
+   {
+      m_pMatCu[u] = new diagonal_matrix<double>( m_fItemMapper.size() );
+   }
+
+   m_pVecPi = new mapped_vector<double>*[m_fItemMapper.size()];
+   for( size_t i = 0 ; i < m_fItemMapper.size() ; i++ )
+   {
+      m_pVecPi[i] = new mapped_vector<double>( m_fUserMapper.size() );
+   }
+
+   m_pMatCi = new diagonal_matrix<double>*[m_fItemMapper.size()];
+   for( size_t i = 0 ; i < m_fItemMapper.size() ; i++ )
+   {
+      m_pMatCi[i] = new diagonal_matrix<double, row_major>( m_fUserMapper.size() );
+   }
+
+   map< pair<size_t, size_t>, double >::iterator ind;
+   map< pair<size_t, size_t>, double >::iterator end = inputData.end();
+   for( ind = inputData.begin() ; ind != end ; ++ind )
+   {
+      size_t row = ind->first.first;
+      size_t col = ind->first.second;
+      double observation = ind->second;
+
+      m_pVecPu[row]->operator()( col ) = 1;
+      m_pMatCu[row]->operator()( col, col ) = 1 + m_alpha*observation;
+
+      m_pVecPi[col]->operator()( row ) = 1;
+      m_pMatCi[col]->operator()( row, row ) = 1 + m_alpha*observation;
+   }
+
+   size_t nusers = m_fUserMapper.size();
+   size_t nitems = m_fItemMapper.size();
+   m_Xu.resize( nusers, m_nfactors );
+   m_Yi.resize( nitems, m_nfactors );
+   reset();
+}
+
 AlgIFAls::~AlgIFAls()
 {
    m_Xu.clear();
@@ -178,6 +293,13 @@ AlgIFAls::~AlgIFAls()
 int AlgIFAls::train( size_t factors, size_t alsNumIter, float lambda, FlowControl& fcontrol )
 {
    reset( factors, alsNumIter, lambda );
+   return train( fcontrol );
+}
+
+int AlgIFAls::train( size_t alsNumIter, float lambda, FlowControl& fcontrol )
+{
+   m_alsNumIter = alsNumIter;
+   m_lambda = lambda;
    return train( fcontrol );
 }
 
@@ -341,6 +463,32 @@ throw( runtime_error& )
    return FINISHED;
 }
 
+void AlgIFAls::reset()
+{
+   size_t nusers = m_fUserMapper.size();
+   size_t nitems = m_fItemMapper.size();
+
+   random_device rd;
+   mt19937 randGen( rd() );
+   normal_distribution<> normal_dist( 0, 0.1 );
+
+   for( size_t u = 0 ; u < nusers ; ++u )
+   {
+      for( size_t f = 0 ; f < m_nfactors ; ++f )
+      {
+         m_Xu( u, f ) = normal_dist( randGen );
+      }
+   }
+
+   for( size_t i = 0 ; i < nitems ; ++i )
+   {
+      for( size_t f = 0 ; f < m_nfactors ; ++f )
+      {
+         m_Yi( i, f ) = normal_dist( randGen );
+      }
+   }
+}
+
 double AlgIFAls::predict( size_t userrow, size_t itemcol )
 {
    double pred = 0;
@@ -408,16 +556,16 @@ void AlgIFAls::reset( size_t factors, size_t alsNumIter, float lambda )
    size_t nusers = m_fUserMapper.size();
    size_t nitems = m_fItemMapper.size();
 
-   mt19937 rng;
-   normal_distribution<> nd( 0, 0.1 );
-   variate_generator< mt19937&, normal_distribution<> > var_nor( rng, nd );
+   random_device rd;
+   mt19937 randGen( rd() );
+   normal_distribution<> normal_dist( 0, 0.1 );
 
    m_Xu.resize( nusers, m_nfactors );
    for( size_t u = 0 ; u < nusers ; ++u )
    {
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_Xu( u, f ) = var_nor();
+         m_Xu( u, f ) = normal_dist( randGen );
       }
    }
 
@@ -426,7 +574,7 @@ void AlgIFAls::reset( size_t factors, size_t alsNumIter, float lambda )
    {
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_Yi( i, f ) = var_nor();
+         m_Yi( i, f ) = normal_dist( randGen );
       }
    }
 }

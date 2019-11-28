@@ -27,12 +27,19 @@ public:
              int itempos = 1,
              int obspos = 2 );
 
+   AlgIFAls( size_t factors,
+             DataReader& dreader,
+             int userpos = 0,
+             int itempos = 1,
+             int obspos = 2 );
+
    ~AlgIFAls();
 
-   int train( FlowControl& fcontrol )
-   throw( std::runtime_error& );
-
    int train( size_t factors, size_t alsNumIter, float lambda, FlowControl& fcontrol );
+
+   int train( size_t alsNumIter, float lambda, FlowControl& fcontrol );
+
+   void reset();
 
    double predict( size_t userrow, size_t itemcol );
 
@@ -48,6 +55,9 @@ public:
    }
 
 private:
+
+   int train( FlowControl& fcontrol )
+   throw( std::runtime_error& );
 
    void reset( size_t factors, size_t maxiter, float lambda );
 

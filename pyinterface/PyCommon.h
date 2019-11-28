@@ -2,6 +2,7 @@
 #define __PY_COMMON_H__
 
 #include <Python.h> // This header was set at the first place to avoid warnings
+#include <iostream>
 #include <vector>
 #include <map>
 #include <stdexcept>
@@ -105,6 +106,66 @@ PyObject* PyNewIF( PyTypeObject* type, PyObject* args, PyObject* kwdict )
       }
 
       self->m_recAlgorithm = new TAlgorithm( *self->m_trainingReader, usercol, itemcol, ratingcol );
+      if( NULL == self->m_recAlgorithm )
+      {
+         Py_DECREF( self );
+         return NULL;
+      }
+   }
+
+   return reinterpret_cast<PyObject*>( self );
+}
+
+template<class TPyInstance, class TAlgorithm>
+PyObject* PyNewIFWFactors( PyTypeObject* type, PyObject* args, PyObject* kwdict )
+{
+   int factors = -60223;
+   const char* dsfilename = NULL;
+   char dlmchar = ',';
+   int header = 0;
+   int usercol = 0;
+   int itemcol = 1;
+   int ratingcol = 2;
+
+   static char* kwlist[] = { const_cast<char*>( "dataset" ),
+                             const_cast<char*>( "dlmchar" ),
+                             const_cast<char*>( "header" ),
+                             const_cast<char*>( "usercol" ),
+                             const_cast<char*>( "itemcol" ),
+                             const_cast<char*>( "observationcol" ),
+                             const_cast<char*>( "factors" ),
+                             NULL };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|ciiiii", kwlist, &dsfilename,
+                                     &dlmchar, &header, &usercol, &itemcol, &ratingcol, &factors ) )
+   {
+      return NULL;
+   }
+
+   if( NULL == dsfilename )
+   {
+      return NULL;
+   }
+
+   TPyInstance* self = reinterpret_cast<TPyInstance*>( type->tp_alloc( type, 0 ) );
+   if( self != NULL )
+   {
+      self->m_trainingReader = new DataReader( dsfilename, dlmchar, header );
+      if( NULL == self->m_trainingReader )
+      {
+         Py_DECREF( self );
+         return NULL;
+      }
+
+      if( factors < 0 )
+      {
+         std::cout << "Warning: Constructor signature used is deprecated. From now on, it should include 'factors' parameter. See documentation for more information." << std::endl;
+         self->m_recAlgorithm = new TAlgorithm( *self->m_trainingReader, usercol, itemcol, ratingcol );
+      }
+      else
+      {
+         self->m_recAlgorithm = new TAlgorithm( factors, *self->m_trainingReader, usercol, itemcol, ratingcol );
+      }
       if( NULL == self->m_recAlgorithm )
       {
          Py_DECREF( self );

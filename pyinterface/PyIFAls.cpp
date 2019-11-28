@@ -16,6 +16,7 @@ static
 PyMethodDef IFAls_methods[] =
 {
    { "train",     (PyCFunction)IFAlsTrain,           METH_VARARGS|METH_KEYWORDS, "train model" },
+   { "reset",     (PyCFunction)PyReset<PyIFAls>,     METH_NOARGS,                "reset model parameters" },
    { "testrec",   (PyCFunction)PyTestrec<PyIFAls>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "recommend", (PyCFunction)PyRecommend<PyIFAls>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
    { "MAP",       (PyCFunction)PynDCG<PyIFAls>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
@@ -67,7 +68,7 @@ static PyTypeObject IFAlsType =
    0,                                        // tp_dictoffset
    0,                                        // tp_init
    0,                                        // tp_alloc
-   PyNewIF<PyIFAls, AlgIFAls>,               // tp_new
+   PyNewIFWFactors<PyIFAls, AlgIFAls>,       // tp_new
 };
 
 
@@ -78,7 +79,7 @@ PyTypeObject* IFAlsGetType()
 
 PyObject* IFAlsTrain( PyIFAls* self, PyObject* args, PyObject* kwdict )
 {
-   size_t factors = 50;
+   int factors = -60223;
    size_t alsNumIter = 5;
    float lambda = 10;
 
@@ -97,7 +98,15 @@ PyObject* IFAlsTrain( PyIFAls* self, PyObject* args, PyObject* kwdict )
    string eMsg;
    try
    {
-      cause = dynamic_cast<AlgIFAls*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda, sigHandler );
+      if( factors < 0 )
+      {
+         cause = dynamic_cast<AlgIFAls*>( self->m_recAlgorithm )->train( alsNumIter, lambda, sigHandler );
+      }
+      else
+      {
+         cout << "Warning: Train signature used is deprecated. From now on, 'factors' parameter should be provided in model's constructor. See documentation for more information." << endl;
+         cause = dynamic_cast<AlgIFAls*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda, sigHandler );
+      }
    }
    catch( exception& e )
    {
