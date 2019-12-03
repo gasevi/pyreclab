@@ -134,22 +134,24 @@ PyObject* BprMfTrain( PyBprMf* self, PyObject* args, PyObject* kwdict )
    float lambdaW = 0.01;
    float lambdaHp = 0.01;
    float lambdaHm = 0.01;
+   int progress = 0;
 
    static char* kwlist[] = { const_cast<char*>( "maxiter" ),
                              const_cast<char*>( "lr" ),
                              const_cast<char*>( "lambda_w" ),
                              const_cast<char*>( "lambda_hp" ),
                              const_cast<char*>( "lambda_hm" ),
+                             const_cast<char*>( "progress" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iffff", kwlist, &maxiter, &lr, &lambdaW, &lambdaHp, &lambdaHm ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iffffi", kwlist, &maxiter, &lr, &lambdaW, &lambdaHp, &lambdaHm, &progress ) )
    {
       return NULL;
    }
 
    SigHandler sigHandler( SIGINT );
    int cause = 0;
-   cause = dynamic_cast<AlgBprMf*>( self->m_recAlgorithm )->train( maxiter, lr, lambdaW, lambdaHp, lambdaHm, sigHandler );
+   cause = dynamic_cast<AlgBprMf*>( self->m_recAlgorithm )->train( maxiter, lr, lambdaW, lambdaHp, lambdaHm, sigHandler, progress );
 
    if( AlgBprMf::STOPPED == cause )
    {

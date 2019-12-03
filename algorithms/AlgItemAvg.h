@@ -20,7 +20,7 @@ public:
 
    ~AlgItemAvg();
 
-   int train( FlowControl& fcontrol );
+   int train( FlowControl& fcontrol, bool progress );
 
    double predict( std::string& userId, std::string& itemId );
 

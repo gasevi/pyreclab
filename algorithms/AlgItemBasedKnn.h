@@ -21,11 +21,9 @@ public:
 
    ~AlgItemBasedKnn();
 
-   int train( FlowControl& fcontrol );
+   int train( FlowControl& fcontrol, bool progress );
 
-   int train( size_t k, std::string& similarity, FlowControl& fcontrol );
-
-   void test( DataFrame& dataFrame );
+   int train( size_t k, std::string& similarity, FlowControl& fcontrol, bool progress );
 
    double predict( std::string& userId, std::string& itemId )
    throw( std::invalid_argument );

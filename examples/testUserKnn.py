@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   ubknn.train( k = 100, similarity = 'pearson' )
+   ubknn.train( k = 100, similarity = 'pearson', progress = True )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 

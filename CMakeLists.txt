@@ -49,6 +49,7 @@ add_subdirectory( datahandlers temp/datahandlers )
 add_subdirectory( algorithms temp/algorithms )
 add_subdirectory( pyinterface temp/pyinterface )
 add_subdirectory( eval_metrics temp/eval_metrics )
+add_subdirectory( tools temp/tools )
 
 if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
   set( CMAKE_MACOSX_RPATH 0 )
@@ -57,6 +58,7 @@ endif( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" )
 add_library( pyreclab SHARED
                       $<TARGET_OBJECTS:dataio>
                       $<TARGET_OBJECTS:datahandlers>
+                      $<TARGET_OBJECTS:tools>
                       $<TARGET_OBJECTS:algorithms>
                       $<TARGET_OBJECTS:eval_metrics>
                       $<TARGET_OBJECTS:pyinterface> )
@@ -82,6 +84,7 @@ if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_PYTHON_VERSION} VERSION_EQ
   add_library( pyreclab${LIBNAME_SUFFIX} SHARED
                                          $<TARGET_OBJECTS:dataio>
                                          $<TARGET_OBJECTS:datahandlers>
+                                         $<TARGET_OBJECTS:tools>
                                          $<TARGET_OBJECTS:algorithms>
                                          $<TARGET_OBJECTS:eval_metrics>
                                          $<TARGET_OBJECTS:pyinterface${LIBNAME_SUFFIX}> )

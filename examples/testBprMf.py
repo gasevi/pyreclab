@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   bprmf.train( maxiter = 5000000, lr = 0.1, lambda_w = 0.01, lambda_hp = 0.01, lambda_hm = 0.01 )
+   bprmf.train( maxiter = 5000000, lr = 0.1, lambda_w = 0.01, lambda_hp = 0.01, lambda_hm = 0.01, progress = True )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 

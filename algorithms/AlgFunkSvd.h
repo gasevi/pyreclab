@@ -26,9 +26,9 @@ public:
 
    ~AlgFunkSvd();
 
-   int train( size_t factors, size_t maxiter, float lrate, float lambda, FlowControl& fcontrol );
+   int train( size_t factors, size_t maxiter, float lrate, float lambda, FlowControl& fcontrol, bool progress );
 
-   int train( size_t maxiter, float lrate, float lambda, FlowControl& fcontrol );
+   int train( size_t maxiter, float lrate, float lambda, FlowControl& fcontrol, bool progress );
 
    void reset();
 
@@ -41,7 +41,7 @@ public:
 
 private:
 
-   int train( FlowControl& fcontrol );
+   int train( FlowControl& fcontrol, bool progress );
 
    void reset( size_t factors, size_t maxiter, float lrate, float lambda );
 

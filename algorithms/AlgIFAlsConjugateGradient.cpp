@@ -2,6 +2,7 @@
 #include "Similarity.h"
 #include "MaxHeap.h"
 #include "RecSysAlgorithm.h"
+#include "ProgressBar.h"
 
 #include <boost/numeric/ublas/matrix_proxy.hpp>
 #include <boost/numeric/ublas/triangular.hpp>
@@ -291,27 +292,28 @@ AlgIFAlsConjugateGradient::~AlgIFAlsConjugateGradient()
    }
 }
 
-int AlgIFAlsConjugateGradient::train( size_t factors, size_t alsNumIter, float lambda, size_t cgNumIter, FlowControl& fcontrol )
+int AlgIFAlsConjugateGradient::train( size_t factors, size_t alsNumIter, float lambda, size_t cgNumIter, FlowControl& fcontrol, bool progress )
 {
    reset( factors, alsNumIter, lambda, cgNumIter );
-   return train( fcontrol );
+   return train( fcontrol, progress );
 }
 
-int AlgIFAlsConjugateGradient::train( size_t alsNumIter, float lambda, size_t cgNumIter, FlowControl& fcontrol )
+int AlgIFAlsConjugateGradient::train( size_t alsNumIter, float lambda, size_t cgNumIter, FlowControl& fcontrol, bool progress )
 {
    m_alsNumIter = alsNumIter;
    m_lambda = lambda;
    m_cgNumIter = cgNumIter;
-   return train( fcontrol );
+   return train( fcontrol, progress );
 }
 
-int AlgIFAlsConjugateGradient::train( FlowControl& fcontrol )
+int AlgIFAlsConjugateGradient::train( FlowControl& fcontrol, bool progress )
 throw( runtime_error& )
 {
    size_t nusers = m_fUserMapper.size();
    size_t nitems = m_fItemMapper.size();
    identity_matrix<double> Iu( nusers );
    identity_matrix<double> Ii( nitems );
+   ProgressBar pbar( m_alsNumIter, progress );
 
    for( size_t i = 0 ; i < m_alsNumIter ; ++i )
    {
@@ -328,6 +330,8 @@ throw( runtime_error& )
       {
          return STOPPED;
       }
+
+      pbar.update( i + 1 );
    }
 
    return FINISHED;

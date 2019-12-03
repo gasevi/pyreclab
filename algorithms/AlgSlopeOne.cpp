@@ -1,4 +1,5 @@
 #include "AlgSlopeOne.h"
+#include "ProgressBar.h"
 
 using namespace std;
 
@@ -26,11 +27,12 @@ AlgSlopeOne::~AlgSlopeOne()
    }
 }
 
-int AlgSlopeOne::train( FlowControl& fcontrol )
+int AlgSlopeOne::train( FlowControl& fcontrol, bool progress )
 {
    size_t nusers = m_ratingMatrix.users();
    size_t nitems = m_ratingMatrix.items();
 
+   ProgressBar pbar( nusers, progress );
    for( size_t u = 0 ; u < nusers ; ++u )
    {
       SparseRow< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> > row = m_ratingMatrix.userVector( u );
@@ -60,6 +62,8 @@ int AlgSlopeOne::train( FlowControl& fcontrol )
          }
 
       }
+
+      pbar.update( u + 1 );
    }
 
    for( size_t i = 0 ; i < nitems ; ++i )

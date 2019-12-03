@@ -82,13 +82,15 @@ PyObject* IFAlsTrain( PyIFAls* self, PyObject* args, PyObject* kwdict )
    int factors = -60223;
    size_t alsNumIter = 5;
    float lambda = 10;
+   int progress = 0;
 
    static char* kwlist[] = { const_cast<char*>( "factors" ),
                              const_cast<char*>( "alsNumIter" ),
                              const_cast<char*>( "lambd" ),
+                             const_cast<char*>( "progress" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iif", kwlist, &factors, &alsNumIter, &lambda ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iifi", kwlist, &factors, &alsNumIter, &lambda, &progress ) )
    {
       return NULL;
    }
@@ -100,12 +102,12 @@ PyObject* IFAlsTrain( PyIFAls* self, PyObject* args, PyObject* kwdict )
    {
       if( factors < 0 )
       {
-         cause = dynamic_cast<AlgIFAls*>( self->m_recAlgorithm )->train( alsNumIter, lambda, sigHandler );
+         cause = dynamic_cast<AlgIFAls*>( self->m_recAlgorithm )->train( alsNumIter, lambda, sigHandler, progress );
       }
       else
       {
          cout << "Warning: Train signature used is deprecated. From now on, 'factors' parameter should be provided in model's constructor. See documentation for more information." << endl;
-         cause = dynamic_cast<AlgIFAls*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda, sigHandler );
+         cause = dynamic_cast<AlgIFAls*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda, sigHandler, progress );
       }
    }
    catch( exception& e )

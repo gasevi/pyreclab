@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   uavg.train()
+   uavg.train( progress = True )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 

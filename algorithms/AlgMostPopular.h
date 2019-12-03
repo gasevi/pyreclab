@@ -18,7 +18,7 @@ public:
                    int itempos = 1,
                    int ratingpos = 2 );
 
-   int train( FlowControl& fcontrol );
+   int train( FlowControl& fcontrol, bool progress );
 
    bool recommend( const std::string& userId,
                    size_t n,

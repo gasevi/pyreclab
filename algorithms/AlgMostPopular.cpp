@@ -1,5 +1,6 @@
 #include "AlgMostPopular.h"
 #include "MaxHeap.h"
+#include "ProgressBar.h"
 
 using namespace std;
 
@@ -12,9 +13,11 @@ AlgMostPopular::AlgMostPopular( DataReader& dreader,
 {
 }
 
-int AlgMostPopular::train( FlowControl& fcontrol )
+int AlgMostPopular::train( FlowControl& fcontrol, bool progress )
 {
-   for( size_t i = 0 ; i < m_ratingMatrix.items() ; ++i )
+   size_t nitems = m_ratingMatrix.items();
+   ProgressBar pbar( nitems, progress );
+   for( size_t i = 0 ; i < nitems ; ++i )
    {
       double score = m_ratingMatrix.nonZeroCol( i );
       pair<double, size_t> e = pair<double, size_t>( score, i );
@@ -25,6 +28,8 @@ int AlgMostPopular::train( FlowControl& fcontrol )
          sort( m_itemList.rbegin(), m_itemList.rend() );
          return STOPPED;
       }
+
+      pbar.update( i + 1 );
    }
    sort( m_itemList.rbegin(), m_itemList.rend() );
 

@@ -80,12 +80,14 @@ PyObject* UserKnnTrain( PyUserKnn* self, PyObject* args, PyObject* kwdict )
 {  
    int k = 10;
    const char* simType = NULL;
+   int progress = 0;
 
    static char* kwlist[] = { const_cast<char*>( "k" ),
                              const_cast<char*>( "similarity" ),
+                             const_cast<char*>( "progress" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|is", kwlist, &k, &simType ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|isi", kwlist, &k, &simType, &progress ) )
    {
       return NULL;
    }
@@ -107,7 +109,7 @@ PyObject* UserKnnTrain( PyUserKnn* self, PyObject* args, PyObject* kwdict )
    string eMsg;
    try
    {
-      cause = dynamic_cast<AlgUserBasedKnn*>( self->m_recAlgorithm )->train( k, strSimType, sigHandler );
+      cause = dynamic_cast<AlgUserBasedKnn*>( self->m_recAlgorithm )->train( k, strSimType, sigHandler, progress );
    }
    catch( const char* e )
    {

@@ -1,4 +1,5 @@
 #include "AlgUserAvg.h"
+#include "ProgressBar.h"
 
 using namespace std;
 
@@ -20,9 +21,11 @@ AlgUserAvg::~AlgUserAvg()
    }
 }
 
-int AlgUserAvg::train( FlowControl& fcontrol )
+int AlgUserAvg::train( FlowControl& fcontrol, bool progress )
 {
-   for( size_t row = 0 ; row < m_ratingMatrix.users() ; ++row )
+   size_t nusers = m_ratingMatrix.users();
+   ProgressBar pbar( nusers, progress );
+   for( size_t row = 0 ; row < nusers ; ++row )
    {
       double sumbyrow = 0;
       int countbyrow = m_ratingMatrix.sumRow( row, sumbyrow );
@@ -35,6 +38,8 @@ int AlgUserAvg::train( FlowControl& fcontrol )
       {
          return STOPPED;
       }
+
+      pbar.update( row + 1 );
    }
 
    return FINISHED;

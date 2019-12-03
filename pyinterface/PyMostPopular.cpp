@@ -80,18 +80,20 @@ PyTypeObject* MostPopularGetType()
 PyObject* MostPopularTrain( PyMostPopular* self, PyObject* args, PyObject* kwdict )
 {
    int topn = 10;
+   int progress = 0;
 
    static char* kwlist[] = { const_cast<char*>( "topn" ),
+                             const_cast<char*>( "progress" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|i", kwlist, &topn ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|ii", kwlist, &topn, &progress ) )
    {
       return NULL;
    }
 
    SigHandler sigHandler( SIGINT );
    int cause = 0;
-   cause = dynamic_cast<AlgMostPopular*>( self->m_recAlgorithm )->train( sigHandler );
+   cause = dynamic_cast<AlgMostPopular*>( self->m_recAlgorithm )->train( sigHandler, progress );
 
    if( AlgMostPopular::STOPPED == cause )
    {

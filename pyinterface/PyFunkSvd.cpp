@@ -143,14 +143,16 @@ PyObject* FunkSvdTrain( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
    size_t maxiter = 100;
    float lr = 0.01;
    float lambda = 0.1;
+   int progress = 0;
 
    static char* kwlist[] = { const_cast<char*>( "factors" ),
                              const_cast<char*>( "maxiter" ),
                              const_cast<char*>( "lr" ),
                              const_cast<char*>( "lamb" ),
+                             const_cast<char*>( "progress" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iiff", kwlist, &factors, &maxiter, &lr, &lambda ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iiffi", kwlist, &factors, &maxiter, &lr, &lambda, &progress ) )
    {
       return NULL;
    }
@@ -159,12 +161,12 @@ PyObject* FunkSvdTrain( PyFunkSvd* self, PyObject* args, PyObject* kwdict )
    int cause = 0;
    if( factors < 0 )
    {
-      cause = dynamic_cast<AlgFunkSvd*>( self->m_recAlgorithm )->train( maxiter, lr, lambda, sigHandler );
+      cause = dynamic_cast<AlgFunkSvd*>( self->m_recAlgorithm )->train( maxiter, lr, lambda, sigHandler, progress );
    }
    else
    {
       cout << "Warning: Train signature used is deprecated. From now on, 'factors' parameter should be provided in model's constructor. See documentation for more information." << endl;
-      cause = dynamic_cast<AlgFunkSvd*>( self->m_recAlgorithm )->train( factors, maxiter, lr, lambda, sigHandler );
+      cause = dynamic_cast<AlgFunkSvd*>( self->m_recAlgorithm )->train( factors, maxiter, lr, lambda, sigHandler, progress );
    }
 
    if( AlgFunkSvd::STOPPED == cause )

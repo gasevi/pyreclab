@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   mpop.train( 5 )
+   mpop.train( 5, progress = True )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 

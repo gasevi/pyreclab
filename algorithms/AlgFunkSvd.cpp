@@ -1,6 +1,7 @@
 #include "AlgFunkSvd.h"
 #include "Similarity.h"
 #include "MaxHeap.h"
+#include "ProgressBar.h"
 
 #include <random>
 
@@ -139,22 +140,23 @@ AlgFunkSvd::~AlgFunkSvd()
    }
 }
 
-int AlgFunkSvd::train( size_t factors, size_t maxiter, float lrate, float lambda, FlowControl& fcontrol )
+int AlgFunkSvd::train( size_t factors, size_t maxiter, float lrate, float lambda, FlowControl& fcontrol, bool progress )
 {
    reset( factors, maxiter, lrate, lambda );
-   return train( fcontrol );
+   return train( fcontrol, progress );
 }
 
-int AlgFunkSvd::train( size_t maxiter, float lrate, float lambda, FlowControl& fcontrol )
+int AlgFunkSvd::train( size_t maxiter, float lrate, float lambda, FlowControl& fcontrol, bool progress )
 {
    m_maxIter = maxiter;
    m_learningRate = lrate;
    m_lambda = lambda;
-   return train( fcontrol );
+   return train( fcontrol, progress );
 }
 
-int AlgFunkSvd::train( FlowControl& fcontrol )
+int AlgFunkSvd::train( FlowControl& fcontrol, bool progress )
 {
+   ProgressBar pbar( m_maxIter, progress );
    for( size_t it = 0 ; it < m_maxIter ; ++it )
    {
       size_t nusers = m_ratingMatrix.users();
@@ -216,6 +218,7 @@ int AlgFunkSvd::train( FlowControl& fcontrol )
          break;
       }
       adaptLR( it );
+      pbar.update( it + 1 );
    }
 
    return FINISHED;

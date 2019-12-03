@@ -35,9 +35,9 @@ public:
 
    ~AlgIFAlsConjugateGradient();
 
-   int train( size_t factors, size_t maxiter, float lambda, size_t cgNumIter, FlowControl& fcontrol );
+   int train( size_t factors, size_t maxiter, float lambda, size_t cgNumIter, FlowControl& fcontrol, bool progress );
 
-   int train( size_t maxiter, float lambda, size_t cgNumIter, FlowControl& fcontrol );
+   int train( size_t maxiter, float lambda, size_t cgNumIter, FlowControl& fcontrol, bool progress );
 
    void reset();
 
@@ -56,7 +56,7 @@ public:
 
 private:
 
-   int train( FlowControl& fcontrol )
+   int train( FlowControl& fcontrol, bool progress )
    throw( std::runtime_error& );
 
    void conjugateGradient( boost::numeric::ublas::matrix<double>& Y,

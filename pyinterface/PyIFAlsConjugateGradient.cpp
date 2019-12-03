@@ -83,14 +83,16 @@ PyObject* IFAlsConjugateGradientTrain( PyIFAlsConjugateGradient* self, PyObject*
    size_t alsNumIter = 5;
    float lambda = 10;
    size_t cgNumIter = 2;
+   int progress = 0;
 
    static char* kwlist[] = { const_cast<char*>( "factors" ),
                              const_cast<char*>( "alsNumIter" ),
                              const_cast<char*>( "lambd" ),
                              const_cast<char*>( "cgNumIter" ),
+                             const_cast<char*>( "progress" ),
                              NULL };
 
-   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iifi", kwlist, &factors, &alsNumIter, &lambda, &cgNumIter ) )
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|iifii", kwlist, &factors, &alsNumIter, &lambda, &cgNumIter, &progress ) )
    {
       return NULL;
    }
@@ -102,12 +104,12 @@ PyObject* IFAlsConjugateGradientTrain( PyIFAlsConjugateGradient* self, PyObject*
    {
       if( factors < 0 )
       {
-         cause = dynamic_cast<AlgIFAlsConjugateGradient*>( self->m_recAlgorithm )->train( alsNumIter, lambda, cgNumIter, sigHandler );
+         cause = dynamic_cast<AlgIFAlsConjugateGradient*>( self->m_recAlgorithm )->train( alsNumIter, lambda, cgNumIter, sigHandler, progress );
       }
       else
       {
          cout << "Warning: Train signature used is deprecated. From now on, 'factors' parameter should be provided in model's constructor. See documentation for more information." << endl;
-         cause = dynamic_cast<AlgIFAlsConjugateGradient*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda, cgNumIter, sigHandler );
+         cause = dynamic_cast<AlgIFAlsConjugateGradient*>( self->m_recAlgorithm )->train( factors, alsNumIter, lambda, cgNumIter, sigHandler, progress );
       }
    }
    catch( exception& e )

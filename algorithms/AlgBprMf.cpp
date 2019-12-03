@@ -1,6 +1,7 @@
 #include "AlgBprMf.h"
 #include "Similarity.h"
 #include "MaxHeap.h"
+#include "ProgressBar.h"
 
 #include <cmath>
 #include <random>
@@ -94,7 +95,7 @@ AlgBprMf::~AlgBprMf()
    }
 }
 
-int AlgBprMf::train( size_t maxiter, float lrate, float lambdaW, float lambdaHp, float lambdaHm, FlowControl& fcontrol )
+int AlgBprMf::train( size_t maxiter, float lrate, float lambdaW, float lambdaHp, float lambdaHm, FlowControl& fcontrol, bool progress )
 {
    m_maxIter = maxiter;
    m_lr = lrate;
@@ -102,11 +103,12 @@ int AlgBprMf::train( size_t maxiter, float lrate, float lambdaW, float lambdaHp,
    m_lambdaHp = lambdaHp;
    m_lambdaHm = lambdaHm;
 
-   return train( fcontrol );
+   return train( fcontrol, progress );
 }
 
-int AlgBprMf::train( FlowControl& fcontrol )
+int AlgBprMf::train( FlowControl& fcontrol, bool progress )
 {
+   ProgressBar pbar( m_maxIter, progress );
    for( size_t it = 0 ; it < m_maxIter ; ++it )
    {
       // Draw (u,i,j) from Ds
@@ -138,6 +140,7 @@ int AlgBprMf::train( FlowControl& fcontrol )
             return STOPPED;
          }
       }
+      pbar.update( it + 1 );
    }
 
    return FINISHED;

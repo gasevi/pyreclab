@@ -79,9 +79,19 @@ PyTypeObject* ItemAvgGetType()
 
 PyObject* ItemAvg_train( PyItemAvg* self, PyObject* args, PyObject* kwdict )
 {
+   int progress = 0;
+
+   static char* kwlist[] = { const_cast<char*>( "progress" ),
+                             NULL };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "|i", kwlist, &progress ) )
+   {
+      return NULL;
+   }
+
    SigHandler sigHandler( SIGINT );
    int cause = 0;
-   cause = dynamic_cast<AlgItemAvg*>( self->m_recAlgorithm )->train( sigHandler );
+   cause = dynamic_cast<AlgItemAvg*>( self->m_recAlgorithm )->train( sigHandler, progress );
 
    if( AlgItemAvg::STOPPED == cause )
    {

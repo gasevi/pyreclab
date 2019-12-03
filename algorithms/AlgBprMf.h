@@ -22,14 +22,13 @@ public:
 
    ~AlgBprMf();
 
-   int train( FlowControl& fcontrol );
-
    int train( size_t maxiter,
               float lrate,
               float lambdaW,
               float lambdaHp,
               float lambdaHm,
-              FlowControl& fcontrol );
+              FlowControl& fcontrol,
+              bool progress );
 
    void reset();
 
@@ -38,6 +37,8 @@ public:
    double loss();
 
 private:
+
+   int train( FlowControl& fcontrol, bool progress );
 
    double score( size_t userrow, size_t itemcoli, size_t itemcolj );
 

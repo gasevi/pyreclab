@@ -1,4 +1,5 @@
 #include "AlgItemAvg.h"
+#include "ProgressBar.h"
 
 using namespace std;
 
@@ -20,9 +21,11 @@ AlgItemAvg::~AlgItemAvg()
    }
 }
 
-int AlgItemAvg::train( FlowControl& fcontrol )
+int AlgItemAvg::train( FlowControl& fcontrol, bool progress )
 {
-   for( size_t col = 0 ; col < m_ratingMatrix.items() ; ++col )
+   size_t nitems = m_ratingMatrix.items();
+   ProgressBar pbar( nitems, progress );
+   for( size_t col = 0 ; col < nitems ; ++col )
    {
       double sumbycol = 0;
       int countbycol = m_ratingMatrix.sumColumn( col, sumbycol );
@@ -35,6 +38,8 @@ int AlgItemAvg::train( FlowControl& fcontrol )
       {
          return STOPPED;
       }
+
+      pbar.update( col + 1 );
    }
 
    return FINISHED;

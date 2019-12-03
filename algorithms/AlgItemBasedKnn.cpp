@@ -1,6 +1,7 @@
 #include "AlgItemBasedKnn.h"
 #include "Similarity.h"
 #include "MaxHeap.h"
+#include "ProgressBar.h"
 
 using namespace std;
 
@@ -29,13 +30,13 @@ AlgItemBasedKnn::~AlgItemBasedKnn()
    }
 }
 
-int AlgItemBasedKnn::train( FlowControl& fcontrol )
+int AlgItemBasedKnn::train( FlowControl& fcontrol, bool progress )
 {  
    string strSimType = "pearson";
-   return train( 10, strSimType, fcontrol );
+   return train( 10, strSimType, fcontrol, progress );
 }
 
-int AlgItemBasedKnn::train( size_t k, string& similarity, FlowControl& fcontrol )
+int AlgItemBasedKnn::train( size_t k, string& similarity, FlowControl& fcontrol, bool progress )
 {
    m_knn = k;
    size_t nitems = m_ratingMatrix.items();
@@ -47,6 +48,7 @@ int AlgItemBasedKnn::train( size_t k, string& similarity, FlowControl& fcontrol 
    }
    m_pSimMatrix = new SymmMatrix( nitems );
 
+   ProgressBar pbar( nitems, progress );
    for( size_t i = 0 ; i < nitems ; ++i )
    {
       // Mean rating matrix
@@ -65,6 +67,8 @@ int AlgItemBasedKnn::train( size_t k, string& similarity, FlowControl& fcontrol 
             return STOPPED;
          }
       }
+
+      pbar.update( i + 1 );
    }
 
    return FINISHED;

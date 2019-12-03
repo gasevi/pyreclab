@@ -35,9 +35,9 @@ public:
 
    ~AlgIFAls();
 
-   int train( size_t factors, size_t alsNumIter, float lambda, FlowControl& fcontrol );
+   int train( size_t factors, size_t alsNumIter, float lambda, FlowControl& fcontrol, bool progress );
 
-   int train( size_t alsNumIter, float lambda, FlowControl& fcontrol );
+   int train( size_t alsNumIter, float lambda, FlowControl& fcontrol, bool progress );
 
    void reset();
 
@@ -56,7 +56,7 @@ public:
 
 private:
 
-   int train( FlowControl& fcontrol )
+   int train( FlowControl& fcontrol, bool progress )
    throw( std::runtime_error& );
 
    void reset( size_t factors, size_t maxiter, float lambda );

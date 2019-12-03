@@ -2,6 +2,7 @@
 #include "Similarity.h"
 #include "MaxHeap.h"
 #include "RecSysAlgorithm.h"
+#include "ProgressBar.h"
 
 #include <boost/numeric/ublas/matrix_proxy.hpp>
 #include <boost/numeric/ublas/triangular.hpp>
@@ -290,20 +291,20 @@ AlgIFAls::~AlgIFAls()
    }
 }
 
-int AlgIFAls::train( size_t factors, size_t alsNumIter, float lambda, FlowControl& fcontrol )
+int AlgIFAls::train( size_t factors, size_t alsNumIter, float lambda, FlowControl& fcontrol, bool progress )
 {
    reset( factors, alsNumIter, lambda );
-   return train( fcontrol );
+   return train( fcontrol, progress );
 }
 
-int AlgIFAls::train( size_t alsNumIter, float lambda, FlowControl& fcontrol )
+int AlgIFAls::train( size_t alsNumIter, float lambda, FlowControl& fcontrol, bool progress )
 {
    m_alsNumIter = alsNumIter;
    m_lambda = lambda;
-   return train( fcontrol );
+   return train( fcontrol, progress );
 }
 
-int AlgIFAls::train( FlowControl& fcontrol )
+int AlgIFAls::train( FlowControl& fcontrol, bool progress )
 throw( runtime_error& )
 {
    size_t nusers = m_fUserMapper.size();
@@ -311,6 +312,7 @@ throw( runtime_error& )
    identity_matrix<double> Iu( nusers );
    identity_matrix<double> Ii( nitems );
    identity_matrix<double> If( m_nfactors );
+   ProgressBar pbar( m_alsNumIter, progress );
 
    for( size_t it = 0 ; it < m_alsNumIter ; ++it )
    {
@@ -458,6 +460,8 @@ throw( runtime_error& )
          cout << "elapsed time: " << dt << endl;
 */
       }
+
+      pbar.update( it + 1 );
    }
 
    return FINISHED;

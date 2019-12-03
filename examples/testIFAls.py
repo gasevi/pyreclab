@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   ifals.train( alsNumIter = 5, lambd = 10 )
+   ifals.train( alsNumIter = 5, lambd = 10, progress = True )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 

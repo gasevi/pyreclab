@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   ifalscg.train( alsNumIter = 5, lambd = 10, cgNumIter = 2 )
+   ifalscg.train( alsNumIter = 5, lambd = 10, cgNumIter = 2, progress = True )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 

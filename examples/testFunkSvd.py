@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
    print( '-> training model' )
    start = time.clock()
-   svd.train( maxiter = 100, lr = 0.01, lamb = 0.1 )
+   svd.train( maxiter = 100, lr = 0.01, lamb = 0.1, progress = True )
    end = time.clock()
    print( 'training time: ' + str( end - start ) )
 
