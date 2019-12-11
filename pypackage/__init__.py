@@ -7,12 +7,12 @@ if platform.system() == 'Darwin':
    cur_version = sys.version_info
 
    if cur_version == native_version:
-      from pyreclab.libpyreclab_native_py import MostPopular, UserAvg, ItemAvg, SlopeOne, UserKnn, ItemKnn, SVD, IFAls, IFAlsConjugateGradient
+      from pyreclab.libpyreclab_native_py import MostPopular, UserAvg, ItemAvg, SlopeOne, UserKnn, ItemKnn, SVD, IFAls, IFAlsConjugateGradient, BprMf
    else: # brew version
-      from pyreclab.libpyreclab import MostPopular, UserAvg, ItemAvg, SlopeOne, UserKnn, ItemKnn, SVD, IFAls, IFAlsConjugateGradient
+      from pyreclab.libpyreclab import MostPopular, UserAvg, ItemAvg, SlopeOne, UserKnn, ItemKnn, SVD, IFAls, IFAlsConjugateGradient, BprMf
 
 else:
-   from pyreclab.libpyreclab import MostPopular, UserAvg, ItemAvg, SlopeOne, UserKnn, ItemKnn, SVD, IFAls, IFAlsConjugateGradient
+   from pyreclab.libpyreclab import MostPopular, UserAvg, ItemAvg, SlopeOne, UserKnn, ItemKnn, SVD, IFAls, IFAlsConjugateGradient, BprMf
 
 __all__ = [ 'MostPopular',
             'UserAvg',
@@ -22,5 +22,6 @@ __all__ = [ 'MostPopular',
             'ItemKnn',
             'SVD',
             'IFAls',
-            'IFAlsConjugateGradient' ]
+            'IFAlsConjugateGradient',
+            'BprMf' ]
 
