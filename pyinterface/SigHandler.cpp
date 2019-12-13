@@ -28,7 +28,6 @@ SigHandler::~SigHandler()
 
 void SigHandler::handler( int signum )
 {
-   cout << "sighandler called" << endl;
    m_sigReceived = true;
    signum = 0; // avoid warning
 }
