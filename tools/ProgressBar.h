@@ -2,6 +2,7 @@
 #define __PROGRESS_BAR_H__
 
 #include <unistd.h>
+#include <string>
 
 class ProgressBarStrategy
 {
@@ -33,11 +34,7 @@ class ActiveProgressBar
 {
 public:
 
-   ActiveProgressBar( float maxValue )
-   : m_maxValue( maxValue ),
-     m_barWidth( 70 )
-   {
-   }
+   ActiveProgressBar( float maxValue );
 
    ~ActiveProgressBar();
 
@@ -45,9 +42,15 @@ public:
 
 private:
 
+   std::string elapsedTime();
+
+   std::string timeOfArrival( float progress );
+
    float m_maxValue;
 
    size_t m_barWidth;
+
+   time_t m_startTime;
 
 };
 

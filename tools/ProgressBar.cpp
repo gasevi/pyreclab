@@ -2,9 +2,17 @@
 
 #include <iostream>
 #include <iomanip>
+#include <iostream>
 
 using namespace std;
 
+
+ActiveProgressBar::ActiveProgressBar( float maxValue )
+: m_maxValue( maxValue ),
+  m_barWidth( 50 )
+{
+   m_startTime = time( NULL );
+}
 
 ActiveProgressBar::~ActiveProgressBar()
 {
@@ -23,8 +31,38 @@ void ActiveProgressBar::update( float progress )
       else if (i == pos) cout << ">";
       else cout << " ";
    }
-   cout << "] " << fixed << setprecision( 1 ) << completion_rate * 100.0 << " %\r";
+   cout << "] "
+        << std::setw( 5 ) << fixed << setprecision( 1 ) << completion_rate * 100 << " % - "
+        << elapsedTime() << " "
+        << timeOfArrival( progress ) << "\r";
    cout.flush();
+}
+
+string ActiveProgressBar::elapsedTime()
+{
+   double elapsedTimeSec = difftime( time( NULL ), m_startTime );
+   tm elapsedTime = { 0 };
+   elapsedTime.tm_hour = elapsedTimeSec / 3600;
+   elapsedTime.tm_min = elapsedTimeSec / 60;
+   elapsedTime.tm_sec = static_cast<int>( elapsedTimeSec ) % 60;
+   char buffer[32];
+   strftime( buffer, 32, "ET %H:%M:%S", &elapsedTime );
+   return string( buffer );
+}
+
+string ActiveProgressBar::timeOfArrival( float progress )
+{
+   float completion_rate = progress / m_maxValue;
+   double elapsedTimeSec = difftime( time( NULL ), m_startTime );
+   double speed = completion_rate / elapsedTimeSec;
+   double etaSec = ( 1 - completion_rate ) / speed;
+   tm eta = { 0 };
+   eta.tm_hour = etaSec / 3600;
+   eta.tm_min = etaSec / 60;
+   eta.tm_sec = static_cast<int>( etaSec ) % 60;
+   char buffer[32];
+   strftime( buffer, 32, "ETA %H:%M:%S", &eta );
+   return string( buffer );
 }
 
 ProgressBar::ProgressBar( float maxValue, bool active )
