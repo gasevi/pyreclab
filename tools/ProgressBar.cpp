@@ -12,6 +12,7 @@ ActiveProgressBar::ActiveProgressBar( float maxValue )
   m_barWidth( 50 )
 {
    m_startTime = time( NULL );
+   m_lastUpdateTime = time( NULL );
 }
 
 ActiveProgressBar::~ActiveProgressBar()
@@ -22,6 +23,13 @@ ActiveProgressBar::~ActiveProgressBar()
 
 void ActiveProgressBar::update( float progress )
 {
+   time_t now = time( NULL );
+   double secs = difftime( now, m_lastUpdateTime );
+   if( secs < m_kMinUpdateTime && progress != m_maxValue )
+   {
+      return;
+   }
+   m_lastUpdateTime = now;
    float completion_rate = progress / m_maxValue;
    cout << "[";
    size_t pos = m_barWidth * completion_rate;
@@ -33,14 +41,14 @@ void ActiveProgressBar::update( float progress )
    }
    cout << "] "
         << std::setw( 5 ) << fixed << setprecision( 1 ) << completion_rate * 100 << " % - "
-        << elapsedTime() << " "
-        << timeOfArrival( progress ) << "\r";
+        << elapsedTime( now ) << " "
+        << timeOfArrival( progress, now ) << "\r";
    cout.flush();
 }
 
-string ActiveProgressBar::elapsedTime()
+string ActiveProgressBar::elapsedTime( time_t& now )
 {
-   double elapsedTimeSec = difftime( time( NULL ), m_startTime );
+   double elapsedTimeSec = difftime( now, m_startTime );
    tm elapsedTime = { 0 };
    elapsedTime.tm_hour = elapsedTimeSec / 3600;
    elapsedTime.tm_min = elapsedTimeSec / 60;
@@ -50,10 +58,10 @@ string ActiveProgressBar::elapsedTime()
    return string( buffer );
 }
 
-string ActiveProgressBar::timeOfArrival( float progress )
+string ActiveProgressBar::timeOfArrival( float progress, time_t& now )
 {
    float completion_rate = progress / m_maxValue;
-   double elapsedTimeSec = difftime( time( NULL ), m_startTime );
+   double elapsedTimeSec = difftime( now, m_startTime );
    double speed = completion_rate / elapsedTimeSec;
    double etaSec = ( 1 - completion_rate ) / speed;
    tm eta = { 0 };

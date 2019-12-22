@@ -42,15 +42,20 @@ public:
 
 private:
 
-   std::string elapsedTime();
+   const
+   size_t m_kMinUpdateTime = 1;
 
-   std::string timeOfArrival( float progress );
+   std::string elapsedTime( time_t& now );
+
+   std::string timeOfArrival( float progress, time_t& now );
 
    float m_maxValue;
 
    size_t m_barWidth;
 
    time_t m_startTime;
+
+   time_t m_lastUpdateTime;
 
 };
 
