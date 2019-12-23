@@ -305,7 +305,6 @@ int AlgIFAls::train( size_t alsNumIter, float lambda, FlowControl& fcontrol, boo
 }
 
 int AlgIFAls::train( FlowControl& fcontrol, bool progress )
-throw( runtime_error& )
 {
    size_t nusers = m_fUserMapper.size();
    size_t nitems = m_fItemMapper.size();
@@ -511,7 +510,6 @@ bool AlgIFAls::recommend( const std::string& userId,
                           size_t n,
                           std::vector<std::string>& ranking,
                           bool includeRated )
-throw( invalid_argument& )
 {
    if( m_fUserMapper.find( userId ) == m_fUserMapper.end() )
    {  

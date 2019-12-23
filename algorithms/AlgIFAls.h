@@ -46,8 +46,7 @@ public:
    bool recommend( const std::string& userId,
                    size_t n,
                    std::vector<std::string>& ranking,
-                   bool includeRated = false )
-   throw( std::invalid_argument& );
+                   bool includeRated = false );
  
    void stop()
    {
@@ -56,8 +55,7 @@ public:
 
 private:
 
-   int train( FlowControl& fcontrol, bool progress )
-   throw( std::runtime_error& );
+   int train( FlowControl& fcontrol, bool progress );
 
    void reset( size_t factors, size_t maxiter, float lambda );
 

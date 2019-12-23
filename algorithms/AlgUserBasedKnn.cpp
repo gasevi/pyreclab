@@ -75,7 +75,6 @@ int AlgUserBasedKnn::train( size_t k, string& similarity, FlowControl& fcontrol,
 }
 
 double AlgUserBasedKnn::predict( string& userId, string& itemId )
-throw( invalid_argument )
 {
    int userrow = m_ratingMatrix.row( userId );
    if( userrow < 0 )

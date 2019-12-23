@@ -253,7 +253,6 @@ double AlgFunkSvd::loss()
 }
 
 double AlgFunkSvd::predict( string& userId, string& itemId )
-throw( invalid_argument )
 {
    int userrow = m_ratingMatrix.row( userId );
    if( userrow < 0 )

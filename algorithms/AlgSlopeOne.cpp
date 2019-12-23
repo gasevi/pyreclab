@@ -88,7 +88,6 @@ int AlgSlopeOne::train( FlowControl& fcontrol, bool progress )
 }
 
 double AlgSlopeOne::predict( string& userId, string& itemId )
-throw( invalid_argument )
 {
    int userrow = m_ratingMatrix.row( userId );
    if( userrow < 0 )

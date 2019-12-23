@@ -34,8 +34,7 @@ public:
 
    double loss();
 
-   double predict( std::string& userId, std::string& itemId )
-   throw( std::invalid_argument );
+   double predict( std::string& userId, std::string& itemId );
 
    double predict( size_t userrow, size_t itemcol );
 
