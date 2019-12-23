@@ -1,10 +1,11 @@
 #include "AlgBprMf.h"
 #include "Similarity.h"
 #include "MaxHeap.h"
+#include "NormalDistribution.h"
+#include "UniformIntDistribution.h"
 #include "ProgressBar.h"
 
 #include <cmath>
-#include <random>
 
 using namespace std;
 
@@ -40,9 +41,7 @@ AlgBprMf::AlgBprMf( size_t factors,
       }
    }
 
-   random_device rd;
-   mt19937 randGen( rd() );
-   normal_distribution<> normal_dist( 0, 0.1 );
+   NormalDistribution normal_dist( 0, 0.1 );
 
    m_userP = new double*[nusers];
    for( size_t i = 0 ; i < nusers ; ++i )
@@ -50,7 +49,7 @@ AlgBprMf::AlgBprMf( size_t factors,
       m_userP[i] = new double[m_nfactors];
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_userP[i][f] = normal_dist( randGen );
+         m_userP[i][f] = normal_dist();
       }
    }
 
@@ -60,7 +59,7 @@ AlgBprMf::AlgBprMf( size_t factors,
       m_itemQ[i] = new double[m_nfactors];
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_itemQ[i][f] = normal_dist( randGen );
+         m_itemQ[i][f] = normal_dist();
       }
    }
 }
@@ -148,27 +147,25 @@ int AlgBprMf::train( FlowControl& fcontrol, bool progress )
 
 void AlgBprMf::sample( int& u, int& i, int& j )
 {
-   random_device rd;
-   mt19937 randGen( rd() );
-
    size_t nusers = m_ratingMatrix.users();
    size_t nitems = m_ratingMatrix.items();
 
-   uniform_int_distribution<int> uniform_dist_users( 0, nusers - 1 );
-   uniform_int_distribution<int> uniform_dist_items( 0, nitems - 1 );
+   UniformIntDistribution uniform_dist_users( 0, nusers - 1 );
+   UniformIntDistribution uniform_dist_items( 0, nitems - 1 );
 
-   u = uniform_dist_users( randGen );
+   u = uniform_dist_users();
    size_t numObserved = m_pObservedItemsIndices[u]->size();
+   // numObserved: be carefull with items rated with value 0
 
-   uniform_int_distribution<int> uniform_dist_obs_items( 0, numObserved - 1 );
-   int obsidx = uniform_dist_obs_items( randGen );
+   UniformIntDistribution uniform_dist_obs_items( 0, numObserved - 1 );
+   int obsidx = uniform_dist_obs_items();
    i = (*m_pObservedItemsIndices[u])[obsidx];
 
-   j = uniform_dist_items( randGen );
+   j = uniform_dist_items();
    double observation = m_ratingMatrix.get( u, j );
    while( observation != 0 )
    {
-      j = uniform_dist_items( randGen );
+      j = uniform_dist_items();
       observation = m_ratingMatrix.get( u, j );
    }
 }
@@ -211,15 +208,13 @@ void AlgBprMf::reset()
    size_t nusers = m_ratingMatrix.users();
    size_t nitems = m_ratingMatrix.items();
 
-   random_device rd;
-   mt19937 randGen( rd() );
-   normal_distribution<> normal_dist( 0, 0.1 );
+   NormalDistribution normal_dist( 0, 0.1 );
 
    for( size_t i = 0 ; i < nusers ; ++i )
    {
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_userP[i][f] = normal_dist( randGen );
+         m_userP[i][f] = normal_dist();
       }
    }
 
@@ -227,7 +222,7 @@ void AlgBprMf::reset()
    {
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_itemQ[i][f] = normal_dist( randGen );
+         m_itemQ[i][f] = normal_dist();
       }
    }
 }

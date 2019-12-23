@@ -2,6 +2,7 @@
 #include "Similarity.h"
 #include "MaxHeap.h"
 #include "RecSysAlgorithm.h"
+#include "NormalDistribution.h"
 #include "ProgressBar.h"
 
 #include <boost/numeric/ublas/matrix_proxy.hpp>
@@ -11,7 +12,6 @@
 
 #include <cstdlib>
 #include <sys/time.h>
-#include <random>
 
 using namespace std;
 using namespace boost::numeric::ublas;
@@ -451,15 +451,13 @@ void AlgIFAlsConjugateGradient::reset()
    size_t nusers = m_fUserMapper.size();
    size_t nitems = m_fItemMapper.size();
 
-   random_device rd;
-   mt19937 randGen( rd() );
-   normal_distribution<> normal_dist( 0, 0.1 );
+   NormalDistribution normal_dist( 0, 0.1 );
 
    for( size_t u = 0 ; u < nusers ; ++u )
    {
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_Xu( u, f ) = normal_dist( randGen );
+         m_Xu( u, f ) = normal_dist();
       }
    }
 
@@ -467,7 +465,7 @@ void AlgIFAlsConjugateGradient::reset()
    {
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_Yi( i, f ) = normal_dist( randGen );
+         m_Yi( i, f ) = normal_dist();
       }
    }
 }
@@ -540,16 +538,14 @@ void AlgIFAlsConjugateGradient::reset( size_t factors, size_t alsNumIter, float 
    size_t nusers = m_fUserMapper.size();
    size_t nitems = m_fItemMapper.size();
 
-   random_device rd;
-   mt19937 randGen( rd() );
-   normal_distribution<> normal_dist( 0, 0.1 );
+   NormalDistribution normal_dist( 0, 0.1 );
 
    m_Xu.resize( nusers, m_nfactors );
    for( size_t u = 0 ; u < nusers ; ++u )
    {
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_Xu( u, f ) = normal_dist( randGen );
+         m_Xu( u, f ) = normal_dist();
       }
    }
 
@@ -558,7 +554,7 @@ void AlgIFAlsConjugateGradient::reset( size_t factors, size_t alsNumIter, float 
    {
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_Yi( i, f ) = normal_dist( randGen );
+         m_Yi( i, f ) = normal_dist();
       }
    }
 }

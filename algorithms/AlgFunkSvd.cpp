@@ -1,9 +1,8 @@
 #include "AlgFunkSvd.h"
 #include "Similarity.h"
 #include "MaxHeap.h"
+#include "NormalDistribution.h"
 #include "ProgressBar.h"
-
-#include <random>
 
 using namespace std;
 
@@ -28,19 +27,17 @@ AlgFunkSvd::AlgFunkSvd( DataReader& dreader,
    size_t nusers = m_ratingMatrix.users();
    size_t nitems = m_ratingMatrix.items();
 
-   random_device rd;
-   mt19937 randGen( rd() );
-   normal_distribution<> normal_dist( 0, 0.1 );
+   NormalDistribution normal_dist( 0, 0.1 );
 
    m_userBias = new double[nusers];
    m_userP = new double*[nusers];
    for( size_t i = 0 ; i < nusers ; ++i )
    {
-      m_userBias[i] = normal_dist( randGen );
+      m_userBias[i] = normal_dist();
       m_userP[i] = new double[m_nfactors];
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_userP[i][f] = normal_dist( randGen );
+         m_userP[i][f] = normal_dist();
       }
    }
 
@@ -48,11 +45,11 @@ AlgFunkSvd::AlgFunkSvd( DataReader& dreader,
    m_itemQ = new double*[nitems];
    for( size_t i = 0 ; i < nitems ; ++i )
    {
-      m_itemBias[i] = normal_dist( randGen );
+      m_itemBias[i] = normal_dist();
       m_itemQ[i] = new double[m_nfactors];
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_itemQ[i][f] = normal_dist( randGen );
+         m_itemQ[i][f] = normal_dist();
       }
    }
 }
@@ -78,19 +75,17 @@ AlgFunkSvd::AlgFunkSvd( size_t factors,
    size_t nusers = m_ratingMatrix.users();
    size_t nitems = m_ratingMatrix.items();
 
-   random_device rd;
-   mt19937 randGen( rd() );
-   normal_distribution<> normal_dist( 0, 0.1 );
+   NormalDistribution normal_dist( 0, 0.1 );
 
    m_userBias = new double[nusers];
    m_userP = new double*[nusers];
    for( size_t i = 0 ; i < nusers ; ++i )
    {
-      m_userBias[i] = normal_dist( randGen );
+      m_userBias[i] = normal_dist();
       m_userP[i] = new double[m_nfactors];
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_userP[i][f] = normal_dist( randGen );
+         m_userP[i][f] = normal_dist();
       }
    }
 
@@ -98,11 +93,11 @@ AlgFunkSvd::AlgFunkSvd( size_t factors,
    m_itemQ = new double*[nitems];
    for( size_t i = 0 ; i < nitems ; ++i )
    {
-      m_itemBias[i] = normal_dist( randGen );
+      m_itemBias[i] = normal_dist();
       m_itemQ[i] = new double[m_nfactors];
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_itemQ[i][f] = normal_dist( randGen );
+         m_itemQ[i][f] = normal_dist();
       }
    }
 }
@@ -229,25 +224,23 @@ void AlgFunkSvd::reset()
    size_t nusers = m_ratingMatrix.users();
    size_t nitems = m_ratingMatrix.items();
 
-   random_device rd;
-   mt19937 randGen( rd() );
-   normal_distribution<> normal_dist( 0, 0.1 );
+   NormalDistribution normal_dist( 0, 0.1 );
 
    for( size_t i = 0 ; i < nusers ; ++i )
    {
-      m_userBias[i] = normal_dist( randGen );
+      m_userBias[i] = normal_dist();
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_userP[i][f] = normal_dist( randGen );
+         m_userP[i][f] = normal_dist();
       }
    }
 
    for( size_t i = 0 ; i < nitems ; ++i )
    {
-      m_itemBias[i] = normal_dist( randGen );
+      m_itemBias[i] = normal_dist();
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_itemQ[i][f] = normal_dist( randGen );
+         m_itemQ[i][f] = normal_dist();
       }
    }
 
@@ -333,19 +326,17 @@ void AlgFunkSvd::reset( size_t factors, size_t maxiter, float lrate, float lambd
    size_t nusers = m_ratingMatrix.users();
    size_t nitems = m_ratingMatrix.items();
 
-   random_device rd;
-   mt19937 randGen( rd() );
-   normal_distribution<> normal_dist( 0, 0.1 );
+   NormalDistribution normal_dist( 0, 0.1 );
 
    m_userBias = new double[nusers];
    m_userP = new double*[nusers];
    for( size_t i = 0 ; i < nusers ; ++i )
    {
-      m_userBias[i] = normal_dist( randGen );
+      m_userBias[i] = normal_dist();
       m_userP[i] = new double[m_nfactors];
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_userP[i][f] = normal_dist( randGen );
+         m_userP[i][f] = normal_dist();
       }
    }
 
@@ -353,11 +344,11 @@ void AlgFunkSvd::reset( size_t factors, size_t maxiter, float lrate, float lambd
    m_itemQ = new double*[nitems];
    for( size_t i = 0 ; i < nitems ; ++i )
    {
-      m_itemBias[i] = normal_dist( randGen );
+      m_itemBias[i] = normal_dist();
       m_itemQ[i] = new double[m_nfactors];
       for( size_t f = 0 ; f < m_nfactors ; ++f )
       {
-         m_itemQ[i][f] = normal_dist( randGen );
+         m_itemQ[i][f] = normal_dist();
       }
    }
 }
