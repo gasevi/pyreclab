@@ -3,6 +3,7 @@
 
 #include "RecSysAlgorithm.h"
 #include "FlowControl.h"
+#include "UniformIntDistribution.h"
 
 #include <string>
 #include <stdexcept>
@@ -45,6 +46,10 @@ private:
    void sample( int& u, int& i, int& j );
 
    double innerProduct( double v1[], double v2[], size_t size );
+
+   UniformIntDistribution m_uniform_dist_users;
+
+   UniformIntDistribution m_uniform_dist_items;
 
    size_t m_nfactors;
 

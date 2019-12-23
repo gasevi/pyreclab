@@ -2,7 +2,6 @@
 #include "Similarity.h"
 #include "MaxHeap.h"
 #include "NormalDistribution.h"
-#include "UniformIntDistribution.h"
 #include "ProgressBar.h"
 
 #include <cmath>
@@ -16,6 +15,8 @@ AlgBprMf::AlgBprMf( size_t factors,
                     int itempos,
                     int ratingpos )
 : RecSysAlgorithm< boost::numeric::ublas::mapped_matrix<double, boost::numeric::ublas::row_major> >( dreader, userpos, itempos, ratingpos ),
+  m_uniform_dist_users( 0, m_ratingMatrix.users() - 1 ),
+  m_uniform_dist_items( 0, m_ratingMatrix.items() - 1 ),
   m_nfactors( factors ),
   m_userP( NULL ),
   m_itemQ( NULL ),
@@ -150,10 +151,7 @@ void AlgBprMf::sample( int& u, int& i, int& j )
    size_t nusers = m_ratingMatrix.users();
    size_t nitems = m_ratingMatrix.items();
 
-   UniformIntDistribution uniform_dist_users( 0, nusers - 1 );
-   UniformIntDistribution uniform_dist_items( 0, nitems - 1 );
-
-   u = uniform_dist_users();
+   u = m_uniform_dist_users();
    size_t numObserved = m_pObservedItemsIndices[u]->size();
    // numObserved: be carefull with items rated with value 0
 
@@ -161,11 +159,11 @@ void AlgBprMf::sample( int& u, int& i, int& j )
    int obsidx = uniform_dist_obs_items();
    i = (*m_pObservedItemsIndices[u])[obsidx];
 
-   j = uniform_dist_items();
+   j = m_uniform_dist_items();
    double observation = m_ratingMatrix.get( u, j );
    while( observation != 0 )
    {
-      j = uniform_dist_items();
+      j = m_uniform_dist_items();
       observation = m_ratingMatrix.get( u, j );
    }
 }

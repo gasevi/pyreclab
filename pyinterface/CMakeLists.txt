@@ -22,4 +22,5 @@ target_include_directories( ${PYINTERFACE_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/alg
 target_include_directories( ${PYINTERFACE_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/datahandlers )
 target_include_directories( ${PYINTERFACE_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/dataio )
 target_include_directories( ${PYINTERFACE_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/eval_metrics )
+target_include_directories( ${PYINTERFACE_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/tools )
 
