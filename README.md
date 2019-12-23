@@ -11,17 +11,18 @@
 <!-- Tick      : &#10003 -->
 <!-- Bold tick : &#10004 -->
 
-| RecSys Algorithm            | Rating Prediction | Item Recommendation | Implicit Feedback |
-|:----------------------------|:-----------------:|:-------------------:|:-----------------:|
-| User Average                | x                 | x                   |                   |
-| Item Average                | x                 | x                   |                   |
-| Slope One                   | x                 | x                   |                   |
-| User Based KNN              | x                 | x                   |                   |
-| Item Based KNN              | x                 | x                   |                   |
-| Funk's SVD                  | x                 | x                   |                   |
-| Most Popular                |                   | x                   |                   |
-| ALS                         |                   | x                   | x                 |
-| ALS with Conjugate Gradient |                   | x                   | x                 |
+| RecSys Algorithm             | Rating Prediction | Item Recommendation | Implicit Feedback |
+|:-----------------------------|:-----------------:|:-------------------:|:-----------------:|
+| User Average                 | x                 | x                   |                   |
+| Item Average                 | x                 | x                   |                   |
+| Slope One                    | x                 | x                   |                   |
+| User Based KNN               | x                 | x                   |                   |
+| Item Based KNN               | x                 | x                   |                   |
+| Funk's SVD                   | x                 | x                   |                   |
+| Most Popular                 |                   | x                   |                   |
+| ALS                          |                   | x                   | x                 |
+| ALS with Conjugate Gradient  |                   | x                   | x                 |
+| BPR for Matrix Factorization |                   | x                   | x                 |
 
 
 <!--
@@ -160,6 +161,7 @@ $ sudo make install
  * [pyreclab.MostPopular](#mostpopular)
  * [pyreclab.IFAls](#ifals)
  * [pyreclab.IFAlsConjugateGradient](#ifalscg)
+ * [pyreclab.BprMf](#bprmf)
 
    So, you can import any of them as follows:
 
@@ -201,8 +203,12 @@ $ sudo make install
  * Training
 
 ```python
->>> obj.train()
+>>> obj.train( progress = False )
 ```
+
+| Parameter | Type      | Default value | Description       |
+|:----------|:---------:|:-------------:|:------------------|
+| progress  | optional  | False         | Show progress bar |
 
  * Rating prediction
 
@@ -342,8 +348,12 @@ $ sudo make install
  * Training
 
 ```python
->>> obj.train()
+>>> obj.train( progress = False )
 ```
+
+| Parameter | Type      | Default value | Description       |
+|:----------|:---------:|:-------------:|:------------------|
+| progress  | optional  | False         | Show progress bar |
 
  * Rating prediction
 
@@ -482,8 +492,12 @@ $ sudo make install
  * Training
 
 ```python
-obj.train()
+>>> obj.train( progress = False )
 ```
+
+| Parameter | Type      | Default value | Description       |
+|:----------|:---------:|:-------------:|:------------------|
+| progress  | optional  | False         | Show progress bar |
 
  * Rating prediction
 
@@ -622,13 +636,14 @@ prediction = obj.predict( userId, itemId )
  * Training
 
 ```python
->>> obj.train( knn, similarity )
+>>> obj.train( knn, similarity, progress = False )
 ```
 
 | Parameter  | Type      | Default value | Valid values      | Description         |
 |:-----------|:---------:|:-------------:|:-----------------:|:--------------------|
 | knn        | optional  | 10            | positive integer  | K nearest neighbors |
 | similarity | optional  | 'pearson'     |'pearson', 'cosine'| Similarity metric   |
+| progress   | optional  | False         |                   | Show progress bar   |
 
  * Rating prediction
 
@@ -767,13 +782,14 @@ prediction = obj.predict( userId, itemId )
  * Training
 
 ```python
->>> obj.train( knn, similarity )
+>>> obj.train( knn, similarity, progress = False )
 ```
 
 | Parameter  | Type      | Default value | Valid values      | Description         |
 |:-----------|:---------:|:-------------:|:-----------------:|:--------------------|
 | knn        | optional  | 10            | positive integer  | K nearest neighbors |
 | similarity | optional  | 'pearson'     |'pearson', 'cosine'| Similarity metric   |
+| progress   | optional  | False         |                   | Show progress bar   |
 
  * Rating prediction
 
@@ -892,7 +908,8 @@ prediction = obj.predict( userId, itemId )
  * Instance creation
 
 ```python
->>> obj = pyreclab.SVD( dataset = filename,
+>>> obj = pyreclab.SVD( factors = 1000,
+                        dataset = filename,
                         dlmchar = b'\t',
                         header = False,
                         usercol = 0,
@@ -902,6 +919,7 @@ prediction = obj.predict( userId, itemId )
 
 | Parameter | Type      | Default value | Description                                                 |
 |:----------|:---------:|:-------------:|:------------------------------------------------------------|
+| factors   | optional  | 1000          | Number of latent factors in matrix factorization            |
 | dataset   | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
 | dlmchar   | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header    | optional  | False         | Whether dataset filename contains a header line to skip     |
@@ -912,15 +930,15 @@ prediction = obj.predict( userId, itemId )
  * Training
 
 ```python
->>> obj.train( factors = 1000, maxiter = 100, lr = 0.01, lamb = 0.1 )
+>>> obj.train( maxiter = 100, lr = 0.01, lamb = 0.1, progress = False )
 ```
 
-| Parameter   | Type      | Default value | Description                                                 |
-|:------------|:---------:|:-------------:|:------------------------------------------------------------|
-| factors     | optional  | 1000          | Number of latent factors in matrix factorization            |
-| maxiter     | optional  | 100           | Maximum number of iterations reached without convergence    |
-| lr          | optional  | 0.01          | Learning rate                                               |
-| lamb        | optional  | 0.1           | Regularization parameter                                    |
+| Parameter | Type      | Default value | Description                                                 |
+|:----------|:---------:|:-------------:|:------------------------------------------------------------|
+| maxiter   | optional  | 100           | Maximum number of iterations reached without convergence    |
+| lr        | optional  | 0.01          | Learning rate                                               |
+| lamb      | optional  | 0.1           | Regularization parameter                                    |
+| progress  | optional  | False         | Show progress bar                                           |
 
  * Rating prediction
 
@@ -1034,6 +1052,20 @@ prediction = obj.predict( userId, itemId )
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
+ * Loss
+
+```python
+>>> current_loss = obj.loss()
+```
+
+
+ * Reset factors
+
+```python
+>>> obj.reset()
+```
+
+
 ### <a name="mostpopular"> pyreclab.MostPopular </a>
 
  * Instance creation
@@ -1059,8 +1091,12 @@ prediction = obj.predict( userId, itemId )
  * Training
 
 ```python
->>> obj.train()
+>>> obj.train( progress = False )
 ```
+
+| Parameter | Type      | Default value | Description       |
+|:----------|:---------:|:-------------:|:------------------|
+| progress  | optional  | False         | Show progress bar |
 
  * Top-N item recommendation
 
@@ -1147,7 +1183,8 @@ prediction = obj.predict( userId, itemId )
  * Instance creation
 
 ```python
->>> obj = pyreclab.IFAls( dataset = filename,
+>>> obj = pyreclab.IFAls( factors = 50,
+                          dataset = filename,
                           dlmchar = b'\t',
                           header = False,
                           usercol = 0,
@@ -1157,6 +1194,7 @@ prediction = obj.predict( userId, itemId )
 
 | Parameter      | Type      | Default value | Description                                                 |
 |:---------------|:---------:|:-------------:|:------------------------------------------------------------|
+| factors        | optional  | 50            | Number of latent factors in matrix factorization            |
 | dataset        | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
 | dlmchar        | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header         | optional  | False         | Whether dataset filename contains a header line to skip     |
@@ -1167,14 +1205,14 @@ prediction = obj.predict( userId, itemId )
  * Training
 
 ```python
->>> obj.train( factors, maxiter, lambd )
+>>> obj.train( maxiter, lambd, progress = False )
 ```
 
 | Parameter   | Type      | Default value | Description                                                 |
 |:------------|:---------:|:-------------:|:------------------------------------------------------------|
-| factors     | optional  | 50            | Number of latent factors in matrix factorization            |
 | alsNumIter  | optional  | 5             | Number of iterations in ALS algorithm                       |
 | lambd       | optional  | 10            | Regularization parameter                                    |
+| progress    | optional  | False         | Show progress bar                                           |
 
  * Top-N item recommendation
 
@@ -1256,12 +1294,20 @@ prediction = obj.predict( userId, itemId )
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
+ * Reset factors
+
+```python
+>>> obj.reset()
+```
+
+
 ### <a name="ifalscg"> pyreclab.IFAlsConjugateGradient </a>
 
  * Instance creation
 
 ```python
->>> obj = pyreclab.IFAlsConjugateGradient( dataset = filename,
+>>> obj = pyreclab.IFAlsConjugateGradient( factors = 50,
+                                           dataset = filename,
                                            dlmchar = b'\t',
                                            header = False,
                                            usercol = 0,
@@ -1271,25 +1317,26 @@ prediction = obj.predict( userId, itemId )
 
 | Parameter      | Type      | Default value | Description                                                 |
 |:---------------|:---------:|:-------------:|:------------------------------------------------------------|
+| factors        | optional  | 50            | Number of latent factors in matrix factorization            |
 | dataset        | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
 | dlmchar        | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
 | header         | optional  | False         | Whether dataset filename contains a header line to skip     |
 | usercol        | optional  | 0             | User column position in dataset file                        |
 | itemcol        | optional  | 1             | Item column position in dataset file                        |
-| observationcol | optional  | 2             | Observation column position in dataset file                      |
+| observationcol | optional  | 2             | Observation column position in dataset file                 |
 
  * Training
 
 ```python
->>> obj.train( factors, alsNumIter, lambd, cgNumIter )
+>>> obj.train( alsNumIter, lambd, cgNumIter, progress = False )
 ```
 
 | Parameter   | Type      | Default value | Description                                                 |
 |:------------|:---------:|:-------------:|:------------------------------------------------------------|
-| factors     | optional  | 50            | Number of latent factors in matrix factorization            |
 | alsNumIter  | optional  | 5             | Number of iterations in ALS algorithm                       |
 | lambd       | optional  | 10            | Regularization parameter                                    |
 | cgNumIter   | optional  | 2             | Number of iterations in Conjugate Gradient algorithm        |
+| progress    | optional  | False         | Show progress bar                                           |
 
  * Top-N item recommendation
 
@@ -1369,6 +1416,149 @@ prediction = obj.predict( userId, itemId )
 | topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
 | relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
 | include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Reset factors
+
+```python
+>>> obj.reset()
+```
+
+
+### <a name="bprmf"> pyreclab.BprMf </a>
+
+ * Instance creation
+
+```python
+>>> obj = pyreclab.BprMf( factors = 20,
+                          dataset = filename,
+                          dlmchar = b'\t',
+                          header = False,
+                          usercol = 0,
+                          itemcol = 1,
+                          observationcol = 2 )
+```
+
+| Parameter      | Type      | Default value | Description                                                 |
+|:---------------|:---------:|:-------------:|:------------------------------------------------------------|
+| factors        | optional  | 20            | Number of latent factors in matrix factorization            |
+| dataset        | mandatory | N.A.          | Dataset filename with fields: userid, itemid and rating     |
+| dlmchar        | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header         | optional  | False         | Whether dataset filename contains a header line to skip     |
+| usercol        | optional  | 0             | User column position in dataset file                        |
+| itemcol        | optional  | 1             | Item column position in dataset file                        |
+| observationcol | optional  | 2             | Observation column position in dataset file                 |
+
+ * Training
+
+```python
+>>> obj.train( maxiter = 100,
+               lr = 0.1,
+               lambda_w = 0.01,
+               lambda_hp = 0.01,
+               lambda_hm = 0.01,
+               progress = True )
+```
+
+| Parameter   | Type      | Default value | Description                                                         |
+|:------------|:---------:|:-------------:|:--------------------------------------------------------------------|
+| maxiter     | optional  | 100           | Number of iterations                                                |
+| lr          | optional  | 0.1           | Learning rate                                                       |
+| lambda_w    | optional  | 0.01          | Regularization parameter for the user features                      |
+| lambda_hp   | optional  | 0.01          | Regularization parameter for the item features and positive updates |
+| lambda_hm   | optional  | 0.01          | Regularization parameter for the item features and negative updates |
+| progress    | optional  | False         | Show progress bar                                                   |
+
+ * Top-N item recommendation
+
+```python
+>>> ranking = obj.recommend( userId, topN, includeRated )
+```
+
+| Parameter    | Type      | Default value | Description                               |
+|:-------------|:---------:|:-------------:|:------------------------------------------|
+| userId       | mandatory | N.A.          | User identifier                           |
+| topN         | optional  | 10            | Top N items to recommend                  |
+| includeRated | optional  | False         | Include rated items in ranking generation |
+
+
+ * Testing for recommendation
+
+```python
+>>> recommendationList, map, ndcg = obj.testrec( input_file = testset,
+                                                 dlmchar = b'\t',
+                                                 header = False,
+                                                 usercol = 0,
+                                                 itemcol = 1,
+                                                 ratingcol = 2,
+                                                 topn = 10,
+                                                 output_file = 'ranking.json',
+                                                 relevance_threshold = 2,
+                                                 includeRated = False )
+```
+
+| Parameter    | Type      | Default value | Description                                                 |
+|:-------------|:---------:|:-------------:|:------------------------------------------------------------|
+| input_file   | mandatory | N.A.          | Testset filename                                            |
+| dlmchar      | optional  | tab           | Delimiter character between fields (userid, itemid, rating) |
+| header       | optional  | False         | Dataset filename contains first line header to skip         |
+| usercol      | optional  | 0             | User column position in dataset file                        |
+| itemcol      | optional  | 1             | Item column position in dataset file                        |
+| ratingcol    | optional  | 2             | Rating column position in dataset file                      |
+| output_file  | optional  | N.A.          | Output file to write rankings                               |
+| topN         | optional  | 10            | Top N items to recommend                                    |
+| relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
+| includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Mean Average precision
+
+```python
+>>> map = obj.MAP( user_id,
+                   retrieved,
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Normalized Discounted Cumulative Gain
+
+```python
+>>> map = obj.nDCG( user_id,
+                    retrieved,
+                    topn = 10,
+                    relevance_threshold = 0,
+                    include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+ * Loss
+
+```python
+>>> current_loss = obj.loss()
+```
+
+ * Reset factors
+
+```python
+>>> obj.reset()
+```
 
 
 ## <span style="font-size: 4em;">On roadmap</span>
