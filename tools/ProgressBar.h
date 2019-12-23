@@ -42,8 +42,8 @@ public:
 
 private:
 
-   const
-   size_t m_kMinUpdateTime = 1;
+   static
+   const size_t m_kMinUpdateTime = 1;
 
    std::string elapsedTime( time_t& now );
 
