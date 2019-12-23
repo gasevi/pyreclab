@@ -148,9 +148,6 @@ int AlgBprMf::train( FlowControl& fcontrol, bool progress )
 
 void AlgBprMf::sample( int& u, int& i, int& j )
 {
-   size_t nusers = m_ratingMatrix.users();
-   size_t nitems = m_ratingMatrix.items();
-
    u = m_uniform_dist_users();
    size_t numObserved = m_pObservedItemsIndices[u]->size();
    // numObserved: be carefull with items rated with value 0
