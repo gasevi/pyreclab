@@ -39,6 +39,8 @@ add_compile_options( -Wall )
 
 find_package( PythonLibs "${CMAKE_PYTHON_VERSION}"
               REQUIRED )
+find_package( Boost REQUIRED )
+include_directories(${Boost_INCLUDE_DIRS})
 
 #
 # Library building
