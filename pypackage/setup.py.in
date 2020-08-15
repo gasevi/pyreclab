@@ -14,7 +14,7 @@ setup(
    license      = 'GPL 3.0',
    keywords     = 'recsys recommendation rating ranking',
    packages     = ['pyreclab'],
-   package_dir  = { '': '${CMAKE_CURRENT_SOURCE_DIR}' },
+   package_dir  = { 'pyreclab': '${CMAKE_CURRENT_SOURCE_DIR}/pyreclab' },
    package_data = { 'pyreclab': [${CMAKE_LIBRARY_LIST}] },
    distclass    = BinaryDistribution,
    zip_safe     = False
