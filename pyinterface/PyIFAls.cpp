@@ -19,6 +19,9 @@ PyMethodDef IFAls_methods[] =
    { "reset",     (PyCFunction)PyReset<PyIFAls>,     METH_NOARGS,                "reset model parameters" },
    { "testrec",   (PyCFunction)PyTestrec<PyIFAls>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "recommend", (PyCFunction)PyRecommend<PyIFAls>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
+   { "precision", (PyCFunction)PyPrecision<PyIFAls>, METH_VARARGS|METH_KEYWORDS, "calculate Precision for a user" },
+   { "recall",    (PyCFunction)PyRecall<PyIFAls>,    METH_VARARGS|METH_KEYWORDS, "calculate Recall for a user" },
+   { "AUC",       (PyCFunction)PyAUC<PyIFAls>,       METH_VARARGS|METH_KEYWORDS, "calculate Area Under the ROC Curve for a user" },
    { "MAP",       (PyCFunction)PynDCG<PyIFAls>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
    { "nDCG",      (PyCFunction)PyMAP<PyIFAls>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
    { NULL, NULL, 0, NULL }

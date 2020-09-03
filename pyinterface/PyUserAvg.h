@@ -14,6 +14,8 @@ public:
 
    PyObject_HEAD
    DataReader* m_trainingReader;
+   int m_nusers;
+   int m_nitems;
    DataFrame* m_pTestData;
    AlgUserAvg* m_recAlgorithm;
 };

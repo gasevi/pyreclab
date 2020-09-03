@@ -19,6 +19,9 @@ PyMethodDef MostPopular_methods[] =
    { "train",     (PyCFunction)MostPopularTrain,           METH_VARARGS|METH_KEYWORDS, "train model" },
    { "testrec",   (PyCFunction)PyTestrec<PyMostPopular>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "recommend", (PyCFunction)PyRecommend<PyMostPopular>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
+   { "precision", (PyCFunction)PyPrecision<PyMostPopular>, METH_VARARGS|METH_KEYWORDS, "calculate Precision for a user" },
+   { "recall",    (PyCFunction)PyRecall<PyMostPopular>,    METH_VARARGS|METH_KEYWORDS, "calculate Recall for a user" },
+   { "AUC",       (PyCFunction)PyAUC<PyMostPopular>,       METH_VARARGS|METH_KEYWORDS, "calculate Area Under the ROC Curve for a user" },
    { "MAP",       (PyCFunction)PynDCG<PyMostPopular>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
    { "nDCG",      (PyCFunction)PyMAP<PyMostPopular>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
    { NULL, NULL, 0, NULL }

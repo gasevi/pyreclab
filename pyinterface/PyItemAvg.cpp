@@ -19,6 +19,9 @@ PyMethodDef ItemAvg_methods[] =
    { "testrec",   (PyCFunction)PyTestrec<PyItemAvg>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "predict",   (PyCFunction)PyPredict<PyItemAvg>,   METH_VARARGS,               "predict user's rating for an item" },
    { "recommend", (PyCFunction)PyRecommend<PyItemAvg>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
+   { "precision", (PyCFunction)PyPrecision<PyItemAvg>, METH_VARARGS|METH_KEYWORDS, "calculate Precision for a user" },
+   { "recall",    (PyCFunction)PyRecall<PyItemAvg>,    METH_VARARGS|METH_KEYWORDS, "calculate Recall for a user" },
+   { "AUC",       (PyCFunction)PyAUC<PyItemAvg>,       METH_VARARGS|METH_KEYWORDS, "calculate Area Under the ROC Curve for a user" },
    { "MAP",       (PyCFunction)PynDCG<PyItemAvg>,      METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
    { "nDCG",      (PyCFunction)PyMAP<PyItemAvg>,       METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
    { NULL, NULL, 0, NULL }

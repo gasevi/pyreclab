@@ -285,6 +285,63 @@ $ sudo make install
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
+ * Precision
+
+```python
+>>> precision = obj.precision( user_id,
+                               retrieved,
+                               topn = 10,
+                               relevance_threshold = 0,
+                               include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Recall
+
+```python
+>>> recall = obj.recall( user_id,
+                         retrieved,
+                         topn = 10,
+                         relevance_threshold = 0,
+                         include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Area Under the ROC Curve (AUC)
+
+```python
+>>> auc = obj.AUC( user_id,
+                   retrieved,
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
  * Mean Average precision
 
 ```python
@@ -429,6 +486,63 @@ $ sudo make install
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
+ * Precision
+
+```python
+>>> precision = obj.precision( user_id,
+                               retrieved,
+                               topn = 10,
+                               relevance_threshold = 0,
+                               include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Recall
+
+```python
+>>> recall = obj.recall( user_id,
+                         retrieved,
+                         topn = 10,
+                         relevance_threshold = 0,
+                         include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Area Under the ROC Curve (AUC)
+
+```python
+>>> auc = obj.AUC( user_id,
+                   retrieved,
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
  * Mean Average precision
 
 ```python
@@ -571,6 +685,63 @@ prediction = obj.predict( userId, itemId )
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
 | relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Precision
+
+```python
+>>> precision = obj.precision( user_id,
+                               retrieved,
+                               topn = 10,
+                               relevance_threshold = 0,
+                               include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Recall
+
+```python
+>>> recall = obj.recall( user_id,
+                         retrieved,
+                         topn = 10,
+                         relevance_threshold = 0,
+                         include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Area Under the ROC Curve (AUC)
+
+```python
+>>> auc = obj.AUC( user_id,
+                   retrieved,
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
  * Mean Average precision
@@ -719,6 +890,63 @@ prediction = obj.predict( userId, itemId )
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
+ * Precision
+
+```python
+>>> precision = obj.precision( user_id,
+                               retrieved,
+                               topn = 10,
+                               relevance_threshold = 0,
+                               include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Recall
+
+```python
+>>> recall = obj.recall( user_id,
+                         retrieved,
+                         topn = 10,
+                         relevance_threshold = 0,
+                         include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Area Under the ROC Curve (AUC)
+
+```python
+>>> auc = obj.AUC( user_id,
+                   retrieved,
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
  * Mean Average precision
 
 ```python
@@ -863,6 +1091,63 @@ prediction = obj.predict( userId, itemId )
 | output_file  | optional  | N.A.          | Output file to write predictions                            |
 | relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Precision
+
+```python
+>>> precision = obj.precision( user_id,
+                               retrieved,
+                               topn = 10,
+                               relevance_threshold = 0,
+                               include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Recall
+
+```python
+>>> recall = obj.recall( user_id,
+                         retrieved,
+                         topn = 10,
+                         relevance_threshold = 0,
+                         include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Area Under the ROC Curve (AUC)
+
+```python
+>>> auc = obj.AUC( user_id,
+                   retrieved,
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
  * Mean Average precision
@@ -1014,6 +1299,63 @@ prediction = obj.predict( userId, itemId )
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
+ * Precision
+
+```python
+>>> precision = obj.precision( user_id,
+                               retrieved,
+                               topn = 10,
+                               relevance_threshold = 0,
+                               include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Recall
+
+```python
+>>> recall = obj.recall( user_id,
+                         retrieved,
+                         topn = 10,
+                         relevance_threshold = 0,
+                         include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Area Under the ROC Curve (AUC)
+
+```python
+>>> auc = obj.AUC( user_id,
+                   retrieved,
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
  * Mean Average precision
 
 ```python
@@ -1140,6 +1482,63 @@ prediction = obj.predict( userId, itemId )
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
 
 
+ * Precision
+
+```python
+>>> precision = obj.precision( user_id,
+                               retrieved,
+                               topn = 10,
+                               relevance_threshold = 0,
+                               include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Recall
+
+```python
+>>> recall = obj.recall( user_id,
+                         retrieved,
+                         topn = 10,
+                         relevance_threshold = 0,
+                         include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Area Under the ROC Curve (AUC)
+
+```python
+>>> auc = obj.AUC( user_id,
+                   retrieved,
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
  * Mean Average precision
 
 ```python
@@ -1254,6 +1653,63 @@ prediction = obj.predict( userId, itemId )
 | topN         | optional  | 10            | Top N items to recommend                                    |
 | relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Precision
+
+```python
+>>> precision = obj.precision( user_id,
+                               retrieved,
+                               topn = 10,
+                               relevance_threshold = 0,
+                               include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Recall
+
+```python
+>>> recall = obj.recall( user_id,
+                         retrieved,
+                         topn = 10,
+                         relevance_threshold = 0,
+                         include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Area Under the ROC Curve (AUC)
+
+```python
+>>> auc = obj.AUC( user_id,
+                   retrieved,
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
  * Mean Average precision
@@ -1378,6 +1834,63 @@ prediction = obj.predict( userId, itemId )
 | topN         | optional  | 10            | Top N items to recommend                                    |
 | relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Precision
+
+```python
+>>> precision = obj.precision( user_id,
+                               retrieved,
+                               topn = 10,
+                               relevance_threshold = 0,
+                               include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Recall
+
+```python
+>>> recall = obj.recall( user_id,
+                         retrieved,
+                         topn = 10,
+                         relevance_threshold = 0,
+                         include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Area Under the ROC Curve (AUC)
+
+```python
+>>> auc = obj.AUC( user_id,
+                   retrieved,
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
  * Mean Average precision
@@ -1509,6 +2022,63 @@ prediction = obj.predict( userId, itemId )
 | topN         | optional  | 10            | Top N items to recommend                                    |
 | relevance_threshold | optional  | 0          | Lower threshold to consider an item as relevant ( threshold value included ) |
 | includeRated | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Precision
+
+```python
+>>> precision = obj.precision( user_id,
+                               retrieved,
+                               topn = 10,
+                               relevance_threshold = 0,
+                               include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Recall
+
+```python
+>>> recall = obj.recall( user_id,
+                         retrieved,
+                         topn = 10,
+                         relevance_threshold = 0,
+                         include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
+
+
+ * Area Under the ROC Curve (AUC)
+
+```python
+>>> auc = obj.AUC( user_id,
+                   retrieved,
+                   topn = 10,
+                   relevance_threshold = 0,
+                   include_rated = False )
+```
+
+| Parameter           | Type      | Default value | Description                                                 |
+|:--------------------|:---------:|:-------------:|:------------------------------------------------------------|
+| user_id             | mandatory | N.A.          | User identifier                                             |
+| retrieved           | optional  | N.A.          | Recommendation list for user 'user_id'                      |
+| topn                | optional  | 10            | Top N items to recommend. If 'retrieved' is provided, this value will be set to 'retrieved' length |
+| relevance_threshold | optional  | 0             | Lower threshold to consider an item as relevant ( threshold value included ) |
+| include_rated       | optional  | False         | Include rated items in ranking generation                   |
 
 
  * Mean Average precision

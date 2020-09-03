@@ -18,6 +18,9 @@ PyMethodDef BprMf_methods[] =
    { "loss",      (PyCFunction)PyLoss<PyBprMf>,      METH_NOARGS,                "returns current loss value" },
    { "testrec",   (PyCFunction)PyTestrec<PyBprMf>,   METH_VARARGS|METH_KEYWORDS, "test recommendation model" },
    { "recommend", (PyCFunction)PyRecommend<PyBprMf>, METH_VARARGS|METH_KEYWORDS, "recommend ranked items to a user" },
+   { "precision", (PyCFunction)PyPrecision<PyBprMf>, METH_VARARGS|METH_KEYWORDS, "calculate Precision for a user" },
+   { "recall",    (PyCFunction)PyRecall<PyBprMf>,    METH_VARARGS|METH_KEYWORDS, "calculate Recall for a user" },
+   { "AUC",       (PyCFunction)PyAUC<PyBprMf>,       METH_VARARGS|METH_KEYWORDS, "calculate Area Under the ROC Curve for a user" },
    { "MAP",       (PyCFunction)PyMAP<PyBprMf>,       METH_VARARGS|METH_KEYWORDS, "calculate Mean Average Precision for a user" },
    { "nDCG",      (PyCFunction)PynDCG<PyBprMf>,      METH_VARARGS|METH_KEYWORDS, "calculate Normalized Discounted Cumulative Gain for a user" },
    { NULL, NULL, 0, NULL }

@@ -3,12 +3,16 @@
 
 #include <Python.h> // This header was set at the first place to avoid warnings
 #include <iostream>
+#include <string>
 #include <vector>
 #include <map>
 #include <stdexcept>
 
 #include "DataReader.h"
 #include "DataWriter.h"
+#include "Precision.h"
+#include "Recall.h"
+#include "AUC.h"
 #include "MAE.h"
 #include "RMSE.h"
 #include "MAP.h"
@@ -62,6 +66,34 @@ PyObject* PyNew( PyTypeObject* type, PyObject* args, PyObject* kwdict )
          return NULL;
       }
    }
+
+   std::map<std::string, int> userMap;
+   std::map<std::string, int> itemMap;
+   DataReader dreader( dsfilename, dlmchar, header );
+   while( !dreader.eof() )
+   {
+      std::vector<std::string> line;
+      dreader.readline( line );
+      if( line.empty() )
+      {
+         break;
+      }
+      std::string userId = line[usercol];
+      std::string itemId = line[itemcol];
+
+      if( userMap.find( userId ) == userMap.end() )
+      {
+         userMap[userId] = 1;
+      }
+
+      if( itemMap.find( itemId ) == itemMap.end() )
+      {
+         itemMap[itemId] = 1;
+      }
+   }
+
+   self->m_nusers = userMap.size();
+   self->m_nitems = itemMap.size();
 
    return reinterpret_cast<PyObject*>( self );
 }
@@ -598,6 +630,235 @@ PyObject* PyTestrec( TPyInstance* self, PyObject* args, PyObject* kwdict )
    PyTuple_SET_ITEM( pyTupleResult, 2, PyFloat_FromDouble( nDcg.eval() ) );
 
    return pyTupleResult;
+}
+
+template<class TPyInstance>
+PyObject* PyPrecision( TPyInstance* self, PyObject* args, PyObject* kwdict )
+{
+   const char* userId = NULL;
+   PyObject* retrieved = NULL;
+   int topN = 10;
+   float relevanceThreshold = 0;
+   int includeRated = 0;
+
+   static char* kwlist[] = { const_cast<char*>( "user_id" ),
+                             const_cast<char*>( "retrieved" ),
+                             const_cast<char*>( "topn" ),
+                             const_cast<char*>( "relevance_threshold" ),
+                             const_cast<char*>( "include_rated" ),
+                             NULL
+                           };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|O!ifi", kwlist, &userId, &PyList_Type, &retrieved, &topN, &relevanceThreshold, &includeRated ) )
+   {
+      return NULL;
+   }
+
+   if( NULL == self->m_pTestData )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_RuntimeError, "Test data not found" );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
+   int numLines = 0;
+   if( retrieved != NULL )
+   {
+      numLines = PyList_Size( retrieved );
+   }
+
+   std::vector<std::string> ranking;
+   if( numLines <= 0 )
+   {
+      try
+      {
+         if( !self->m_recAlgorithm->recommend( userId, topN, ranking, includeRated ) )
+         {
+            PyGILState_STATE gstate = PyGILState_Ensure();
+            PyErr_SetString( PyExc_RuntimeError, "It was not possible to recommend items" );
+            PyGILState_Release( gstate );
+            return NULL;
+         }
+      }
+      catch( std::invalid_argument& eMsg )
+      {
+         PyGILState_STATE gstate = PyGILState_Ensure();
+         PyErr_SetString( PyExc_RuntimeError, eMsg.what() );
+         PyGILState_Release( gstate );
+         return NULL;
+      }
+   }
+   else
+   {
+      for( int i = 0 ; i < numLines ; ++i )
+      {
+         PyObject* strObj = PyList_GetItem( retrieved, i );
+#if PY_MAJOR_VERSION >= 3
+         ranking.push_back( std::string( PyBytes_AS_STRING( strObj ) ) );
+#else
+         ranking.push_back( std::string( PyString_AsString( strObj ) ) );
+#endif
+      }
+      topN = ranking.size();
+   }
+
+   std::vector<std::string> relevants = self->m_pTestData->filter( userId, relevanceThreshold );
+
+   return Py_BuildValue( "f", precision( ranking, relevants ) );
+}
+
+template<class TPyInstance>
+PyObject* PyRecall( TPyInstance* self, PyObject* args, PyObject* kwdict )
+{
+   const char* userId = NULL;
+   PyObject* retrieved = NULL;
+   int topN = 10;
+   float relevanceThreshold = 0;
+   int includeRated = 0;
+
+   static char* kwlist[] = { const_cast<char*>( "user_id" ),
+                             const_cast<char*>( "retrieved" ),
+                             const_cast<char*>( "topn" ),
+                             const_cast<char*>( "relevance_threshold" ),
+                             const_cast<char*>( "include_rated" ),
+                             NULL
+                           };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|O!ifi", kwlist, &userId, &PyList_Type, &retrieved, &topN, &relevanceThreshold, &includeRated ) )
+   {
+      return NULL;
+   }
+
+   if( NULL == self->m_pTestData )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_RuntimeError, "Test data not found" );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
+   int numLines = 0;
+   if( retrieved != NULL )
+   {
+      numLines = PyList_Size( retrieved );
+   }
+
+   std::vector<std::string> ranking;
+   if( numLines <= 0 )
+   {
+      try
+      {
+         if( !self->m_recAlgorithm->recommend( userId, topN, ranking, includeRated ) )
+         {
+            PyGILState_STATE gstate = PyGILState_Ensure();
+            PyErr_SetString( PyExc_RuntimeError, "It was not possible to recommend items" );
+            PyGILState_Release( gstate );
+            return NULL;
+         }
+      }
+      catch( std::invalid_argument& eMsg )
+      {
+         PyGILState_STATE gstate = PyGILState_Ensure();
+         PyErr_SetString( PyExc_RuntimeError, eMsg.what() );
+         PyGILState_Release( gstate );
+         return NULL;
+      }
+   }
+   else
+   {
+      for( int i = 0 ; i < numLines ; ++i )
+      {
+         PyObject* strObj = PyList_GetItem( retrieved, i );
+#if PY_MAJOR_VERSION >= 3
+         ranking.push_back( std::string( PyBytes_AS_STRING( strObj ) ) );
+#else
+         ranking.push_back( std::string( PyString_AsString( strObj ) ) );
+#endif
+      }
+      topN = ranking.size();
+   }
+
+   std::vector<std::string> relevants = self->m_pTestData->filter( userId, relevanceThreshold );
+
+   return Py_BuildValue( "f", recall( ranking, relevants ) );
+}
+
+template<class TPyInstance>
+PyObject* PyAUC( TPyInstance* self, PyObject* args, PyObject* kwdict )
+{
+   const char* userId = NULL;
+   PyObject* retrieved = NULL;
+   int topN = 10;
+   float relevanceThreshold = 0;
+   int includeRated = 0;
+
+   static char* kwlist[] = { const_cast<char*>( "user_id" ),
+                             const_cast<char*>( "retrieved" ),
+                             const_cast<char*>( "topn" ),
+                             const_cast<char*>( "relevance_threshold" ),
+                             const_cast<char*>( "include_rated" ),
+                             NULL
+                           };
+
+   if( !PyArg_ParseTupleAndKeywords( args, kwdict, "s|O!ifi", kwlist, &userId, &PyList_Type, &retrieved, &topN, &relevanceThreshold, &includeRated ) )
+   {
+      return NULL;
+   }
+
+   if( NULL == self->m_pTestData )
+   {
+      PyGILState_STATE gstate = PyGILState_Ensure();
+      PyErr_SetString( PyExc_RuntimeError, "Test data not found" );
+      PyGILState_Release( gstate );
+      return NULL;
+   }
+
+   int numLines = 0;
+   if( retrieved != NULL )
+   {
+      numLines = PyList_Size( retrieved );
+   }
+
+   std::vector<std::string> ranking;
+   if( numLines <= 0 )
+   {
+      try
+      {
+         if( !self->m_recAlgorithm->recommend( userId, topN, ranking, includeRated ) )
+         {
+            PyGILState_STATE gstate = PyGILState_Ensure();
+            PyErr_SetString( PyExc_RuntimeError, "It was not possible to recommend items" );
+            PyGILState_Release( gstate );
+            return NULL;
+         }
+      }
+      catch( std::invalid_argument& eMsg )
+      {
+         PyGILState_STATE gstate = PyGILState_Ensure();
+         PyErr_SetString( PyExc_RuntimeError, eMsg.what() );
+         PyGILState_Release( gstate );
+         return NULL;
+      }
+   }
+   else
+   {
+      for( int i = 0 ; i < numLines ; ++i )
+      {
+         PyObject* strObj = PyList_GetItem( retrieved, i );
+#if PY_MAJOR_VERSION >= 3
+         ranking.push_back( std::string( PyBytes_AS_STRING( strObj ) ) );
+#else
+         ranking.push_back( std::string( PyString_AsString( strObj ) ) );
+#endif
+      }
+      topN = ranking.size();
+   }
+
+   std::vector<std::string> relevants = self->m_pTestData->filter( userId, relevanceThreshold );
+
+   int nitems = self->m_nitems;
+   return Py_BuildValue( "f", auc( ranking, relevants, nitems ) );
 }
 
 template<class TPyInstance>
