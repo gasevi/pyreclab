@@ -121,7 +121,7 @@ if( PYTHON )
 
    configure_file( ${SETUP_PY_IN} ${SETUP_PY} )
 
-   execute_process( COMMAND mkdir ${PROJECT_BINARY_DIR}/pyreclab/ )
+   execute_process( COMMAND mkdir -p ${PROJECT_BINARY_DIR}/pyreclab/ )
    execute_process( COMMAND cp ${PROJECT_BINARY_DIR}/pypackage/__init__.py ${PROJECT_BINARY_DIR}/pyreclab/ )
    install( CODE "execute_process(COMMAND ${PYTHON} pypackage/setup.py install)" )
 
