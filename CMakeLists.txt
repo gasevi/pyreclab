@@ -23,6 +23,7 @@ set( PRLOPT_BUILD_WHEEL OFF CACHE BOOL "Build wheel package" )
 set( CMAKE_PYTHON_VERSION 2.7 CACHE STRING "Python version" )
 
 if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
+  set( MANYLINUX_VERSION manylinux1 CACHE STRING "manylinux version" )
   if( ${CMAKE_PYTHON_VERSION} VERSION_LESS "3.3" ) # Before Python 3.3, there were two ABI-incompatible ways of building CPython
     set( CMAKE_PYTHON_UCS4 ON CACHE BOOL "Enable unicode ucs4" )
   else( ${CMAKE_PYTHON_VERSION} VERSION_LESS "3.3" )
@@ -130,7 +131,7 @@ if( PYTHON )
       if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
          add_custom_command( OUTPUT ${OUTPUT}
                              COMMAND ${CMAKE_COMMAND} -E copy "pypackage/__init__.py" "${PROJECT_BINARY_DIR}/pyreclab/"
-                             COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" manylinux1_${CMAKE_SYSTEM_PROCESSOR} # PEP 513
+                             COMMAND ${PYTHON} ${SETUP_PY} bdist_wheel "--plat-name" ${MANYLINUX_VERSION}_${CMAKE_SYSTEM_PROCESSOR} # PEP 513
                              COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
                              DEPENDS ${DEPS} )
 
